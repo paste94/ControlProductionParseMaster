@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, FormControl, InputGroup, Button } from 'react-bootstrap';
+import { Modal, FormControl, InputGroup, Button, Form } from 'react-bootstrap';
 
 /**
  * Modal specifico per l'aggiunta dell'impiegato
@@ -14,6 +14,7 @@ import { Modal, FormControl, InputGroup, Button } from 'react-bootstrap';
  *                  - handleAddImpiegato (function) handler che gestisce l'aggiunta dell'impiegato
  */
 function ModalNewImpiegato(props){
+
     return (
         <Modal 
             show={props.show} 
@@ -24,36 +25,39 @@ function ModalNewImpiegato(props){
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <label>Nome</label>
-                    <InputGroup className="mb-3">
-                        <FormControl
-                            placeholder="Nome"
-                            aria-label="Nome"
-                            aria-describedby="basic-addon1"
-                            onChange={props.handleChangeNome}
-                            />
-                    </InputGroup>
-                    <label>Numero chip</label>
-                    <InputGroup className="mb-3">
-                        <FormControl
-                            placeholder="Numero chip"
-                            aria-label="Chip"
-                            aria-describedby="basic-addon2"
-                            readOnly
-                            value={props.newImp.chip}
-                            onChange={props.handleChangeChip}
-                            >
-                        </FormControl>
-                        <InputGroup.Append>
-                            <Button variant="secondary" onClick={props.handleShowChip}>Imposta</Button>
-                        </InputGroup.Append>
-                    </InputGroup>
+                    <Form id='formAddImpiegato' onSubmit={ props.handleAddImpiegato }>
+                        <label>Nome</label>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                required
+                                placeholder="Nome"
+                                aria-label="Nome"
+                                aria-describedby="basic-addon1"
+                                onChange={props.handleChangeNome}
+                                />
+                        </InputGroup>
+                        <label>Numero chip</label>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                placeholder="Numero chip"
+                                aria-label="Chip"
+                                aria-describedby="basic-addon2"
+                                readOnly
+                                value={props.newImp.chip}
+                                onChange={ props.handleChangeChip }
+                                >
+                            </FormControl>
+                            <InputGroup.Append>
+                                <Button variant="secondary" onClick={props.handleShowChip}>Imposta</Button>
+                            </InputGroup.Append>
+                        </InputGroup>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={props.handleClose}>
+                    <Button variant="secondary" onClick={ props.handleClose }>
                         Annulla
                     </Button>
-                    <Button variant="primary" type='submit' onClick={props.handleAddImpiegato}>
+                    <Button variant="primary" type='submit' form='formAddImpiegato'>
                         Crea
                     </Button>
                 </Modal.Footer>

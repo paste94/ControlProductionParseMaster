@@ -4,11 +4,11 @@ import Parse from 'parse'
 Parse.initialize('ParseServerAzzalin');
 Parse.serverURL = 'http://localhost:1337/parse'
 
-const commesse = 'commesseTest'
-const employee = 'employeeTest'
-const articoli = 'articoliTest'
-const preventivo = 'preventivoTest'
-const jobs = 'jobsTest'
+const commesse = 'commesse'
+const impiegati = 'impiegati'
+const articoli = 'articoli'
+const preventivo = 'preventivo'
+const lavori = 'lavori'
 
 const config = { /* COPY THE ACTUAL CONFIG FROM FIREBASE CONSOLE */
   projectId: "db-azalin",
@@ -57,4 +57,4 @@ function dateToStr(date){
 
 const fire = firebase.initializeApp(config).firestore()
 export default fire
-export {commesse, employee, articoli, jobs, preventivo, strToDate, dateToStr, Parse}
+export {commesse, impiegati, articoli, lavori, preventivo, strToDate, dateToStr, Parse}

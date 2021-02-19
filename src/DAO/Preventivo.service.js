@@ -1,7 +1,6 @@
-import { FaNotEqual } from 'react-icons/fa';
-import db, {preventivo, Parse} from './http-common';
+import {preventivo, Parse} from './http-common';
 
-/**Aggiunge una commesssa al database
+/**Aggiunge un preventivo al database
  * 
  * @param {Object} newPreventivo il nuovo preventivo da aggiungere
  * @param {String} commessaId ID della commessa parent
@@ -9,10 +8,10 @@ import db, {preventivo, Parse} from './http-common';
  * @param {function} errorCallback callback per errore
  */
 async function addPreventivo(newPreventivo, commessaId, callback){
-    const commessa = new Parse.Object(preventivo)
-    Object.keys(newPreventivo).forEach( key => commessa.set(key, newPreventivo[key]) )
-    commessa.set('parent', commessaId)
-    await commessa.save()
+    const prev = new Parse.Object(preventivo)
+    Object.keys(newPreventivo).forEach( key => prev.set(key, newPreventivo[key]) )
+    prev.set('parent', commessaId)
+    await prev.save()
             .then( 
                 () => callback(), 
                 (error) => console.error('ERRORE:', error.message)
@@ -21,7 +20,6 @@ async function addPreventivo(newPreventivo, commessaId, callback){
 
 async function getAllPreventivi(commessaId, callback){
     let query = new Parse.Query(preventivo)
-    console.log('ID:',commessaId)
     let result = await query
                         .notEqualTo('eliminato', true)
                         .equalTo('parent', commessaId)
@@ -34,7 +32,6 @@ async function getAllPreventivi(commessaId, callback){
             ...attr
         })
     })
-    console.log(data)
     callback(data)
 }
 
@@ -54,9 +51,6 @@ function deletePreventivo(id, callback){
 
 async function editPreventivo(prevId, newPreventivo, callback){
     let query = new Parse.Query(preventivo)
-
-    console.log('EDIT', prevId, newPreventivo)
-
     query.get(prevId)
         .then( 
             elem => {

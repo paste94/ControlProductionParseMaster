@@ -4,6 +4,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import {Button} from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import ModalChip from './ModalChip';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 /**Definisce la tabella degli impiegati
  * 
@@ -54,7 +55,7 @@ function ImpiegatiTable(props){
         text: 'ID',
         hidden:true
     }, {
-        dataField: 'name',
+        dataField: 'nome',
         text: 'Nome'
     }, {
         dataField: 'chip',
@@ -81,6 +82,7 @@ function ImpiegatiTable(props){
                 keyField='id' 
                 data={ props.data } 
                 columns={ columns } 
+                pagination={ paginationFactory() }
                 cellEdit={ cellEditFactory({ 
                     mode: 'click',
                     blurToSave: true,

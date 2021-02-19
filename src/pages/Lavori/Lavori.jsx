@@ -3,6 +3,7 @@ import { Col, Row, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
 import { lavoriListener, getLavori } from '../../DAO/Lavori.service';
 import { getAllMacchine } from '../../DAO/Macchine.service';
 import { dateToStr } from '../../DAO/http-common'
+import LavoriTable from './LavoriTable';
 /**
  * 
  * @param {Object}  props Properties
@@ -26,7 +27,7 @@ function Lavori(props){
     }
 
     useEffect(() => {
-        getLavori((res) => {console.log(res)})
+        getLavori(selectedMacchina, startDate, endDate, setData, () => {})
     }, [selectedMacchina, startDate, endDate]);
 
     return (
@@ -65,6 +66,10 @@ function Lavori(props){
                             <FormControl type='date' value={endDate} onChange={handleSelectEndDate}></FormControl>
                         </InputGroup>
                     </Col>
+                </Row>
+                <Row>
+                    <LavoriTable
+                        data={ data } />
                 </Row>
             </div>
         </div>

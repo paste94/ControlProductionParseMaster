@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { articoliListener, editArticolo, deleteArticolo } from '../../DAO/Articoli.service';
 import { Row, Col } from 'react-bootstrap';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import DeleteButton from '../../components/DeleteButton';
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
@@ -9,37 +9,7 @@ import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 /**
  * Definisce la tabella per visualizzare e gestire gli articoli
  */
-function ArticoliTable(){
-    // Dati della tabella
-    const [data, setData] = useState([])
-
-    /**
-     * Elimina un articolo
-     * 
-     * @param {string} id identificativo dell'elemento da eliminare dal DB
-     */
-    const handleDeleteArticolo = (id) => {
-        deleteArticolo(id)
-    }
-
-    /**
-     * Modifica un articolo 
-     * 
-     * @param {string} id identificativo dell'articolo da modificare
-     * @param {object} articolo oggetto con le modifiche effettuate
-     */
-    const handleEditArticolo = (id, articolo) => {
-        editArticolo(id, articolo)
-    }
-
-    /**
-     * Richiama il listener con i dati da mostrare in tabella
-     */
-    useEffect(() => {
-        const unsubscribe = articoliListener( result => setData(result) )
-        return () => unsubscribe()
-    }, []);
-
+function ArticoliTable(props){
     /**
      * Definisce i bottoni da inserire nell'ultima colonna della tabella 
      * 
@@ -53,14 +23,14 @@ function ArticoliTable(){
             <Col lg='6' md='6' sm='6'>
                 <ModalCommessaSingola
                     data={row}
-                    handleConfirm={ (articolo) => handleEditArticolo(row.id, articolo) }
+                    handleConfirm={ (articolo) => props.handleEditArticolo(row.id, articolo) }
                     confirmButtonText={'Modifica'}
                     type={'edit'} />
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton 
                     title='Elimina'
-                    handleConfirm={() => handleDeleteArticolo(row.id)} >
+                    handleConfirm={() => props.handleDeleteArticolo(row.id)} >
                         <p>Eliminare definitivamente l'articolo?</p>
                 </DeleteButton>
             </Col>
@@ -96,7 +66,12 @@ function ArticoliTable(){
                 item !== firstElements[2] &&
                 item !== 'numDisegno' &&
                 item !== 'totOre' &&
-                item !== 'totPreventivo'
+                item !== 'totPreventivo' &&
+                item !== 'id' &&
+                item !== 'parent' &&
+                item !== 'updatedAt' && 
+                item !== 'eliminato' && 
+                item !== 'createdAt'
             )
             sortedArr = firstElements.concat(sortedArr)
             sortedArr = sortedArr.filter(item => item !== 'id')
@@ -135,11 +110,11 @@ function ArticoliTable(){
 
     return (
         <div>
-            {console.log('DATA:', data)}
             <BootstrapTable 
                 keyField='id' 
-                data={ data } 
+                data={ props.data } 
                 columns={ columns } 
+                pagination={ paginationFactory() }
                 noDataIndication="Tabella vuota"
                 expandRow={ expandRow }
                 />

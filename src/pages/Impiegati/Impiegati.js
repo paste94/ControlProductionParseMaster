@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/Pages.css';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import { Button } from 'react-bootstrap';
-import {impiegatiListener, addImpiegato, deleteImpiegato, updateImpiegato} from '../../DAO/Impiegati.service';
+import { Button, Col, Row } from 'react-bootstrap';
+import { addImpiegato, deleteImpiegato, updateImpiegato, getAllImpiegati} from '../../DAO/Impiegati.service';
 import ModalChip from './ModalChip';
 import ModalNewImpiegato from './ModalNewImpiegato';
 import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
+import { MdRefresh } from 'react-icons/md';
 
 /**Pagina degli impiegati
  * 
@@ -19,6 +20,9 @@ function Impiegati(props) {
 
     // Elenco degli impiegati 
     const [data, setData] = useState([]); 
+    const [update, setUpdate] = useState(true)
+
+    const refresh = () => setUpdate(!update)
 
     // Stato dei modal, quando sono true sono visibili. 
     const [modalState, setModalState] = useState({
@@ -75,13 +79,14 @@ function Impiegati(props) {
 
     // newVal può essere un oggetto {nome: newName} oppure {chip: newChip}
     const handleEdit = (id, newVal) => {
-        updateImpiegato(id, newVal)
+        updateImpiegato(id, newVal, refresh)
     }
 
     // Quando creo il nuovo impiegato
-    const handleAddImpiegato = () => {
-        addImpiegato(newImp)
-        handleCloseNewImpiegato();
+    const handleAddImpiegato = (e) => {
+        e.preventDefault()
+        addImpiegato(newImp, refresh)
+        handleCloseNewImpiegato()
     };
 
     // Quando faccio click sul bottone di eliminazione
@@ -94,7 +99,7 @@ function Impiegati(props) {
     const handleDeleteConfirm = () => {
         const id = deleteId;
         setDeleteId('');
-        deleteImpiegato(id)
+        deleteImpiegato(id, refresh)
         handleCloseConfirm()
     }
 
@@ -102,9 +107,8 @@ function Impiegati(props) {
 
     // Il secondo parametro [] serve per farlo eseguire una volta sola quando avvii la pagina
     useEffect(() => {
-        const unsubscribe = impiegatiListener( result => setData(result) )
-        return () => unsubscribe()
-    }, []);
+        getAllImpiegati( (result) => setData(result) )
+    }, [update]);
     
 
     /*************** RENDER ***************/
@@ -113,18 +117,26 @@ function Impiegati(props) {
         <div className='page'>
 
             <div className='container' style={{marginBottom: 10}}>
-                <div className='row align-items-center'>
-                    <div className='col'>
-                        <h1>Impiegati</h1>
-                    </div>
-                    <div className='col'>
+                <Row className='align-items-center'>
+                    <Col>
+                        <Row>
+                            <h1>Impiegati</h1>
+                            <Button 
+                                variant="link" 
+                                size="lg" 
+                                onClick={() => refresh()}> 
+                                    <MdRefresh color='grey' /> 
+                                </Button>
+                        </Row>
+                    </Col>
+                    <Col>
                         <Button 
                             className='float-right vertical-center' 
                             onClick={handleShowNewImpiegato}>
                                 Aggiungi impiegato
                         </Button>
-                    </div>
-                </div>
+                    </Col>
+                </Row>
             </div>          
 
             <ImpiegatiTable 
@@ -155,8 +167,6 @@ function Impiegati(props) {
                 >
                     <p>Confermare l'eliminazione? ATTENZIONE! Questa operazione non è reversibile</p>
             </ModalConfirm>
-
-            <p>nome: {newImp.nome}, chip: {newImp.chip}</p>
         </div>
     );
 }

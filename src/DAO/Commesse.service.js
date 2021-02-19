@@ -1,16 +1,8 @@
-import db, {commesse, Parse} from './http-common';
+import {commesse, Parse} from './http-common';
 
 /**Ottiene tutte le commesse dal database
  * 
- * @param {*} responseCallback callback per successo. Deve restituire un array di oggetti:
- *                              {
- *                                  id
- *                                  nome
- *                                  numero
- *                                  data_offerta (isostring)
- *                                  data_consegna (isostring)
- *                              }
- * @param {*} errorCallback callback per errore
+ * @param {*} responseCallback callback per successo.
  */
 async function getAllCommesse(callback){
     let query = new Parse.Query(commesse)
@@ -31,74 +23,10 @@ async function getAllCommesse(callback){
     callback(data)
 }
 
-async function preventivoListener(commessaId, callback){
-    /*
-    const unsubscribe = db.collection(commesse).doc(commessaId)
-        .onSnapshot(
-            snapshot => {
-                callback(snapshot.data())
-    })
-    return unsubscribe
-    */
-}
-
-async function commesseListener(callback){     
-    /*
-    const unsubscribe = db.collection(commesse)
-        .onSnapshot(
-            snapshot => {
-                let tempData = []
-                snapshot.forEach(doc => {
-                    tempData.push({
-                        id: doc.id,
-                        nome: doc.data().name,
-                        numero: doc.data().number,
-                        data_offerta: strToDate(doc.data().offDate),
-                        data_consegna: strToDate(doc.data().consDate),
-                        chiusa: doc.data().closed,
-                        preventivo: doc.data().preventivo
-                    })
-                });
-                callback(tempData)
-    })
-    return unsubscribe
-    */
-}
-
-function getCommessa(id, responseCallback, errorCallback){
-    /*
-    const doc = db.collection(commesse).doc(id)
-    doc.onSnapshot(
-        docSnapshot => {
-            responseCallback(docSnapshot.data().preventivo)
-        }, err => {
-            errorCallback(`Encountered error: ${err}`);
-        }
-    )
-    */
-}
-
-function deletePreventivo(commessaId, numDisegno, callback){
-    /*
-    const prevName = 'preventivo.' + numDisegno
-    const FieldValue = firebase.firestore.FieldValue
-    const obj = {}
-    obj[prevName] = FieldValue.delete()
-
-    console.log(commessaId, numDisegno)
-
-    db.collection(commesse).doc(commessaId)
-        .update(obj)
-        .then( () => callback() )
-        .catch( (err) => console.warn(err) );
-    */
-}
-
 /**Aggiunge una commesssa al database
  * 
  * @param {Object} commessa la commessa da aggiungere, campi: {nome, numero, dataOfferta, dataConsegna}
- * @param {function} responseCallback callback per successo
- * @param {function} errorCallback callback per errore
+ * @param {function} callback callback per successo
  */
 async function addCommessa(newCommessa, callback){
     const commessa = new Parse.Object(commesse)
@@ -153,28 +81,8 @@ function updateCommessa(id, newVal, callback){
         )
 }
 
-function editCommessaLavoro(idCommessa, lavoro, callback){
-
-    /*
-    let path = 'preventivo.' + lavoro.numDisegno.replace(/\./g, '%2E');
-    let obj = {};
-
-    obj[path] = lavoro;
-
-    console.log(idCommessa)
-
-    db.collection(commesse)
-        .doc(idCommessa)
-        .update(obj)
-    */
-}
-
 export {getAllCommesse, 
     addCommessa, 
     deleteCommessa, 
     updateCommessa, 
-    editCommessaLavoro, 
-    getCommessa, 
-    commesseListener, 
-    preventivoListener,
-    deletePreventivo};
+};

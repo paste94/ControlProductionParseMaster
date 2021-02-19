@@ -4,7 +4,6 @@ import CommessaSingolaTable from './CommessaSingolaTable'
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import { FaArrowLeft } from 'react-icons/fa'
 import { useHistory } from "react-router-dom";
-import { editCommessaLavoro } from '../../DAO/Commesse.service'
 import { addPreventivo, getAllPreventivi, deletePreventivo, editPreventivo } from '../../DAO/Preventivo.service';
 
 
@@ -28,15 +27,6 @@ function CommessaSingola(props){
     const handleDelete = (id) => deletePreventivo(id, refresh)
     const handleEdit = (prevId, newPreventivo) => editPreventivo(prevId, newPreventivo, refresh)
 
-        /**
-         * Aggiunta o modifica di un articolo alla commessa. Si usa LA STESSA FUNZIONE 
-         * 
-         * @param {object} newJob l'articolo da aggiungere alla commessa
-         */
-        const handleAddEdit = (newJob) => {
-            editCommessaLavoro(props.commessa.id, newJob, refresh)
-        }
-
     useEffect(() => {
         getAllPreventivi(props.commessa.id, (data) => setData(data))
     }, [update, props.commessa.id])
@@ -48,7 +38,10 @@ function CommessaSingola(props){
                 <Col lg='1'>
                     <Button 
                         variant='transparent'
-                        onClick={handleClickBack}><FaArrowLeft/></Button>
+                        onClick={handleClickBack}
+                        title='Aggiorna tabella' >
+                            <FaArrowLeft/>
+                        </Button>
                 </Col>
                 <Col lg='8'>
                     <h1>Commessa {props.commessa.nome} {props.commessa.chiusa && '(chiusa)'}</h1>

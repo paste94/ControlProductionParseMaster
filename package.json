@@ -1,5 +1,5 @@
 {
-  "name": "electron-react-mongo",
+  "name": "control-production-master",
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
@@ -42,12 +42,12 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "set PORT=3010 && react-scripts start",
+    "build": "set PORT=3010 && react-scripts build",
+    "test": "set PORT=3010 && react-scripts test",
+    "eject": "set PORT=3010 && react-scripts eject",
     "dev": "concurrently -k \"npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron ."
+    "electron": "wait-on tcp:3010 && electron ."
   },
   "eslintConfig": {
     "extends": [

@@ -1,22 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
-import { addArticolo } from '../../DAO/Articoli.service';
+import { addArticolo, editArticolo, deleteArticolo, getAllArticoli } from '../../DAO/Articoli.service';
 import ArticoliTable from './ArticoliTable'
 
 /** Pagina per la visualizzazione degli articoli salvati. 
  * 
  */
 function Articoli(){
+    // Dati della tabella
+    const [data, setData] = useState([])
+    const [update, setUpdate] = useState(true)
+
+    const refresh = () => setUpdate(!update)
 
     /**
      * Aggiunge un articolo al database
      * 
      * @param {object} articolo l'articolo da aggiungere
      */
-    const handleAddArticolo = (articolo) => {
-        addArticolo(articolo)
+    const handleAddArticolo = (articolo) => addArticolo(articolo, refresh)
+
+    /**
+     * Modifica un articolo 
+     * 
+     * @param {string} id identificativo dell'articolo da modificare
+     * @param {object} articolo oggetto con le modifiche effettuate
+     */
+    const handleEditArticolo = (id, articolo) => {
+        editArticolo(id, articolo, refresh)
     }
+
+    /**
+     * Elimina un articolo
+     * 
+     * @param {string} id identificativo dell'elemento da eliminare dal DB
+     */
+    const handleDeleteArticolo = (id) => {
+        deleteArticolo(id, refresh)
+    }
+
+    /**
+     * Richiama il listener con i dati da mostrare in tabella
+     */
+    useEffect(() => {
+        getAllArticoli( (result) => setData(result) )
+    }, [update]);
 
     return (
         <div className='page'>
@@ -46,7 +75,10 @@ function Articoli(){
             </Row>
             <Row>
                 <Col>
-                    <ArticoliTable />
+                    <ArticoliTable
+                        data={data} 
+                        handleEditArticolo={handleEditArticolo} 
+                        handleDeleteArticolo={handleDeleteArticolo} />
                 </Col>
             </Row>
         </div>
