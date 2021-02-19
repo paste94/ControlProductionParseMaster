@@ -1,16 +1,16 @@
 import { Parse, lavori } from './http-common';
 
-function getLavori(macchina, startDate, endDate, callback, errorCallback){
+function getLavori(macchina, startDate, endDate, includeInProgress, callback, errorCallback){
     const query = new Parse.Query(lavori)
 
-    console.log(macchina, startDate, endDate)
+    console.log(startDate, new Date(startDate+'T00:00:00'))
 
     if(macchina !== 'Tutte')
         query.equalTo('macchina', macchina)
     // TODO Aggiungi la data alla query
-    //query.greaterThanOrEqualTo('inizio', startDate)
-    //    .lessThanOrEqualTo('fine', endDate)
-        query.find()
+    query.greaterThanOrEqualTo('inizio', new Date(startDate+'T00:00:00'))
+        .lessThanOrEqualTo('fine', new Date(endDate+'T23:59:59'))
+        .find()
         .then((res) => {
             let data = []
             res.forEach(elem => 

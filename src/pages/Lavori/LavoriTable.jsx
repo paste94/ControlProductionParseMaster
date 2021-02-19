@@ -23,11 +23,11 @@ function LavoriTable(props){
             if(cell === undefined){
                 return '-'
             }
-            const dd = cell.getDate()
-            const mm = cell.getMonth()+1
+            const dd = cell.getDate() < 10 ? '0'+cell.getDate() : cell.getDate()
+            const mm = cell.getMonth()+1 < 10 ? '0'+(cell.getMonth()+1) : cell.getMonth()+1
             const yy = cell.getFullYear()
-            const hh = cell.getHours()
-            const min = cell.getMinutes()
+            const hh = cell.getHours() < 10 ? '0'+cell.getHours() : cell.getHours()
+            const min = cell.getMinutes() < 10 ? '0'+cell.getMinutes() : cell.getMinutes()
             return dd + '/' + mm + '/' + yy + ' ' + hh + ':' + min
         }
     },{
@@ -37,14 +37,19 @@ function LavoriTable(props){
             if(cell === undefined){
                 return '-'
             }
-            const dd = cell.getDate()
-            const mm = cell.getMonth()+1
+            const dd = cell.getDate() < 10 ? '0'+cell.getDate() : cell.getDate()
+            const mm = cell.getMonth()+1 < 10 ? '0'+(cell.getMonth()+1) : cell.getMonth()+1
             const yy = cell.getFullYear()
-            const hh = cell.getHours()
-            const min = cell.getMinutes()
+            const hh = cell.getHours() < 10 ? '0'+cell.getHours() : cell.getHours()
+            const min = cell.getMinutes() < 10 ? '0'+cell.getMinutes() : cell.getMinutes()
             return dd + '/' + mm + '/' + yy + ' ' + hh + ':' + min
         }
-    }];
+    },{
+        dataField:'tempo',
+        text:'Tempo(ore)'
+    }]
+
+    
     return (
         <div>
             <BootstrapTable 

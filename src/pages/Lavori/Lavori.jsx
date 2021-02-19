@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Dropdown, InputGroup, FormControl } from 'react-bootstrap';
+import { Col, Row, InputGroup, FormControl, Form } from 'react-bootstrap';
 import { lavoriListener, getLavori } from '../../DAO/Lavori.service';
 import { getAllMacchine } from '../../DAO/Macchine.service';
 import { dateToStr } from '../../DAO/http-common'
@@ -10,25 +10,22 @@ import LavoriTable from './LavoriTable';
  *                  - handleShowAlert (function) handler che mostra l'alert per gli errori
  */
 function Lavori(props){
-    const [macchine] = useState(getAllMacchine)
-    const [selectedMacchina, setSelectedMacchina] = useState(macchine[0].nome)
     const [data, setData] = useState([])
+    const [macchine] = useState(getAllMacchine)
+    const [selectedMacchina, setSelectedMacchina] = useState('Tutte')
     const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0])
     const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
+    const [checked, setChecked] = useState(false)
 
-    const handleSelectMacchina = (event) => {
-        setSelectedMacchina(event.target.value)
-    }
-    const handleSelectStartDate = (event) => {
-        setStartDate(event.target.value)
-    }
-    const handleSelectEndDate = (event) => {
-        setEndDate(event.target.value)
-    }
+    const handleSelectMacchina = (event) => setSelectedMacchina(event.target.value)
+    const handleSelectStartDate = (event) => setStartDate(event.target.value)
+    const handleSelectEndDate = (event) => setEndDate(event.target.value)
+    const handleCkeck = (e) => setChecked(e.target.checked)
+
 
     useEffect(() => {
-        getLavori(selectedMacchina, startDate, endDate, setData, () => {})
-    }, [selectedMacchina, startDate, endDate]);
+        getLavori(selectedMacchina, startDate, endDate, checked, setData, () => {})
+    }, [selectedMacchina, startDate, endDate, checked]);
 
     return (
         <div className='page'>
@@ -39,7 +36,7 @@ function Lavori(props){
                     </div>
                 </div>
                 <Row>
-                    <Col>
+                    <Col className='my-auto'>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
                                 <InputGroup.Text id="basic-addon1">Macchina</InputGroup.Text>
@@ -50,7 +47,7 @@ function Lavori(props){
                             </select>
                         </InputGroup>
                     </Col>
-                    <Col>
+                    <Col className='my-auto'>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
                                 <InputGroup.Text id="basic-addon1">Dal</InputGroup.Text>
@@ -58,7 +55,7 @@ function Lavori(props){
                             <FormControl type='date' value={startDate} onChange={handleSelectStartDate}></FormControl>
                         </InputGroup>
                     </Col>
-                    <Col>
+                    <Col className='my-auto'>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
                                 <InputGroup.Text id="basic-addon1">Al</InputGroup.Text>
@@ -66,10 +63,18 @@ function Lavori(props){
                             <FormControl type='date' value={endDate} onChange={handleSelectEndDate}></FormControl>
                         </InputGroup>
                     </Col>
+                    <Col className='my-auto'>
+                        <Form.Check
+                            label='In corso'
+                            checked={ checked }
+                            onChange={ handleCkeck } />
+                    </Col>
                 </Row>
                 <Row>
-                    <LavoriTable
-                        data={ data } />
+                    <Col>
+                        <LavoriTable
+                            data={ data } />
+                    </Col>
                 </Row>
             </div>
         </div>
