@@ -1,26 +1,21 @@
 import React, { useState } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
-
+import PropTypes from 'prop-types'
 
 /**
  * Modal specifico per l'aggiunta della commessa
- * 
  * @param {Object}  props properties
- *                  - handleRefresh DEPRECATED (function) Cosa fare quando è necessario un refresh
- * 
- *                  - handleChangeNome (function) handler per la modifica del nome, utile a mantenere lo stato sempre aggiornato
- *                  - handleChangeNumero (function) handler per la modifica del nome, utile a mantenere lo stato sempre aggiornato
- *                  - handleChangeData_offerta (function) handler per la modifica del nome, utile a mantenere lo stato sempre aggiornato
- *                  - handleChangeData_consegna (function) handler per la modifica del nome, utile a mantenere lo stato sempre aggiornato
- *                  - handleAdd (function) handler che gestisce la creazione della commessa
+ *                  - handleAdd (function) handler che gestisce la creazione
+ *                      della commessa
+ * @return {Component} il componente
  */
-function ModalNewCommessa(props){
+function ModalNewCommessa({handleAdd}) {
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: '',
         numero: '',
         data_offerta: new Date().toISOString().split('T')[0],
-        data_consegna: new Date().toISOString().split('T')[0]
+        data_consegna: new Date().toISOString().split('T')[0],
     })
 
     const handleShow = () => setShow(true)
@@ -29,26 +24,30 @@ function ModalNewCommessa(props){
             nome: '',
             numero: '',
             data_offerta: new Date().toISOString().split('T')[0],
-            data_consegna: new Date().toISOString().split('T')[0]
+            data_consegna: new Date().toISOString().split('T')[0],
         })
         setShow(false)
     }
 
-    const handleChangeNome = (event) => setNewCommessa({...newCommessa, nome: event.target.value})
-    const handleChangeNumero = (event) => setNewCommessa({...newCommessa, numero: event.target.value})
-    const handleChangeData_offerta = (event) => setNewCommessa({...newCommessa, data_offerta: event.target.value})
-    const handleChangeData_consegna = (event) => setNewCommessa({...newCommessa, data_consegna: event.target.value})
+    const handleChangeNome = (event) =>
+        setNewCommessa({...newCommessa, nome: event.target.value})
+    const handleChangeNumero = (event) =>
+        setNewCommessa({...newCommessa, numero: event.target.value})
+    const handleChangeDataOfferta = (event) =>
+        setNewCommessa({...newCommessa, data_offerta: event.target.value})
+    const handleChangeDataConsegna = (event) =>
+        setNewCommessa({...newCommessa, data_consegna: event.target.value})
 
     const handleAddForm = (e) => {
         e.preventDefault();
-        props.handleAdd(newCommessa) 
+        handleAdd(newCommessa)
         handleClose()
     }
-    
+
     return (
         <div>
-            <Button 
-                className='float-right vertical-center' 
+            <Button
+                className='float-right vertical-center'
                 onClick={handleShow}>
                     Aggiungi Commessa
             </Button>
@@ -90,7 +89,7 @@ function ModalNewCommessa(props){
                                         type='date'
                                         value={newCommessa.data_offerta}
                                         aria-describedby="basic-addon1"
-                                        onChange={handleChangeData_offerta}
+                                        onChange={handleChangeDataOfferta}
                                         />
                                 </Form.Group>
                                 <Form.Group as={Col}>
@@ -100,25 +99,32 @@ function ModalNewCommessa(props){
                                         type='date'
                                         value={newCommessa.data_consegna}
                                         aria-describedby="basic-addon1"
-                                        onChange={handleChangeData_consegna}
+                                        onChange={handleChangeDataConsegna}
                                         />
                                 </Form.Group>
                             </Form.Row>
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                    <p>new: {newCommessa.nome}</p> 
                         <Button variant="secondary" onClick={handleClose}>
                             Annulla
                         </Button>
-                        <Button variant="primary" type='submit' form='formAddCommessa'>
+                        <Button
+                            variant="primary"
+                            type='submit'
+                            form='formAddCommessa' >
                             Crea
                         </Button>
                     </Modal.Footer>
-            </Modal>   
+            </Modal>
         </div>
-        
+
     )
 }
+
+ModalNewCommessa.propTypes = {
+    handleAdd: PropTypes.func.isRequired,
+}
+
 
 export default ModalNewCommessa;
