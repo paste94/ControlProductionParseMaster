@@ -1,4 +1,3 @@
-import firebase from 'firebase'
 import Parse from 'parse'
 
 Parse.initialize('ParseServerAzzalin');
@@ -10,44 +9,27 @@ const articoli = 'articoli'
 const preventivo = 'preventivo'
 const lavori = 'lavori'
 
-const config = { /* COPY THE ACTUAL CONFIG FROM FIREBASE CONSOLE */
-  projectId: "db-azalin",
-  apiKey: "AIzaSyAWjivdMsTcAC1i0FdWkWHhmNISEs6zjmE",
-  authDomain: "db-azalin.firebaseapp.com",
-  databaseURL: "https://db-azalin.firebaseio.com",
-  storageBucket: "db-azalin.appspot.com",
-  messagingSenderId: "556055520031",
-  appId: "1:556055520031:web:17044b44a605c3d437862a"
-};
-
-/*
-prova()
-
-async function prova(){
-  const obj = new Parse.Object('GameScore');
-  obj.set('score',1338);
-  obj.set('playerName','Past');
-  await obj.save();
-  console.log(obj.toJSON());
-
-  const query = new Parse.Query('GameScore');
-  const objAgain = await query.get(obj.id);
-  console.log(objAgain.toJSON());
-}
-*/
-
-function strToDate(date){
-  console.log(date)
-  if(date === ''){
+/**
+ * Converte una stringa in data
+ * @param {String} date la stringa da convertire in data
+ * @return {Date} la data
+ */
+function strToDate(date) {
+  if (date === '') {
       return ''
   }
-  const [dd,mm,yyyy] = date.split('/')
+  const [dd, mm, yyyy] = date.split('/')
   const str = mm + '/' + (parseInt(dd)+1) + '/' + yyyy
   return new Date(str).toISOString()
 }
 
-function dateToStr(date){
-  if(date === ''){
+/**
+ * Converte una data in stringa
+ * @param {Date} date la data da convertire in stringa
+ * @return {String} la data
+ */
+function dateToStr(date) {
+  if (date === '') {
       return ''
   }
   const arr = date.split('T')
@@ -55,6 +37,13 @@ function dateToStr(date){
   return dd + '/' + mm + '/' + yyyy
 }
 
-const fire = firebase.initializeApp(config).firestore()
-export default fire
-export {commesse, impiegati, articoli, lavori, preventivo, strToDate, dateToStr, Parse}
+export {
+  commesse,
+  impiegati,
+  articoli,
+  lavori,
+  preventivo,
+  strToDate,
+  dateToStr,
+  Parse
+}

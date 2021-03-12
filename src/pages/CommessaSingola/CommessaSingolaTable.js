@@ -1,9 +1,11 @@
+import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import DeleteButton from '../../components/DeleteButton';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Row, Col } from 'react-bootstrap';
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 import ModalEditCommessaSingola from '../../components/ModalCommessaSingola';
+import PropTypes from 'prop-types'
 
 /**Definisce la tabella degli impiegati
  * 
@@ -11,9 +13,7 @@ import ModalEditCommessaSingola from '../../components/ModalCommessaSingola';
  *                  - id (string) id della commessa da mostrare
  *                  - handleConfirm (function) Gestisce la modifica dell'elemento
  */
-function CommessaSingolaTable(props){
-
-
+function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     /**
      * Definisce i bottoni da inserire nell'ultima colonna della tabella 
      * 
@@ -27,14 +27,14 @@ function CommessaSingolaTable(props){
             <Col lg='6' md='6' sm='6'>
                 <ModalEditCommessaSingola
                     data={row}
-                    handleConfirm={ (newPreventivo) => props.handleConfirm(row.id, newPreventivo) }
+                    handleConfirm={ (newPreventivo) => handleConfirm(row.id, newPreventivo) }
                     confirmButtonText={'Modifica'}
                     type={'edit'} />
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton 
                     title='Elimina'
-                    handleConfirm={ () => props.handleDelete(row.id) } >
+                    handleConfirm={ () => handleDelete(row.id) } >
                         <p>Eliminare definitivamente la commessa?</p>
                 </DeleteButton>
             </Col>
@@ -78,7 +78,7 @@ function CommessaSingolaTable(props){
             sortedArr = firstElements.concat(sortedArr)
 
             const listItems = sortedArr.map((keyname) => 
-                <Row>
+                <Row key={keyname}>
                     <Col md='4'>{keyname}:</Col> 
                     <Col>{row[keyname]}</Col>
                     <hr style={
@@ -96,24 +96,20 @@ function CommessaSingolaTable(props){
         showExpandColumn: true,
         expandByColumnOnly: true,
         expandHeaderColumnRenderer: ({ isAnyExpands }) => {
-            if (isAnyExpands)   
-                return <FaCaretDown/>;
-            else
-                return <FaCaretRight/>;
+            if (isAnyExpands) return <FaCaretDown/>;
+            else return <FaCaretRight/>;
           },
           expandColumnRenderer: ({ expanded }) => {
-            if (expanded) 
-              return <FaCaretDown color='grey'/>;
-            else
-                return <FaCaretRight color='grey'/>;
-          }
+            if (expanded) return <FaCaretDown color='grey'/>;
+            else return <FaCaretRight color='grey'/>;
+          },
     };
 
     return (
         <div>
             <BootstrapTable 
                 keyField='numDisegno' 
-                data={ props.data } 
+                data={ data } 
                 columns={ columns } 
                 pagination={ paginationFactory() }
                 noDataIndication="Tabella vuota"
@@ -121,6 +117,12 @@ function CommessaSingolaTable(props){
                 />
         </div>
     )
+}
+
+CommessaSingolaTable.propTypes = {
+    data: PropTypes.array.isRequired,
+    handleConfirm: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 }
 
 export default CommessaSingolaTable

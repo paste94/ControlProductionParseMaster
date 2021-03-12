@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react'
 import AppRoutes from './components/routes';
 
 const App = () => (

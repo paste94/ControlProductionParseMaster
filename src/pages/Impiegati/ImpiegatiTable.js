@@ -5,6 +5,7 @@ import {Button} from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import ModalChip from './ModalChip';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import PropTypes from 'prop-types'
 
 /**Definisce la tabella degli impiegati
  * 
@@ -13,9 +14,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
  *                  - handleDelete: Handler dell'eliminazione della riga
  *                  - handleEdit (function) Cosa eseguire quando viene impostato il chip
  */
-function ImpiegatiTable(props){
+function ImpiegatiTable({data, handleEdit, handleDelete}) {
     const [editRow, setEditRow] = useState(null)
-    
     const [show, setShow] = useState(false)
     const handleShow = () => setShow(true)
     const handleClose = () => {
@@ -26,12 +26,12 @@ function ImpiegatiTable(props){
         if (event.charCode === 13) {
             const id = editRow.id
             const newVal = event.target.value
-            props.handleEdit(id, {chip: newVal})
+            handleEdit(id, {chip: newVal})
             handleClose();
         }
     }
 
-    const handleSetNome = (id, newNome) => props.handleEdit(id, {nome: newNome})
+    const handleSetNome = (id, newNome) => handleEdit(id, {nome: newNome})
 
     // Definizione dei bottoni nell'ultima colonna
     const defineButtons = (cell, row, rowIndex, formatExtraData) => {
@@ -40,7 +40,7 @@ function ImpiegatiTable(props){
                 <div className='col'>
                     <Button
                         variant='light'
-                        onClick={() => props.handleDelete(row.id)}
+                        onClick={() => handleDelete(row.id)}
                         title={'Elimina impiegato'} >
                         <FaTrash style={{color: '#b71c1c'}}/>
                     </Button>
@@ -77,10 +77,9 @@ function ImpiegatiTable(props){
 
     return (
         <div>
-            {console.log(props.data)}
             <BootstrapTable 
                 keyField='id' 
-                data={ props.data } 
+                data={ data } 
                 columns={ columns } 
                 pagination={ paginationFactory() }
                 cellEdit={ cellEditFactory({ 
@@ -98,6 +97,12 @@ function ImpiegatiTable(props){
 
         </div>
     )
+}
+
+ImpiegatiTable.propTypes = {
+    data: PropTypes.array.isRequired,
+    handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 }
 
 export default ImpiegatiTable

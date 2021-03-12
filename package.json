@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -10,6 +11,7 @@
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.3",
+    "chokidar": "^3.5.1",
     "cross-env": "^7.0.2",
     "electron-is-dev": "^1.2.0",
     "express": "^4.17.1",
@@ -17,6 +19,7 @@
     "mongoose": "^5.10.15",
     "mysql": "^2.18.1",
     "parse": "^2.19.0",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-bootstrap-date-picker": "^5.1.0",
@@ -32,28 +35,28 @@
     "react-icons": "^4.1.0",
     "react-minimal-side-navigation": "^1.5.1",
     "react-modal": "^3.12.1",
-    "react-native": "^0.63.3",
+    "react-native": "^0.21.0",
     "react-overlays": "^4.1.1",
     "react-router": "^5.2.0",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "styled-components": "^5.2.1",
+    "watchpack": "^1.7.5",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "set PORT=3010 && react-scripts start",
-    "build": "set PORT=3010 && react-scripts build",
-    "test": "set PORT=3010 && react-scripts test",
-    "eject": "set PORT=3010 && react-scripts eject",
-    "dev": "concurrently -k \"npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3010 && electron ."
+    "react:start": "set PORT=3010 && react-scripts start",
+    "react:build": "set PORT=3010 && react-scripts build",
+    "react:test": "set PORT=3010 && react-scripts test",
+    "react:eject": "set PORT=3010 && react-scripts eject",
+    "electron:build": "electron-builder",
+    "release": "npm run react:build && npm run electron-builder --publish=always",
+    "build": "npm run react:build && npm run electron:build",
+    "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "build": {
+    "appId": "com.controlproduction.master"
   },
   "browserslist": {
     "production": [
@@ -70,6 +73,10 @@
   "devDependencies": {
     "concurrently": "^5.3.0",
     "electron": "^11.0.1",
+    "electron-builder": "^22.9.1",
+    "electron-packager": "^15.2.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.22.0",
     "wait-on": "^5.2.0"
   }
 }

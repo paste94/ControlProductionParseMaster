@@ -1,21 +1,21 @@
 import {preventivo, Parse} from './http-common';
 
-/**Aggiunge un preventivo al database
- * 
+/**
+ * Aggiunge un preventivo al database
  * @param {Object} newPreventivo il nuovo preventivo da aggiungere
  * @param {String} commessaId ID della commessa parent
- * @param {function} responseCallback callback per successo
- * @param {function} errorCallback callback per errore
+ * @param {function} callback callback per successo
  */
-async function addPreventivo(newPreventivo, commessaId, callback){
+async function addPreventivo(newPreventivo, commessaId, callback) {
     const prev = new Parse.Object(preventivo)
-    Object.keys(newPreventivo).forEach( key => prev.set(key, newPreventivo[key]) )
+    Object
+        .keys(newPreventivo)
+        .forEach( key => prev.set(key, newPreventivo[key]) )
     prev.set('parent', commessaId)
     await prev.save()
-            .then( 
-                () => callback(), 
-                (error) => console.error('ERRORE:', error.message)
-            )
+            .then(
+                () => callback(),
+                (error) => console.error('ERRORE:', error.message) )
 }
 
 async function getAllPreventivi(commessaId, callback){
@@ -40,7 +40,6 @@ function deletePreventivo(id, callback){
     query.get(id)
         .then( 
             elem => {
-                console.log(elem)
                 elem.set('eliminato', true)
                 elem.save()
                 callback()

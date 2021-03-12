@@ -4,56 +4,55 @@ import MacchineTable from './MacchineTable';
 import { updateMacchina, deleteMacchina } from '../../DAO/Macchine.service';
 import ModalNewMacchina from './ModalNewMacchina';
 import ModalConfirm from '../../components/ModalConfirm';
+import PropTypes from 'prop-types'
 
 /**
- * 
+ *
  * @param {Object}  props Properties
- *                  - handleShowAlert (function) handler che mostra l'alert per gli errori
+ *                  - handleShowAlert (function) handler
+ *                      che mostra l'alert per gli errori
+ * @return {Component} il componente
  */
-function Macchine(props){
-    // Macchine 
-    const [macchine, setMacchine] = useState([]); 
+function Macchine({handleShowAlert}) {
+    // Macchine
+    const [macchine, setMacchine] = useState([])
     const [deleteId, setDeleteId] = useState(null)
 
     // Modals
-    const [modalState, setModalState] = useState({
-        confirm: false
-    });
+    const [modalState, setModalState] = useState({confirm: false});
 
-    /*************** HANDLERS ***************/
+    /** ************* HANDLERS ***************/
 
     // MODIFICA MACCHINA
     const handleEdit = (id, newMacchina) => {
         updateMacchina(
-            id, 
-            newMacchina, 
-            (error) => props.handleShowAlert(error)
+            id,
+            newMacchina,
+            (error) => handleShowAlert(error),
         )
     }
 
     const handleRefresh = () => {
         getAllMacchine(
-            (result)=> {
-                setMacchine(result)
-                console.log('reaload', result)
-            },
-            (error)=> props.handleShowAlert(error)
+            result => setMacchine(result),
+            error => handleShowAlert(error),
         )
     }
 
     // MOSTRA modal CONFERMA
-    const handleShowConfirm = () => setModalState({...modalState, confirm: true});
+    const handleShowConfirm = () =>
+        setModalState({...modalState, confirm: true})
 
     // CHIUDI modal CONFERMA
     const handleCloseConfirm = () => {
-        setModalState({...modalState, confirm: false});
-        setDeleteId(null);
+        setModalState({...modalState, confirm: false})
+        setDeleteId(null)
     }
 
     // RICHIEDI CONFERMA ELIMINAZIONE
     const handleDelete = (id) => {
         setDeleteId(id)
-        handleShowConfirm();
+        handleShowConfirm()
     };
 
     // ELIMINA MACCHINA
@@ -61,49 +60,55 @@ function Macchine(props){
         const id = deleteId;
         setDeleteId(null);
         deleteMacchina(
-            id, 
-            (error) => props.handleShowAlert(error)
+            id,
+            (error) => handleShowAlert(error),
         )
         handleRefresh()
         handleCloseConfirm()
     }
 
-    /*************** EFFECT ***************/
+    /** ************* EFFECT ***************/
 
-    // Il secondo parametro [] serve per farlo eseguire una volta sola quando avvii la pagina
+    // Il secondo parametro [] serve per farlo
+    // eseguire una volta sola quando avvii la pagina
     useEffect(handleRefresh, []);
 
 
     return (
         <div className='page'>
 
-            <div className='container' style={{marginBottom: 10}}>
+            <div className='container' style={{ marginBottom: 10 }}>
                 <div className='row align-items-center'>
                     <div className='col'>
                         <h1>Macchine</h1>
                     </div>
                     <div className='col'>
-                        <ModalNewMacchina 
-                            handleRefresh={handleRefresh}
-                            handleShowAlert={props.handleShowAlert} />
+                        <ModalNewMacchina
+                            handleRefresh={ handleRefresh }
+                            handleShowAlert={ handleShowAlert } />
                     </div>
                 </div>
-            </div>      
+            </div>
 
             <MacchineTable
                 data={macchine}
                 handleEdit={handleEdit}
                 handleDelete={handleDelete} />
 
-            <ModalConfirm 
+            <ModalConfirm
                 show={modalState.confirm}
-                title={"Conferma eliminazione"}
+                title={'Conferma eliminazione'}
                 handleConfirm={handleDeleteConfirm}
                 handleClose={handleCloseConfirm} >
-                    <p>Confermare l'eliminazione? ATTENZIONE! Questa operazione non è reversibile</p>
+                    <p>Confermare l`&apos;`eliminazione? ATTENZIONE!
+                        Questa operazione non è reversibile</p>
             </ModalConfirm>
         </div>
     )
+}
+
+Macchine.propTypes = {
+    handleShowAlert: PropTypes.func.isRequired,
 }
 
 export default Macchine;

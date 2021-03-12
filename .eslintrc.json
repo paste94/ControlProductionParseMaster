@@ -1,0 +1,43 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "google"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "linebreak-style":"off",
+        "valid-jsdoc":"warn",
+        "max-len":"warn",
+        "space-before-blocks":"warn",
+        "indent":"off",
+        "semi":"off",
+        "no-trailing-spaces":"warn",
+        "object-curly-spacing":"off",
+        "keyword-spacing":"warn",
+        "no-unused-vars":"warn",
+        "spaced-comment":"warn",
+        "comma-dangle":"warn",
+        "arrow-parens":"off",
+        "key-spacing":"warn",
+        "require-jsdoc":"warn",
+        "quotes":"warn",
+        "prefer-const":"warn",
+        "curly":"warn",
+        "comma-spacing":"warn",
+        "react/display-name":"off",
+        "padded-blocks":"warn"
+    }
+}

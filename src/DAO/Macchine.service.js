@@ -1,18 +1,7 @@
-import http from './http-common';
 import macchine from '../macchine.json'
 
 function getAllMacchine(){
     return macchine
-    /*
-    http
-        .get("/macchina")
-        .then(function(response) {
-            responseCallback(response.data);
-        })
-        .catch(function(error) {
-            errorCallback(error.message);
-        });
-        */
 }
 
 function addMacchina(macchina, errorCallback){

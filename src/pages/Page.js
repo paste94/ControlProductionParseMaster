@@ -1,7 +1,11 @@
 import React from 'react';
 import '../css/simple-sidebar.css';
 
-function Page({children}) {
+/**
+ * Crea una pagina wrapper
+ * @return {Component} il componente
+ */
+function Page() {
     return (
         <div id="page-content-wrapper" className='container-fluid mt-4'>
             {children}

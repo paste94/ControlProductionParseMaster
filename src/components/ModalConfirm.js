@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-
+import PropTypes from 'prop-types'
 
 /** Crea un modal di confirm usando bootstrap
  * 
@@ -11,31 +11,38 @@ import { Modal, Button } from 'react-bootstrap';
  *                  - handleConfirm (function) Cosa eseguire nel caso sia clickata la conferma
  *                  - handleClose (function) Indica cosa fare se il modal verrà chiuso 
  */
-function ModalConfirm(props){
-
+function ModalConfirm({title, show, handleClose, handleConfirm}) {
     return (
         <Modal 
-            show={props.show}
-            onHide={props.handleClose}
+            show={show}
+            onHide={handleClose}
             centered >
             <Modal.Header closeButton>
                 <Modal.Title>
-                    {props.title}
+                    {title}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {props.children}
+                {children}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={props.handleClose}>
+                <Button variant="secondary" onClick={handleClose}>
                     Annulla
                 </Button>
-                <Button variant="primary" onClick={props.handleConfirm}>
+                <Button variant="primary" onClick={handleConfirm}>
                     Conferma
                 </Button>
             </Modal.Footer>
         </Modal> 
     )   
+}
+
+
+ModalConfirm.propTypes = {
+    title: PropTypes.string.isRequired,
+    show: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    handleConfirm: PropTypes.func.isRequired,
 }
 
 export default ModalConfirm;

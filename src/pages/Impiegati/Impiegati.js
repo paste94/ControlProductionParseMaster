@@ -8,6 +8,7 @@ import ModalNewImpiegato from './ModalNewImpiegato';
 import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
 import { MdRefresh } from 'react-icons/md';
+import PropTypes from 'prop-types'
 
 /**Pagina degli impiegati
  * 
@@ -15,7 +16,7 @@ import { MdRefresh } from 'react-icons/md';
  *                  - handleShowAlert (function) handler che mostra l'alert
  *                  
  */
-function Impiegati(props) {
+function Impiegati({handleShowAlert}) {
     /*************** STATE ***************/
 
     // Elenco degli impiegati 
@@ -130,45 +131,51 @@ function Impiegati(props) {
                         </Row>
                     </Col>
                     <Col>
-                        <Button 
-                            className='float-right vertical-center' 
+                        <Button
+                            className='float-right vertical-center'
                             onClick={handleShowNewImpiegato}>
                                 Aggiungi impiegato
                         </Button>
                     </Col>
                 </Row>
-            </div>          
+            </div>
 
-            <ImpiegatiTable 
-                data={data} 
+            <ImpiegatiTable
+                data={data}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
-                handleShowAlert={props.handleShowAlert} />
+                handleShowAlert={ handleShowAlert } />
 
-            <ModalNewImpiegato 
-                show={modalState.newImp} 
-                handleClose={handleCloseNewImpiegato} 
+            <ModalNewImpiegato
+                show={modalState.newImp}
+                handleClose={handleCloseNewImpiegato}
                 handleChangeNome={handleChangeNome}
                 handleChangeChip={handleChangeChip}
                 handleShowChip={handleShowChip}
                 handleAddImpiegato={handleAddImpiegato}
-                newImp={newImp}/>
+                newImp={newImp} />
 
-            <ModalChip 
-                show={modalState.chip} 
-                handleClose={handleCloseChip} 
-                handleSetChip={handleSetChip}/>
+            <ModalChip
+                show={modalState.chip}
+                handleClose={handleCloseChip}
+                handleSetChip={handleSetChip} />
 
             <ModalConfirm
-                show={modalState.confirm} 
-                title='Conferma eliminazione'  
-                handleConfirm={handleDeleteConfirm} 
-                handleClose={handleCloseConfirm} 
-                >
-                    <p>Confermare l'eliminazione? ATTENZIONE! Questa operazione non è reversibile</p>
+                show={modalState.confirm}
+                title='Conferma eliminazione'
+                handleConfirm={handleDeleteConfirm}
+                handleClose={handleCloseConfirm} >
+                    <p>
+                        Confermare l`&apos;`eliminazione?
+                        ATTENZIONE! Questa operazione non è reversibile
+                    </p>
             </ModalConfirm>
         </div>
     );
+}
+
+Impiegati.propTypes = {
+    handleShowAlert: PropTypes.func.isRequired,
 }
 
 export default Impiegati;

@@ -3,8 +3,6 @@ import { Parse, lavori } from './http-common';
 function getLavori(macchina, startDate, endDate, includeInProgress, callback, errorCallback){
     const query = new Parse.Query(lavori)
 
-    console.log(startDate, new Date(startDate+'T00:00:00'))
-
     if(macchina !== 'Tutte')
         query.equalTo('macchina', macchina)
     // TODO Aggiungi la data alla query
@@ -19,7 +17,6 @@ function getLavori(macchina, startDate, endDate, includeInProgress, callback, er
                     ...elem.attributes
                 })
             )
-            console.log(data)
             callback(data)
         })
         .catch((error) => {

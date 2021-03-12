@@ -8,16 +8,17 @@ import Commesse from '../pages/Commesse/Commesse';
 import { Alert, AlertContainer } from "react-bs-notifier";
 import Articoli from '../pages/Articoli/Articoli';
 import CommessaSingola from '../pages/CommessaSingola/CommessaSingola';
+import PropTypes from 'prop-types'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le 
  * destinazioni delle varie pagine di navigazione.
  */
-function AppRoutes(){
+function AppRoutes() {
     // Lo stato dell'alert usato come errore
     const [alertState, setAlertState] = useState({
-        show: false, 
-        message: ''
+        show: false,
+        message: '',
     });
 
     // Mostra l'alert di errore 
@@ -32,7 +33,7 @@ function AppRoutes(){
             path: '/commesse',
             text: 'Commesse',
             main: () => {
-                return(
+                return (
                     <Page>
                         <Commesse
                             alertState={alertState}
@@ -62,7 +63,7 @@ function AppRoutes(){
             path: '/lavori',
             text: 'Lavori',
             main: () => {
-                return(
+                return (
                     <Page>
                         <Lavori
                             alertState={alertState}
@@ -70,14 +71,14 @@ function AppRoutes(){
                             handleCloseAlert={handleCloseAlert} />
                     </Page>
                 )
-            }
+            },
         },
         {
             id: 3,
             path: '/articoli',
             text: 'Articoli',
             main: () => {
-                return(
+                return (
                     <Page>
                         <Articoli
                             alertState={alertState}
@@ -85,8 +86,8 @@ function AppRoutes(){
                             handleCloseAlert={handleCloseAlert} />
                     </Page>
                 )
-            }
-        }
+            },
+        },
     ]
 
     return (
@@ -129,15 +130,17 @@ function AppRoutes(){
                         onDismiss={handleCloseAlert} 
                         showIcon={true} 
                         timeout={5000} >
-
-						    {alertState.message}
-					</Alert>
-				) : null}
+                            {alertState.message}
+                    </Alert>
+                ) : null}
             </AlertContainer>
-
 
         </div>
     )
+}
+
+AppRoutes.propTypes = {
+    location: PropTypes.object.isRequired,
 }
 
 export default AppRoutes;

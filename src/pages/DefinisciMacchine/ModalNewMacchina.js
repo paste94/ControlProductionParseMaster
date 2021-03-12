@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, FormControl, InputGroup, Button, Form } from 'react-bootstrap';
 import { addMacchina } from '../../DAO/Macchine.service';
+import PropTypes from 'prop-types'
 
 /**
  * Modal specifico per l'aggiunta della macchina
@@ -9,7 +10,7 @@ import { addMacchina } from '../../DAO/Macchine.service';
  *                  - handleRefresh (function) handler che gestisce il refresh della tabella
  *                  - handleShowAlert (function) handler che mostra l'alert
  */
-function ModalNewMacchina(props){
+function ModalNewMacchina({handleShowAlert, handleRefresh}) {
     const [show, setShow] = useState(false)
     const [newMacchina, setNewMacchina] = useState({});
 
@@ -18,23 +19,19 @@ function ModalNewMacchina(props){
 
     const handleAddForm = (e) => {
         addMacchina(newMacchina, 
-            (error) => props.handleShowAlert(error)
+            (error) => handleShowAlert(error)
         )
-        props.handleRefresh();
+        handleRefresh();
         handleClose()
         e.preventDefault();
     }
 
-    const handleChangeNome = (event) => setNewMacchina({...newMacchina, nome: event.target.value});
+    const handleChangeNome = (event) =>
+        setNewMacchina({...newMacchina, nome: event.target.value});
 
-    // AGGIUNGI NUOVA MACCHINA
-    const handleAddMacchina = () => {
-        
-    };
-    
     return (
         <div>
-            <Button 
+            <Button
                 className='float-right vertical-center'
                 onClick={handleShow} >
                     Aggiungi macchina
@@ -71,6 +68,11 @@ function ModalNewMacchina(props){
             </Modal>    
         </div>
     )
+}
+
+ModalNewMacchina.propTypes = {
+    handleShowAlert: PropTypes.func.isRequired,
+    handleRefresh: PropTypes.func.isRequired,
 }
 
 export default ModalNewMacchina;

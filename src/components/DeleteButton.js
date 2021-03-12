@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { FaTrash } from 'react-icons/fa';
-import ModalConfirm from './ModalConfirm';
+import React, { useState } from 'react'
+import { Button } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import { FaTrash } from 'react-icons/fa'
+import ModalConfirm from './ModalConfirm'
 
-/**Definisce il bottone dell'eliminazione di un elemento dalla tabella, con modal di conferma
- * 
+/**
+ * Definisce il bottone dell'eliminazione di un elemento
+ * dalla tabella, con modal di conferma
  * @param {Object}  props properties
  *                  - title (string) il titolo del bottone
 *                   - children (Component) Cosa mostrare nel corpo del confirm
- *                  - handleConfirm (function) Cosa eseguire nel caso sia clickata la conferma
+ *                  - handleConfirm (function) Cosa eseguire nel caso sia
+ *                      clickata la conferma
+ * @return {Component} il component
  */
-function DeleteButton(props){
+function DeleteButton(props) {
     const [show, setShow] = useState(false)
 
     const handleShow = () => setShow(true)
@@ -20,7 +24,7 @@ function DeleteButton(props){
         handleClose()
     }
 
-    return(
+    return (
         <div>
 
             <Button
@@ -34,12 +38,17 @@ function DeleteButton(props){
             <ModalConfirm
                 show={show}
                 title={props.title}
-                children={props.children}
                 handleConfirm={ handleConfirm }
-                handleClose={ handleClose } />
+                handleClose={ handleClose } > {props.children} </ModalConfirm>
         </div>
 
     )
+}
+
+DeleteButton.propTypes = {
+    handleConfirm: PropTypes.func.isRequired,
+    title: PropTypes.string,
+    children: PropTypes.object,
 }
 
 export default DeleteButton

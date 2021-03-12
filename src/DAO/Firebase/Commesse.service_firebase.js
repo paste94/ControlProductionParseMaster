@@ -78,23 +78,10 @@ function getCommessa(id, responseCallback, errorCallback){
 }
 
 function deletePreventivo(commessaId, numDisegno, callback){
-    /*
-    let prevName = 'preventivo.' + numDisegno.replace(/\./g, '%2E');
-    console.log(prevName)
-    if(numDisegno === undefined){
-        numDisegno = 'undefined';
-    }
-    let obj = {};
-    obj[prevName] = {
-        deleted: true
-    }
-    */
     const prevName = 'preventivo.' + numDisegno
     const FieldValue = firebase.firestore.FieldValue
     const obj = {}
     obj[prevName] = FieldValue.delete()
-
-    console.log(commessaId, numDisegno)
 
     db.collection(commesse).doc(commessaId)
         .update(obj)
@@ -139,7 +126,6 @@ function deleteCommessa(id){
  * @param {function} errorCallback callback per errore
  */
 function updateCommessa(id, newVal){
-    console.log(newVal)
     const [key] = Object.keys(newVal)
 
     let obj = {}
@@ -173,8 +159,6 @@ function editCommessaLavoro(idCommessa, lavoro){
     let obj = {};
 
     obj[path] = lavoro;
-
-    console.log(idCommessa)
 
     db.collection(commesse)
         .doc(idCommessa)

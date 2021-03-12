@@ -1,19 +1,23 @@
 import React from 'react';
 import { Modal, FormControl, InputGroup, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types'
 
-/** Definisce il modal che permette di impostare il chip
- *  
- * @param {Object}  props le property passate al modal 
- *                  - show (boolean) indica se il modal deve essere mostrato o no
- *                  - handleClose (function) Cosa eseguire quando chiudo il modal si chiude
- *                  - handleSetChip (function) Cosa eseguire quando viene impostato il chip
+/**
+ * Definisce il modal che permette di impostare il chip
+ * @param {Object}  props le property passate al modal
+ *                  - show (boolean) indica se il modal
+ *                      deve essere mostrato o no
+ *                  - handleClose (function) Cosa eseguire
+ *                      quando chiudo il modal si chiude
+ *                  - handleSetChip (function) Cosa eseguire
+ *                      quando viene impostato il chip
+ * @return {Component} il component creato
  */
-function ModalChip(props){
-
+function ModalChip({show, handleClose, handleSetChip}) {
     return (
-        <Modal 
-            show={props.show}
-            onHide={props.handleClose}
+        <Modal
+            show={ show }
+            onHide={ handleClose }
             centered
             size="sm"
             animation={false}
@@ -27,24 +31,33 @@ function ModalChip(props){
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <label style={{color:'red'}}>Scorri il badge sul lettore per impostare il codice</label>
+                <label
+                    style={{ color: 'red' }} >
+                        Scorri il badge sul lettore per impostare il codice
+                    </label>
                 <InputGroup className="mb-3">
                     <FormControl
                         autoFocus
                         placeholder="Chip"
                         aria-label="Chip"
                         aria-describedby="basic-addon1"
-                        onKeyPress={props.handleSetChip}
+                        onKeyPress={ handleSetChip }
                     />
                 </InputGroup>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={props.handleClose}>
+                <Button variant="secondary" onClick={ handleClose }>
                     Annulla
                 </Button>
             </Modal.Footer>
-        </Modal> 
-    )   
+        </Modal>
+    )
+}
+
+ModalChip.propTypes = {
+    show: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    handleSetChip: PropTypes.func.isRequired,
 }
 
 export default ModalChip;

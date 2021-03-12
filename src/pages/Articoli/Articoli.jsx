@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
-import { addArticolo, editArticolo, deleteArticolo, getAllArticoli } from '../../DAO/Articoli.service';
+import {
+    addArticolo,
+    editArticolo,
+    deleteArticolo,
+    getAllArticoli,
+} from '../../DAO/Articoli.service';
 import ArticoliTable from './ArticoliTable'
 
-/** Pagina per la visualizzazione degli articoli salvati. 
- * 
+/**
+ * Pagina per la visualizzazione degli articoli salvati.
+ * @return {Component} il component
  */
-function Articoli(){
+function Articoli() {
     // Dati della tabella
     const [data, setData] = useState([])
     const [update, setUpdate] = useState(true)
@@ -16,14 +22,13 @@ function Articoli(){
 
     /**
      * Aggiunge un articolo al database
-     * 
      * @param {object} articolo l'articolo da aggiungere
+     * @return {*} none
      */
     const handleAddArticolo = (articolo) => addArticolo(articolo, refresh)
 
     /**
-     * Modifica un articolo 
-     * 
+     * Modifica un articolo
      * @param {string} id identificativo dell'articolo da modificare
      * @param {object} articolo oggetto con le modifiche effettuate
      */
@@ -33,16 +38,13 @@ function Articoli(){
 
     /**
      * Elimina un articolo
-     * 
      * @param {string} id identificativo dell'elemento da eliminare dal DB
+     * @return {*} none
      */
-    const handleDeleteArticolo = (id) => {
-        deleteArticolo(id, refresh)
-    }
+    const handleDeleteArticolo = (id) => deleteArticolo(id, refresh)
 
-    /**
-     * Richiama il listener con i dati da mostrare in tabella
-     */
+
+    // Richiama il listener con i dati da mostrare in tabella
     useEffect(() => {
         getAllArticoli( (result) => setData(result) )
     }, [update]);
@@ -56,17 +58,17 @@ function Articoli(){
                 <Col>
                     <ModalCommessaSingola
                         data={{
-                            numPezzi:1,
-                            costMat:0,
-                            costoOrario:42,
-                            numDisegno:'',
-                            stozz:0,
-                            squadr:0,
-                            fresa:0,
-                            tornio:0,
-                            CN:0,
-                            rettifica:0,
-                            banco:0
+                            numPezzi: 1,
+                            costMat: 0,
+                            costoOrario: 42,
+                            numDisegno: '',
+                            stozz: 0,
+                            squadr: 0,
+                            fresa: 0,
+                            tornio: 0,
+                            CN: 0,
+                            rettifica: 0,
+                            banco: 0,
                         }}
                         type='add'
                         handleConfirm={ handleAddArticolo }
@@ -76,8 +78,8 @@ function Articoli(){
             <Row>
                 <Col>
                     <ArticoliTable
-                        data={data} 
-                        handleEditArticolo={handleEditArticolo} 
+                        data={data}
+                        handleEditArticolo={handleEditArticolo}
                         handleDeleteArticolo={handleDeleteArticolo} />
                 </Col>
             </Row>
