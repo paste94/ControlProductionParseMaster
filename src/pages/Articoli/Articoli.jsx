@@ -59,8 +59,8 @@ function Articoli() {
                     <ModalCommessaSingola
                         data={{
                             numPezzi: 1,
-                            costMat: 0,
-                            costoOrario: 42,
+                            costMat: '0',
+                            costoOrario: '42',
                             numDisegno: '',
                             stozz: 0,
                             squadr: 0,

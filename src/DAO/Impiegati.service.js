@@ -1,53 +1,88 @@
 import { impiegati, Parse} from './http-common';
 
-/**Ottiene tutti gli impiegati dal database
- * 
- * @param {*} responseCallback callback per successo.
+/** Ottiene tutti gli impiegati dal database
+ * @param {function} callback callback per successo.
+ * @param {function} callbackError callback per errore.
  */
-async function getAllImpiegati(callback){
-    let query = new Parse.Query(impiegati)
-    query.notEqualTo('eliminato', true)
-    let result = await query.find()
-    let data = []
-    result.forEach(elem => {
-        data.push({
-            id: elem.id,
-            ...elem.attributes
-        })
-    })
-    callback(data)
+function getAllImpiegati(callback, callbackError) {
+    new Parse.Query(impiegati)
+        .notEqualTo('eliminato', true)
+        .find()
+        .then(
+            result => {
+                const data = []
+                result.forEach(elem => {
+                    data.push({
+                        id: elem.id,
+                        ...elem.attributes,
+                    })
+                })
+                callback(data)
+            },
+            error => {
+                console.error(error)
+                callbackError(error.message)
+            })
 }
 
-function addImpiegato(newImpiegato, callback){
+/** Aggiunge un nuovo impiegato al database
+ *
+ * @param {Impiegato} newImpiegato l'impiegato da aggiungere
+ * @param {function} callback callback per successo.
+ * @param {function} callbackError callback per errore.
+ */
+function addImpiegato(newImpiegato, callback, callbackError) {
     const impiegato = new Parse.Object(impiegati)
-    Object.keys(newImpiegato).forEach( key => impiegato.set(key, newImpiegato[key]) )
+    Object.keys(newImpiegato).forEach(
+        key => impiegato.set(key, newImpiegato[key]))
     impiegato.set('lavoriInCorso', [])
-    impiegato.save()
-        .then( callback )
-        .catch( (error) => console.error('ERRORE:', error.message) )
+        .save()
+        .then(
+            callback,
+            error => {
+                console.error(error)
+                callback(error.message)
+            })
 }
 
-function deleteImpiegato(id, callback){
-    let query = new Parse.Query(impiegati)
-    query.get(id)
-        .then( 
+/** Elimina l'impiegato selezionato
+ *
+ * @param {String} id ID dell'impiegato da eliminare.
+ * @param {function} callback callback per successo.
+ * @param {function} callbackError callback per errore.
+ */
+function deleteImpiegato(id, callback, callbackError) {
+    new Parse.Query(impiegati)
+        .get(id)
+        .then(
             elem => {
                 elem.set('eliminato', true)
                 elem.save()
                 callback()
-            }, 
-            error => console.error('ERRORE:', error.message)
-        )
+            },
+            error => {
+                console.error(error)
+                callbackError(error.message)
+            })
 }
 
-function updateImpiegato(id, newVal, callback){
+/** Modifica un campo dell'impiegato
+ *
+ * @param {String} id ID dell'impiegato da modificare
+ * @param {Impiegato} newVal Oggetto che indica {nome_parametro : nuovo_valore}
+ * @param {function} callback callback per successo.
+ * @param {function} callbackError callback per errore.
+ */
+function updateImpiegato(id, newVal, callback, callbackError) {
     const [key] = Object.keys(newVal)
-    let query = new Parse.Query(impiegati)
-    query.get(id)
-        .then( 
-            elem => elem.set( key, newVal[key] ).save().then( () => callback() ), 
-            error => console.error('ERRORE:', error.message)
-        )
+    new Parse.Query(impiegati)
+        .get(id)
+        .then(
+            elem => elem.set( key, newVal[key] ).save().then( callback ),
+            error => {
+                console.error(error)
+                callbackError(error.message)
+            })
 }
 
 export {getAllImpiegati, addImpiegato, deleteImpiegato, updateImpiegato};

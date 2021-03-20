@@ -27,11 +27,10 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
                 <ModalCommessaSingola
                     data={row}
                     handleConfirm={
-                        (articolo) =>
-                            handleEditArticolo(row.id, articolo)
+                        articolo => handleEditArticolo(row.id, articolo)
                     }
-                    confirmButtonText={'Modifica'}
-                    type={'edit'} />
+                    confirmButtonText='Modifica'
+                    type='edit' />
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton

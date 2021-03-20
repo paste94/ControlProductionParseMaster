@@ -7,12 +7,14 @@ import ModalChip from './ModalChip';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
 
-/**Definisce la tabella degli impiegati
- * 
- * @param {Object}  props Definisce le propertyes della tabella 
+/** Definisce la tabella degli impiegati
+ *
+ * @param {Object}  props Definisce le propertyes della tabella
  *                  - data: I dati da mostrare
  *                  - handleDelete: Handler dell'eliminazione della riga
- *                  - handleEdit (function) Cosa eseguire quando viene impostato il chip
+ *                  - handleEdit (function) Cosa eseguire quando viene
+ *                                          impostato il chip
+ * @return {Component} Il componente creato
  */
 function ImpiegatiTable({data, handleEdit, handleDelete}) {
     const [editRow, setEditRow] = useState(null)
@@ -53,43 +55,45 @@ function ImpiegatiTable({data, handleEdit, handleDelete}) {
     const columns = [{
         dataField: 'id',
         text: 'ID',
-        hidden:true
+        hidden: true,
     }, {
         dataField: 'nome',
-        text: 'Nome'
+        text: 'Nome',
     }, {
         dataField: 'chip',
         text: 'Chip',
         editable: false,
         events: {
-            onClick: (e, column, columnIndex, row, rowIndex) => { 
+            onClick: (e, column, columnIndex, row, rowIndex) => {
                 setEditRow(row)
                 handleShow()
-            }
-        }
+            },
+        },
     }, {
         dataField: 'actions',
         text: 'Azioni',
         formatter: defineButtons,
         editable: false,
-        headerStyle: { width: 20 }
+        headerStyle: { width: 20 },
     }];
 
     return (
         <div>
-            <BootstrapTable 
-                keyField='id' 
-                data={ data } 
-                columns={ columns } 
+            <BootstrapTable
+                keyField='id'
+                data={ data }
+                columns={ columns }
                 pagination={ paginationFactory() }
-                cellEdit={ cellEditFactory({ 
+                noDataIndication='Tabella vuota. Fai click su "Aggiungi
+                                    impiegato" per iniziare'
+                cellEdit={ cellEditFactory({
                     mode: 'click',
                     blurToSave: true,
-                    afterSaveCell: (oldValue, newValue, row, column) => { 
+                    afterSaveCell: (oldValue, newValue, row, column) => {
                         handleSetNome(row.id, newValue)
-                    }
+                    },
                 })} />
-            
+
             <ModalChip
                 show={show}
                 handleClose={handleClose}

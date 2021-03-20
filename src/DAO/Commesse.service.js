@@ -3,8 +3,9 @@ import {commesse, Parse} from './http-common';
 /**
  * Ottiene tutte le commesse dal database
  * @param {function} callback callback per successo.
+ * @param {function} callbackError callback per errore.
  */
-async function getAllCommesse(callback) {
+async function getAllCommesse(callback, callbackError) {
     new Parse.Query(commesse)
         .notEqualTo('eliminato', true)
         .find()
@@ -21,8 +22,11 @@ async function getAllCommesse(callback) {
                     preventivo: elem.get('preventivo'),
                 })
             })
-            callback(data)
-        }, (error) => console.error('ERRORE:', error.message))
+           callback(data)
+        }, (error) => {
+            console.log('ERRORE:', error)
+            callbackError(error.message)
+        })
 }
 
 /**

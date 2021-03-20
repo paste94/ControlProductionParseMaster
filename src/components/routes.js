@@ -140,7 +140,7 @@ function AppRoutes() {
 }
 
 AppRoutes.propTypes = {
-    location: PropTypes.object.isRequired,
+    location: PropTypes.object,
 }
 
 export default AppRoutes;

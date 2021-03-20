@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
  *                  - handleConfirm (function) Cosa eseguire nel caso sia clickata la conferma
  *                  - handleClose (function) Indica cosa fare se il modal verrà chiuso 
  */
-function ModalConfirm({title, show, handleClose, handleConfirm}) {
+function ModalConfirm({title, show, handleClose, handleConfirm, children}) {
     return (
         <Modal 
             show={show}
@@ -43,6 +43,7 @@ ModalConfirm.propTypes = {
     show: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     handleConfirm: PropTypes.func.isRequired,
+    children: PropTypes.node,
 }
 
 export default ModalConfirm;

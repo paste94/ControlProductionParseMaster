@@ -18,16 +18,11 @@ import AlertError from '../../components/AlertError'
  */
 function Commesse({handleShowAlert}) {
     const [data, setData] = useState([])
-    const [error, setError] = useState({
-        show: false,
-        title: '',
-        message: '',
-    })
+    const [error, setError] = useState('')
     const refresh = () => getAllCommesse( setData, setError )
     const handleDelete = id => deleteCommessa(id, refresh)
-    const handleEdit = (id, newVal) => {
+    const handleEdit = (id, newVal) =>
         updateCommessa(id, newVal, refresh)
-    }
     const handleAdd = (newCommessa) => {
         addCommessa(
             {
@@ -45,15 +40,20 @@ function Commesse({handleShowAlert}) {
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
     useEffect(() => {
-        getAllCommesse( result => setData(result))
+        getAllCommesse(
+            (data) => setData(data),
+            (error) => {
+                console.log('ERROR***************')
+                setError(error)
+            })
     }, []);
 
     return (
         <div className='page'>
             <AlertError
-                show={error.show}
-                title={error.title}
-                message={error.message} />
+                show={error !== ''}
+                message={error}
+                handleClose={ () => setError('') } />
             <Row className='align-items-center'>
                 <Col>
                     <Row className='ml-1'>

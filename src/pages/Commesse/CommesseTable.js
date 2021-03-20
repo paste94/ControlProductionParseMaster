@@ -149,7 +149,7 @@ function CommesseTable({data, handleDelete, handleEdit}) {
 }
 
 CommesseTable.propTypes = {
-    data: PropTypes.array.isRequired,
+    data: PropTypes.array,
     handleDelete: PropTypes.func,
     handleEdit: PropTypes.func,
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, FormControl, InputGroup, Button, Form } from 'react-bootstrap';
-import { PropTypes } from 'react-bs-notifier/lib/alert-timer';
+import PropTypes from 'prop-types'
 
 /**
  * Modal specifico per l'aggiunta dell'impiegato
@@ -86,13 +86,13 @@ function ModalNewImpiegato({
 }
 
 ModalNewImpiegato.propTypes = {
-    newImp: PropTypes.object.isRequired,
-    show: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    handleAddImpiegato: PropTypes.func.isRequired,
-    handleChangeNome: PropTypes.func.isRequired,
-    handleChangeChip: PropTypes.func.isRequired,
-    handleShowChip: PropTypes.func.isRequired,
+    newImp: PropTypes.object,
+    show: PropTypes.bool,
+    handleClose: PropTypes.func,
+    handleAddImpiegato: PropTypes.func,
+    handleChangeNome: PropTypes.func,
+    handleChangeChip: PropTypes.func,
+    handleShowChip: PropTypes.func,
 }
 
 export default ModalNewImpiegato;

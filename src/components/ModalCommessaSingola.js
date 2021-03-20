@@ -63,7 +63,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
         setCostoOrario(DEF_COSTO_ORARIO)
         const macchineList = getAllMacchine()
         const om = {}
-        for (const [key, value] of Object.entries(macchineList)){
+        for (const [key, value] of Object.entries(macchineList)) {
             om[value.nome] = data[value.nome]
         }
         setOreMacchina(om)
@@ -92,10 +92,10 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
         e.target.value !== '' ? setNumPezzi(parseFloat(e.target.value)) : setNumPezzi(0)
     }
     const handleChangeCostMat = (e) => {
-        e.target.value !== '' ? setCostMat(parseFloat(e.target.value)) : setCostMat(0)
+        setCostMat(e.target.value)
     }
     const handleChangeCostoOrario = (e) => {
-        e.target.value !== '' ? setCostoOrario(parseFloat(e.target.value)) : setCostoOrario(0)
+        setCostoOrario(e.target.value)
     }
     
     const thisHandleConfirm = (e) => {
@@ -196,7 +196,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
     useEffect(()=>{
         // Ogni volta che vengono modificati i valori totOre,
         // costoOrario, costMat, numPezzi modifica il preventivo
-        setTotPreventivo((totOre * costoOrario + costMat) * numPezzi)
+        setTotPreventivo((totOre * costoOrario + parseFloat(costMat)) * numPezzi)
         updateTotOre()
         renderMacchine()
 
@@ -288,15 +288,19 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                                     <Form.Label>Costo materiali</Form.Label>
                                 </Col>
                                 <Col>
-                                    <InputGroup>
+                                    <InputGroup hasValidation>
                                         <FormControl
-                                            value={costMat}
+                                            value={ costMat }
                                             aria-describedby="basic-addon1"
                                             name='costMat'
-                                            onChange={handleChangeCostMat}/>
-                                        <InputGroup.Append>
+                                            isInvalid={ costMat === '' || isNaN(costMat) }
+                                            onChange={ handleChangeCostMat }/>
+                                        <InputGroup.Append style={{}}>
                                             <InputGroup.Text>€</InputGroup.Text>
                                         </InputGroup.Append>
+                                        <Form.Control.Feedback type="invalid">
+                                            {'Valore non valido'}
+                                        </Form.Control.Feedback>
                                     </InputGroup>
                                 </Col>
                             </Form.Row>
@@ -306,15 +310,19 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                                     <Form.Label>Costo orario</Form.Label>
                                 </Col>
                                 <Col>
-                                    <InputGroup>
+                                    <InputGroup hasValidation>
                                         <FormControl
                                             aria-describedby="basic-addon1"
                                             name='costoOrario'
                                             value={costoOrario}
+                                            isInvalid={ costoOrario === '' || isNaN(costoOrario) }
                                             onChange={handleChangeCostoOrario}/>
                                         <InputGroup.Append>
                                             <InputGroup.Text>€</InputGroup.Text>
                                         </InputGroup.Append>
+                                        <Form.Control.Feedback type="invalid">
+                                            {'Valore non valido'}
+                                        </Form.Control.Feedback>
                                     </InputGroup>
                                 </Col>
                             </Form.Row>

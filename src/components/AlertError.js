@@ -11,14 +11,14 @@ import PropTypes from 'prop-types'
  *                  - message (String): il messaggio di errore
  * @return {Component} ciao
   */
-function AlertError({show, title, message}) {
+function AlertError({show, message, handleClose}) {
     return (
         <AlertContainer position="top-right">
             { show ? (
                 <Alert
                     type="danger"
-                    headline={title}
-                    onDismiss={handleCloseAlert}
+                    headline='Errore'
+                    onDismiss={ handleClose }
                     showIcon={true}
                     timeout={5000} >
                         { message }
@@ -30,8 +30,8 @@ function AlertError({show, title, message}) {
 
 AlertError.propTypes = {
     show: PropTypes.bool.isRequired,
-    title: PropTypes.string,
     message: PropTypes.string,
+    handleClose: PropTypes.func,
 }
 
 export default AlertError
