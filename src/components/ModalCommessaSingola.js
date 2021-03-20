@@ -52,7 +52,6 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState({})
     const [firstRender, setFirstRender] = useState(true)
-    const [articoli, setArticoli] = useState([])
     const [articoliRender, setArticoliRender] = useState([])
 
     // Imposta tutti i valori ai default
@@ -72,24 +71,28 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
     // Aggiorna il totale delle ore delle macchine
     const updateTotOre = () => {
         let tot = 0
-        for (const [key, value] of Object.entries(oreMacchina)){
+        for (const [key, value] of Object.entries(oreMacchina)) {
             tot = tot + value
         }
         setTotOre(tot)
     }
-    
+
     const handleShow = () => {
         setShow(true)
         initNewCommessa()
     }
     const handleClose = () => setShow(false)
     const handleChangeOreMacchina = (e) => {
-        oreMacchina[e.target.name] = e.target.value !== '' ? parseFloat(e.target.value) : 0
+        oreMacchina[e.target.name] = e.target.value !== '' ?
+            parseFloat(e.target.value):
+            0
         updateTotOre()
     }
     const handleChangeNumDisegno = (e) => setNumDisegno(e.target.value)
     const handleChangeNumPezzi = (e) => {
-        e.target.value !== '' ? setNumPezzi(parseFloat(e.target.value)) : setNumPezzi(0)
+        e.target.value !== '' ?
+            setNumPezzi(parseFloat(e.target.value)):
+            setNumPezzi(0)
     }
     const handleChangeCostMat = (e) => {
         setCostMat(e.target.value)
@@ -97,13 +100,13 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
     const handleChangeCostoOrario = (e) => {
         setCostoOrario(e.target.value)
     }
-    
+
     const thisHandleConfirm = (e) => {
         e.preventDefault();
         handleConfirm({
             costMat: costMat,
             costoOrario: costoOrario,
-            numDisegno: numDisegno, 
+            numDisegno: numDisegno,
             numPezzi: numPezzi,
             totOre: totOre,
             totPreventivo: totPreventivo,
@@ -153,8 +156,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                     </Col>
                 </Form.Row>
                 <br></br>
-            </div>
-        )
+            </div> )
         setMacchineRender(macchineList)
     }
 
@@ -180,7 +182,6 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
      */
     function renderArticoli() {
         getAllArticoli( articoli => {
-            setArticoli(articoli)
             const AR = articoli.map( art =>
                 <Dropdown.Item
                     key={'ciao'}
@@ -189,14 +190,13 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                 </Dropdown.Item> )
             setArticoliRender(AR)
         })
-        // TODO: Mostra render degli articoli
-        // TODO: Crea onclick per gli elementi 
     }
 
     useEffect(()=>{
         // Ogni volta che vengono modificati i valori totOre,
         // costoOrario, costMat, numPezzi modifica il preventivo
-        setTotPreventivo((totOre * costoOrario + parseFloat(costMat)) * numPezzi)
+        setTotPreventivo(
+            (totOre * costoOrario + parseFloat(costMat)) * numPezzi )
         updateTotOre()
         renderMacchine()
 
@@ -293,7 +293,10 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                                             value={ costMat }
                                             aria-describedby="basic-addon1"
                                             name='costMat'
-                                            isInvalid={ costMat === '' || isNaN(costMat) }
+                                            isInvalid={
+                                                costMat === '' ||
+                                                isNaN(costMat)
+                                            }
                                             onChange={ handleChangeCostMat }/>
                                         <InputGroup.Append style={{}}>
                                             <InputGroup.Text>€</InputGroup.Text>
@@ -315,7 +318,10 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                                             aria-describedby="basic-addon1"
                                             name='costoOrario'
                                             value={costoOrario}
-                                            isInvalid={ costoOrario === '' || isNaN(costoOrario) }
+                                            isInvalid={
+                                                costoOrario === '' ||
+                                                isNaN(costoOrario)
+                                            }
                                             onChange={handleChangeCostoOrario}/>
                                         <InputGroup.Append>
                                             <InputGroup.Text>€</InputGroup.Text>
