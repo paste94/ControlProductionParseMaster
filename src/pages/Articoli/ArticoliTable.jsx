@@ -30,7 +30,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
                         articolo => handleEditArticolo(row.id, articolo)
                     }
                     confirmButtonText='Modifica'
-                    type='edit' />
+                    modalFrom='editArticolo' />
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton

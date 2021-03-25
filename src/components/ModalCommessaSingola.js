@@ -13,6 +13,8 @@ import {getAllMacchine} from '../DAO/Macchine.service'
 import { FaEdit } from 'react-icons/fa';
 import { getAllArticoli } from '../DAO/Articoli.service';
 import PropTypes from 'prop-types'
+import { addArticolo } from '../DAO/Articoli.service';
+import { Alert, AlertContainer } from 'react-bs-notifier'
 
 /**
  * Definisce modal per la modifica e la aggiunta di un lavoro
@@ -26,10 +28,6 @@ import PropTypes from 'prop-types'
  *                          - elenco dei valori delle macchine
  *                  - handleConfirm (function) funzione da eseguire
  *                      per la conferma del modal (aggiunta o modifica)
- *                  - fromPage (string) stringa che identifica da dove
- *                      viene richiamato il component. Se vale
- *                          'commessaSingola' allora viene mostrato il
- *                          dropdown per la selezione rapida dell'articolo
  *                  - type (string) stringa che identifica se il component
  *                          serve per aggiungere un elemento o modificarlo.
  *                          Se vale 'add' allora mostra le informazioni
@@ -37,11 +35,12 @@ import PropTypes from 'prop-types'
  *                          mostra gli elementi per la modifica.
  * @return {Component} il componente
  */
-function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
+function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
     const DEF_NUM_PEZZI = data.numPezzi
     const DEF_COSTO_MAT = data.costMat
     const DEF_COSTO_ORARIO = data.costoOrario
     const NUM_DISEGNO = data.numDisegno
+    const ADD = modalFrom === 'addArticolo' || modalFrom === 'addCommessa'
     const [show, setShow] = useState(false)
     const [macchineRender, setMacchineRender] = useState([])
     const [numDisegno, setNumDisegno] = useState(NUM_DISEGNO)
@@ -53,6 +52,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
     const [oreMacchina, setOreMacchina] = useState({})
     const [firstRender, setFirstRender] = useState(true)
     const [articoliRender, setArticoliRender] = useState([])
+    const [showAlert, setShowAlert] = useState(false)
 
     // Imposta tutti i valori ai default
     const initNewCommessa = () => {
@@ -81,7 +81,10 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
         setShow(true)
         initNewCommessa()
     }
-    const handleClose = () => setShow(false)
+    const handleClose = () => {
+        setShow(false)
+        setShowAlert(false)
+    }
     const handleChangeOreMacchina = (e) => {
         oreMacchina[e.target.name] = e.target.value !== '' ?
             parseFloat(e.target.value):
@@ -103,7 +106,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
 
     const thisHandleConfirm = (e) => {
         e.preventDefault();
-        handleConfirm({
+        const obj = {
             costMat: costMat,
             costoOrario: costoOrario,
             numDisegno: numDisegno,
@@ -124,8 +127,18 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                 oreMacchina['rettifica'] : 0,
             banco: oreMacchina['banco'] !== undefined ?
                 oreMacchina['banco'] : 0,
-        })
-        handleClose()
+        }
+        if (e.nativeEvent.submitter.id === 'primaryButton') {
+            handleConfirm(obj)
+            handleClose()
+        } else {
+            addArticolo(
+                obj,
+                () => {
+                    setShowAlert(true)
+                },
+            )
+        }
     }
 
     /**
@@ -182,11 +195,14 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
      */
     function renderArticoli() {
         getAllArticoli( articoli => {
+            console.log(articoli)
             const AR = articoli.map( art =>
                 <Dropdown.Item
-                    key={'ciao'}
+                    key={art.id}
                     onClick={ () => onArticoloClick(art) } >
-                    {art.numDisegno}
+                    {
+                        art.numDisegno
+                    }
                 </Dropdown.Item> )
             setArticoliRender(AR)
         })
@@ -200,7 +216,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
         updateTotOre()
         renderMacchine()
 
-        if (firstRender && fromPage==='commessaSingola') {
+        if (firstRender && modalFrom==='addCommessa') {
             renderArticoli()
             setFirstRender(false)
         }
@@ -210,7 +226,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
     return (
         <div>
             {
-                type === 'add' ? (
+                ADD ? (
                     <Button
                         className='float-right vertical-center'
                         onClick={ handleShow }>
@@ -246,22 +262,22 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                                     <InputGroup>
                                         <FormControl
                                             required
-                                            disabled={ type!=='add' }
+                                            disabled={ !ADD }
                                             value={ numDisegno }
                                             aria-describedby="basic-addon1"
                                             name='numDisegno'
                                             placeholder='Numero Disegno'
                                             onChange={handleChangeNumDisegno} />
-                                            {
-                                                fromPage==='commessaSingola' &&
+                                            { modalFrom==='addCommessa' &&
                                                 (
-                                                    <DropdownButton
-                                                        as={ InputGroup.Append }
-                                                        title='Scegli'
-                                                        variant='secondary'
-                                                        disabled={type!=='add'}>
-                                                            {articoliRender}
-                                                    </DropdownButton>
+                                                <DropdownButton
+                                                    as={ InputGroup.Append }
+                                                    title='Scegli'
+                                                    variant='secondary'
+                                                    disabled={ !ADD }
+                                                    >
+                                                        {articoliRender}
+                                                </DropdownButton>
                                                 )
                                             }
                                     </InputGroup>
@@ -339,14 +355,37 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
                         <p>Totale: {totPreventivo} €</p>
                     </Modal.Body>
                     <Modal.Footer>
+                        {
+                            showAlert &&
+                            <p
+                                className="text-success" >
+                                Articolo salvato
+                            </p>
+                        }
+                        {
+                            modalFrom === 'addCommessa' &&
+                            <Button
+                                id='salvaArticoliButton'
+                                variant='success'
+                                type='submit'
+                                form='formAddCommessaSingola'
+                                title='Salva nella lista degli articoli' >
+                                Salva articolo
+                            </Button>
+                        }
                         <Button variant="secondary" onClick={handleClose}>
                             Annulla
                         </Button>
                         <Button
+                            id='primaryButton'
                             variant="primary"
                             type='submit'
                             form='formAddCommessaSingola'>
-                            { type==='add' ? 'Aggiungi' : 'Modifica'}
+                            {
+                                ADD ?
+                                'Aggiungi':
+                                'Modifica'
+                            }
                         </Button>
                     </Modal.Footer>
             </Modal>
@@ -358,8 +397,7 @@ function ModalCommessaSingola({data, type, fromPage, handleConfirm}) {
 
 ModalCommessaSingola.propTypes = {
     data: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired,
-    fromPage: PropTypes.string.isRequired,
+    modalFrom: PropTypes.string.isRequired,
     handleConfirm: PropTypes.func.isRequired,
 }
 

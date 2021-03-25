@@ -4,7 +4,7 @@ import DeleteButton from '../../components/DeleteButton';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Row, Col } from 'react-bootstrap';
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
-import ModalEditCommessaSingola from '../../components/ModalCommessaSingola';
+import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import PropTypes from 'prop-types'
 
 /**Definisce la tabella degli impiegati
@@ -25,11 +25,11 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     const defineButtons = (cell, row, rowIndex, formatExtraData) => (
         <Row>
             <Col lg='6' md='6' sm='6'>
-                <ModalEditCommessaSingola
+                <ModalCommessaSingola
                     data={row}
                     handleConfirm={ (newPreventivo) => handleConfirm(row.id, newPreventivo) }
                     confirmButtonText={'Modifica'}
-                    type={'edit'} />
+                    modalFrom='editCommessa' />
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton 

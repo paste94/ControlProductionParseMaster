@@ -70,7 +70,7 @@ function Articoli() {
                             rettifica: 0,
                             banco: 0,
                         }}
-                        type='add'
+                        modalFrom='addArticolo'
                         handleConfirm={ handleAddArticolo }
                         confirmButtonText={'Aggiungi'} />
                 </Col>

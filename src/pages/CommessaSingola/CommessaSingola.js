@@ -73,8 +73,7 @@ function CommessaSingola({commessa}) {
                             rettifica: 0,
                             banco: 0,
                         }}
-                        type='add'
-                        fromPage='commessaSingola'
+                        modalFrom ='addCommessa'
                         handleConfirm={ handleAdd }
                         confirmButtonText={'Aggiungi'} />
                 </Col>
