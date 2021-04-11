@@ -39,14 +39,7 @@ function Commesse({handleShowAlert}) {
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
-    useEffect(() => {
-        getAllCommesse(
-            (data) => setData(data),
-            (error) => {
-                console.log('ERROR***************')
-                setError(error)
-            })
-    }, []);
+    useEffect(() => getAllCommesse(setData, setError), []);
 
     return (
         <div className='page'>
@@ -68,7 +61,6 @@ function Commesse({handleShowAlert}) {
                 </Col>
                 <Col>
                     <ModalNewCommessa
-                        handleShowAlert={handleShowAlert}
                         handleAdd={handleAdd}/>
                 </Col>
             </Row>
@@ -76,8 +68,7 @@ function Commesse({handleShowAlert}) {
             <CommesseTable
                 data={data}
                 handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                handleShowAlert={handleShowAlert} />
+                handleEdit={handleEdit} />
 
         </div>
     )

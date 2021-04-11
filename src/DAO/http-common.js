@@ -8,6 +8,7 @@ const impiegati = 'impiegati'
 const articoli = 'articoli'
 const preventivo = 'preventivo'
 const lavori = 'lavori'
+const macchine = 'macchine'
 
 /**
  * Converte una stringa in data
@@ -45,5 +46,6 @@ export {
   preventivo,
   strToDate,
   dateToStr,
-  Parse
+  macchine,
+  Parse,
 }

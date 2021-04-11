@@ -41,7 +41,7 @@ function addImpiegato(newImpiegato, callback, callbackError) {
             callback,
             error => {
                 console.error(error)
-                callback(error.message)
+                callbackError(error.message)
             })
 }
 

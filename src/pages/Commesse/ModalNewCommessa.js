@@ -20,7 +20,7 @@ function ModalNewCommessa({handleAdd}) {
 
     const handleShow = () => setShow(true)
     const handleClose = () => {
-        setNewCommessa({
+        setNewCommessa({ // Fa reset della commessa
             nome: '',
             numero: '',
             data_offerta: new Date().toISOString().split('T')[0],
@@ -38,7 +38,7 @@ function ModalNewCommessa({handleAdd}) {
     const handleChangeDataConsegna = (event) =>
         setNewCommessa({...newCommessa, data_consegna: event.target.value})
 
-    const handleAddForm = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         handleAdd(newCommessa)
         handleClose()
@@ -60,7 +60,7 @@ function ModalNewCommessa({handleAdd}) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form id='formAddCommessa' onSubmit={handleAddForm}>
+                        <Form id='formAddCommessa' onSubmit={handleSubmit}>
                             <Form.Row>
                                 <Form.Group as={Col}>
                                     <Form.Label>Nome Cliente</Form.Label>

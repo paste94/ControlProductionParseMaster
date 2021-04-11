@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/Pages.css';
-import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-import { Button, Col, Row } from 'react-bootstrap';
+import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import { Button, Col, Row } from 'react-bootstrap'
 import { addImpiegato, deleteImpiegato, updateImpiegato, getAllImpiegati} from '../../DAO/Impiegati.service';
 import ModalChip from './ModalChip';
 import ModalNewImpiegato from './ModalNewImpiegato';
@@ -10,27 +10,27 @@ import ModalConfirm from '../../components/ModalConfirm';
 import { MdRefresh } from 'react-icons/md';
 import PropTypes from 'prop-types'
 
-/**Pagina degli impiegati
- * 
+/** Pagina degli impiegati
+ *
  * @param {object}  props properties
  *                  - handleShowAlert (function) handler che mostra l'alert
- *                  
+ * @return {Component} il component creato
  */
 function Impiegati({handleShowAlert}) {
-    /*************** STATE ***************/
+    /* STATE */
 
     // Elenco degli impiegati 
-    const [data, setData] = useState([]); 
+    const [data, setData] = useState([])
     const [update, setUpdate] = useState(true)
 
     const refresh = () => setUpdate(!update)
 
-    // Stato dei modal, quando sono true sono visibili. 
+    // Stato dei modal, quando sono true sono visibili.
     const [modalState, setModalState] = useState({
         newImp: false,
         chip: false,
-        confirm: false
-    });
+        confirm: false,
+    })
 
     // Il nuovo impiegato che deve essere creato.
     const [newImp, setNewImp] = useState({
@@ -41,7 +41,7 @@ function Impiegati({handleShowAlert}) {
     // L'id dell'elemento da eliminare
     const [deleteId, setDeleteId] = useState('');
 
-    /*************** HANDLERS ***************/
+    /* HANDLERS */
 
     // Quando chiudi il modal del nuovo impiegato
     const handleCloseNewImpiegato = () => {
@@ -96,7 +96,7 @@ function Impiegati({handleShowAlert}) {
         handleShowConfirm();
     };
 
-    // Quando confermo l'eliminazione 
+    // Quando confermo l'eliminazione
     const handleDeleteConfirm = () => {
         const id = deleteId;
         setDeleteId('');
@@ -104,16 +104,16 @@ function Impiegati({handleShowAlert}) {
         handleCloseConfirm()
     }
 
-    /*************** EFFECT ***************/
+    /* EFFECT */
 
-    // Il secondo parametro [] serve per farlo eseguire una volta sola quando avvii la pagina
+    // Il secondo parametro [] serve per farlo eseguire una
+    // volta sola quando avvii la pagina
     useEffect(() => {
         getAllImpiegati( (result) => setData(result) )
     }, [update]);
-    
 
-    /*************** RENDER ***************/
-    
+
+    /* RENDER */
     return (
         <div className='page'>
 

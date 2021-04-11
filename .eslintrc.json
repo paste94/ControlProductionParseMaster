@@ -20,7 +20,7 @@
     "rules": {
         "linebreak-style":"off",
         "valid-jsdoc":"warn",
-        "max-len":"warn",
+        "max-len":"off",
         "space-before-blocks":"warn",
         "indent":"off",
         "semi":"off",

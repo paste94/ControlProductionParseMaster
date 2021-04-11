@@ -1,6 +1,15 @@
 import { Parse, lavori } from './http-common';
 
-function getLavori(macchina, startDate, endDate, includeInProgress, callback, errorCallback){
+/**
+ * 
+ * @param {*} macchina 
+ * @param {*} startDate 
+ * @param {*} endDate 
+ * @param {*} includeInProgress 
+ * @param {*} callback 
+ * @param {*} errorCallback 
+ */
+function getLavori(macchina, startDate, endDate, includeInProgress, callback, errorCallback) {
     const query = new Parse.Query(lavori)
 
     if(macchina !== 'Tutte')
@@ -14,7 +23,7 @@ function getLavori(macchina, startDate, endDate, includeInProgress, callback, er
             res.forEach(elem => 
                 data.push({
                     id: elem.id,
-                    ...elem.attributes
+                    ...elem.attributes,
                 })
             )
             callback(data)

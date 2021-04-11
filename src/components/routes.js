@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
-import Page from '../pages/Page';
-import Sidebar from './Sidebar';
-import Impiegati from '../pages/Impiegati/Impiegati';
-import Lavori from '../pages/Lavori/Lavori';
-import Commesse from '../pages/Commesse/Commesse';
-import { Alert, AlertContainer } from "react-bs-notifier";
-import Articoli from '../pages/Articoli/Articoli';
-import CommessaSingola from '../pages/CommessaSingola/CommessaSingola';
+import React, { useState } from 'react'
+import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import Page from '../pages/Page'
+import Sidebar from './Sidebar'
+import Impiegati from '../pages/Impiegati/Impiegati'
+import Lavori from '../pages/Lavori/Lavori'
+import Commesse from '../pages/Commesse/Commesse'
+import { Alert, AlertContainer } from 'react-bs-notifier'
+import Articoli from '../pages/Articoli/Articoli'
+import CommessaSingola from '../pages/CommessaSingola/CommessaSingola'
 import PropTypes from 'prop-types'
+import Macchine from '../pages/DefinisciMacchine/Macchine'
 
 /**
- * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le 
+ * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
  * destinazioni delle varie pagine di navigazione.
+ *
+ * @return {Component} il componente creato
  */
 function AppRoutes() {
     // Lo stato dell'alert usato come errore
@@ -21,7 +24,7 @@ function AppRoutes() {
         message: '',
     });
 
-    // Mostra l'alert di errore 
+    // Mostra l'alert di errore
     const handleShowAlert = (msg) => setAlertState({message: msg, show: true});
 
     // Chiudi l'alert e cancella il messaggio
@@ -41,14 +44,14 @@ function AppRoutes() {
                             handleCloseAlert={handleCloseAlert} />
                     </Page>
                 )
-            }
+            },
         },
         {
             id: 1,
             path: '/impiegati',
             text: 'Impiegati',
             main: () => {
-                return(
+                return (
                     <Page>
                         <Impiegati
                             alertState={alertState}
@@ -56,7 +59,7 @@ function AppRoutes() {
                             handleCloseAlert={handleCloseAlert} />
                     </Page>
                 )
-            }
+            },
         },
         {
             id: 2,
@@ -75,6 +78,18 @@ function AppRoutes() {
         },
         {
             id: 3,
+            path: '/macchine',
+            text: 'Macchine',
+            main: () => {
+                return (
+                    <Page>
+                        <Macchine/>
+                    </Page>
+                )
+            },
+        },
+        {
+            id: 4,
             path: '/articoli',
             text: 'Articoli',
             main: () => {
@@ -93,22 +108,22 @@ function AppRoutes() {
     return (
         <div>
             <Router>
-                <div style={{display:'flex'}}>
+                <div style={{display: 'flex'}}>
                     <Sidebar data={routes} />
                     <Redirect from='/' to='/commesse' />
                     {
                         routes.map(
                             (route) => (
-                                <Route 
+                                <Route
                                     key={route.path}
                                     path={route.path}
                                     exact={route.exact}
                                     component={route.main}
                                 />
-                            )
+                            ),
                         )
                     }
-                    <Route 
+                    <Route
                         key='100'
                         path='/commessasingola'
                         component={(props)=>{
@@ -124,11 +139,11 @@ function AppRoutes() {
 
             <AlertContainer position="top-right">
                 {alertState.show ? (
-                    <Alert 
-                        type="danger" 
-                        headline="Errore" 
-                        onDismiss={handleCloseAlert} 
-                        showIcon={true} 
+                    <Alert
+                        type="danger"
+                        headline="Errore"
+                        onDismiss={handleCloseAlert}
+                        showIcon={true}
                         timeout={5000} >
                             {alertState.message}
                     </Alert>

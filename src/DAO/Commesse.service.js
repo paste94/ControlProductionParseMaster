@@ -47,7 +47,7 @@ async function addCommessa(newCommessa, callback) {
 }
 
 /**
- * Elimina la macchina con ID selezionato.
+ * Elimina la commessa con ID selezionato.
  * L'elemento viene eliminato impostando un flag 'eliminato' a true
  * @param {int} id identificativo della macchina
  * @param {function} callback callback per successo

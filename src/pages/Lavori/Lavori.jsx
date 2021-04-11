@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
  */
 function Lavori() {
     const [data, setData] = useState([])
-    const [macchine] = useState(getAllMacchine)
+    const [macchine, setMacchine] = useState([])
     const [selectedMacchina, setSelectedMacchina] = useState('Tutte')
     const [startDate, setStartDate] =
         useState(new Date().toISOString().split('T')[0])
@@ -27,13 +27,8 @@ function Lavori() {
 
 
     useEffect(() => {
-        getLavori(
-            selectedMacchina,
-            startDate,
-            endDate,
-            checked,
-            setData,
-            () => {} )
+        getLavori(selectedMacchina, startDate, endDate, checked, setData, () => {} )
+        getAllMacchine(setMacchine, () => {})
     }, [selectedMacchina, startDate, endDate, checked]);
 
     return (

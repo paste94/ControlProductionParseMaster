@@ -14,7 +14,6 @@ import { FaEdit } from 'react-icons/fa';
 import { getAllArticoli } from '../DAO/Articoli.service';
 import PropTypes from 'prop-types'
 import { addArticolo } from '../DAO/Articoli.service';
-import { Alert, AlertContainer } from 'react-bs-notifier'
 
 /**
  * Definisce modal per la modifica e la aggiunta di un lavoro
@@ -60,7 +59,11 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
         setNumPezzi(DEF_NUM_PEZZI)
         setCostMat(DEF_COSTO_MAT)
         setCostoOrario(DEF_COSTO_ORARIO)
-        const macchineList = getAllMacchine()
+        let macchineList = []
+        getAllMacchine(
+            (data) => macchineList = data,
+            () => {},
+        )
         const om = {}
         for (const [key, value] of Object.entries(macchineList)) {
             om[value.nome] = data[value.nome]
@@ -146,8 +149,14 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
      */
     function renderMacchine() {
         // Alla prima esecuzione crea l'elenco delle macchine
+        let macchineTemp = []
         const macchineNames = []
-        getAllMacchine().forEach(elem => macchineNames.push(elem.nome))
+        getAllMacchine(
+            data => macchineTemp = data,
+            () => {},
+        )
+
+        macchineTemp.forEach(elem => macchineNames.push(elem.nome))
 
         const macchineList = macchineNames.sort().map((macchina) =>
             <div key={macchina}>

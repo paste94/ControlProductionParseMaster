@@ -134,6 +134,7 @@ function CommesseTable({data, handleDelete, handleEdit}) {
                 columns={ columns }
                 pagination={ paginationFactory() }
                 rowStyle={ rowStyle }
+                noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({
                     mode: 'click',
                     blurToSave: true,

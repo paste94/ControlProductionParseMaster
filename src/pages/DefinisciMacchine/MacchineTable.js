@@ -3,26 +3,27 @@ import { Button } from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import { FaTrash } from 'react-icons/fa';
+import PropTypes from 'prop-types'
+import DeleteButton from '../../components/DeleteButton';
 
 /**
- * 
- * @param {Object}  props property composte da 
+ *
+ * @param {Object}  props property composte da
  *                  - data (List) i dati da visualizzare
- *                  - handleEdit (function) cosa eseguire quando modifico un campo
  *                  - handleDelete (function) cosa eseguire quando voglio eliminare un dato
+ * @return {Component} il component creato
  */
-function MacchineTable(props){
+function MacchineTable({data, handleDelete}) {
     // Definizione dei bottoni nell'ultima colonna
     const defineButtons = (cell, row, rowIndex, formatExtraData) => {
         return (
             <div className='row align-items-center'>
                 <div className='col'>
-                    <Button
-                        variant='light'
-                        onClick={() => props.handleDelete(row.id)} 
-                        title={'Elimina macchina'}>
-                        <FaTrash style={{color: '#b71c1c'}}/>
-                    </Button>
+                    <DeleteButton
+                        title={'Elimina macchina'}
+                        handleConfirm={() => handleDelete(row.id)} >
+                            <p>Eliminare definitivamente la macchina?</p>
+                    </DeleteButton>
                 </div>
             </div>
         );
@@ -30,38 +31,34 @@ function MacchineTable(props){
 
     const columns = [
         {
-            dataField:'id',
+            dataField: 'id',
             text: 'ID',
-            hidden:true
-        },{
+            hidden: true,
+        }, {
             dataField: 'nome',
-            text: 'Nome'
-        },{
+            text: 'Nome',
+        }, {
             dataField: 'actions',
             text: 'Azioni',
             formatter: defineButtons,
             editable: false,
-            headerStyle: { width: 20 }
-        }
+            headerStyle: { width: 20 },
+        },
     ]
-
-    const handleSetNome = (id, newNome) => props.handleEdit(id, {nome: newNome})
 
     return (
         <div>
-            <BootstrapTable 
-                keyField='id' 
-                data={ props.data } 
-                columns={ columns } 
-                cellEdit={ cellEditFactory({ 
-                    mode: 'click',
-                    blurToSave: true,
-                    afterSaveCell: (oldValue, newValue, row, column) => { 
-                        handleSetNome(row.id, newValue)
-                    }
-                })} />
+            <BootstrapTable
+                keyField='id'
+                data={ data }
+                columns={ columns } />
         </div>
     )
+}
+
+MacchineTable.propTypes = {
+    data: PropTypes.array,
+    handleDelete: PropTypes.func,
 }
 
 export default MacchineTable;

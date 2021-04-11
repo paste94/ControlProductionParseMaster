@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
-import { Modal, FormControl, InputGroup, Button, Form } from 'react-bootstrap';
-import { addMacchina } from '../../DAO/Macchine.service';
+import { Modal, FormControl, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 
 /**
  * Modal specifico per l'aggiunta della macchina
- * 
+ *
  * @param {Object}  props properties
- *                  - handleRefresh (function) handler che gestisce il refresh della tabella
- *                  - handleShowAlert (function) handler che mostra l'alert
+ * @return {Component} ModalNewMacchina
  */
-function ModalNewMacchina({handleShowAlert, handleRefresh}) {
+function ModalNewMacchina({handleAdd}) {
     const [show, setShow] = useState(false)
-    const [newMacchina, setNewMacchina] = useState({});
+    const [newMacchina, setNewMacchina] = useState({
+        nome: '',
+    })
 
     const handleShow = () => setShow(true)
-    const handleClose = () => setShow(false)
+    const handleClose = () => {
+        setNewMacchina({
+            nome: '',
+        })
+        setShow(false)
+    }
 
-    const handleAddForm = (e) => {
-        addMacchina(newMacchina, 
-            (error) => handleShowAlert(error)
-        )
-        handleRefresh();
-        handleClose()
-        e.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        handleAdd(newMacchina, handleClose)
     }
 
     const handleChangeNome = (event) =>
@@ -45,34 +46,39 @@ function ModalNewMacchina({handleShowAlert, handleRefresh}) {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form id='formAddMacchina' onSubmit={handleAddForm}>
+                        <Form
+                            id='formAddMacchina'
+                            onSubmit={handleSubmit}>
                             <Form.Group>
                                 <Form.Label>Nome</Form.Label>
                                 <FormControl
                                     placeholder="Nome"
                                     aria-label="Nome"
                                     aria-describedby="basic-addon1"
-                                    onChange={handleChangeNome}
-                                    />
+                                    onChange={handleChangeNome} />
                             </Form.Group>
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
+                        <Button
+                            variant="secondary"
+                            onClick={handleClose} >
                             Annulla
                         </Button>
-                        <Button variant="primary" type='submit' form='formAddMacchina'>
+                        <Button
+                            variant="primary"
+                            type='submit'
+                            form='formAddMacchina' >
                             Crea
                         </Button>
                     </Modal.Footer>
-            </Modal>    
+            </Modal>
         </div>
     )
 }
 
 ModalNewMacchina.propTypes = {
-    handleShowAlert: PropTypes.func.isRequired,
-    handleRefresh: PropTypes.func.isRequired,
+    handleAdd: PropTypes.func.isRequired,
 }
 
 export default ModalNewMacchina;
