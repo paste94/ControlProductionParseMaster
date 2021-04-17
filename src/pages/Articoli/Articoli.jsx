@@ -16,9 +16,9 @@ import ArticoliTable from './ArticoliTable'
 function Articoli() {
     // Dati della tabella
     const [data, setData] = useState([])
-    const [update, setUpdate] = useState(true)
+    const [update] = useState(true)
 
-    const refresh = () => setUpdate(!update)
+    const refresh = () => getAllArticoli( (result) => setData(result) )
 
     /**
      * Aggiunge un articolo al database
@@ -47,7 +47,7 @@ function Articoli() {
     // Richiama il listener con i dati da mostrare in tabella
     useEffect(() => {
         getAllArticoli( (result) => setData(result) )
-    }, [update]);
+    }, [])
 
     return (
         <div className='page'>
@@ -57,19 +57,6 @@ function Articoli() {
                 </Col>
                 <Col>
                     <ModalCommessaSingola
-                        data={{
-                            numPezzi: 1,
-                            costMat: '0',
-                            costoOrario: '42',
-                            numDisegno: '',
-                            stozz: 0,
-                            squadr: 0,
-                            fresa: 0,
-                            tornio: 0,
-                            CN: 0,
-                            rettifica: 0,
-                            banco: 0,
-                        }}
                         modalFrom='addArticolo'
                         handleConfirm={ handleAddArticolo }
                         confirmButtonText={'Aggiungi'} />

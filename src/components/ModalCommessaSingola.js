@@ -1,13 +1,4 @@
-import {
-    Button,
-    Form,
-    Modal,
-    Col,
-    FormControl,
-    InputGroup,
-    DropdownButton,
-    Dropdown,
-} from 'react-bootstrap';
+import { Button, Form, Modal, Col, FormControl, InputGroup, DropdownButton, Dropdown} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import {getAllMacchine} from '../DAO/Macchine.service'
 import { FaEdit } from 'react-icons/fa';
@@ -35,40 +26,45 @@ import { addArticolo } from '../DAO/Articoli.service';
  * @return {Component} il componente
  */
 function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
-    const DEF_NUM_PEZZI = data.numPezzi
-    const DEF_COSTO_MAT = data.costMat
-    const DEF_COSTO_ORARIO = data.costoOrario
-    const NUM_DISEGNO = data.numDisegno
+    const DEF_NUM_PEZZI = data === undefined ? 1 : data.numPezzi
+    const DEF_COSTO_MAT = data === undefined ? '0' : data.costMat
+    const DEF_COSTO_ORARIO = data === undefined ? '42' : data.costoOrario
+    const NUM_DISEGNO = data === undefined ? '' : data.numDisegno
     const ADD = modalFrom === 'addArticolo' || modalFrom === 'addCommessa'
     const [show, setShow] = useState(false)
-    const [macchineRender, setMacchineRender] = useState([])
+    const [macchine, setMacchine] = useState([]) // Oggetto Macchine direttamente dal DB
+    const [macchineRender, setMacchineRender] = useState([]) // Component delle macchine da mostrare nel modal
     const [numDisegno, setNumDisegno] = useState(NUM_DISEGNO)
     const [numPezzi, setNumPezzi] = useState(DEF_NUM_PEZZI)
     const [costMat, setCostMat] = useState(DEF_COSTO_MAT)
     const [costoOrario, setCostoOrario] = useState(DEF_COSTO_ORARIO)
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
-    const [oreMacchina, setOreMacchina] = useState({})
+    const [oreMacchina, setOreMacchina] = useState({}) // Mappa [nome macchina -> ore assegnate]
     const [firstRender, setFirstRender] = useState(true)
     const [articoliRender, setArticoliRender] = useState([])
     const [showAlert, setShowAlert] = useState(false)
 
     // Imposta tutti i valori ai default
     const initNewCommessa = () => {
+        // Eventuali nuovi valori di default
         setNumDisegno(NUM_DISEGNO)
         setNumPezzi(DEF_NUM_PEZZI)
         setCostMat(DEF_COSTO_MAT)
         setCostoOrario(DEF_COSTO_ORARIO)
-        let macchineList = []
+
+        // Imposto la lista delle macchine e delle ore delle macchine
         getAllMacchine(
-            (data) => macchineList = data,
+            (macchineList) => {
+                const om = {}
+                macchineList.forEach(m => {
+                    om[m.nome] = data === undefined ? 0 : data[m.nome]
+                    console.log([m.nome], '->', data === undefined ? 0 : data[m.nome])
+                })
+                setOreMacchina(om)
+            },
             () => {},
         )
-        const om = {}
-        for (const [key, value] of Object.entries(macchineList)) {
-            om[value.nome] = data[value.nome]
-        }
-        setOreMacchina(om)
     }
 
     // Aggiorna il totale delle ore delle macchine
@@ -82,6 +78,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
 
     const handleShow = () => {
         setShow(true)
+        console.log(data)
         initNewCommessa()
     }
     const handleClose = () => {
@@ -107,8 +104,21 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
         setCostoOrario(e.target.value)
     }
 
+    /**
+     * Crea l'oggetto che verrà salvato nel DB come Articolo o Commessa.
+     * @param {Event} e l'evento che scatena la conferma
+     */
     const thisHandleConfirm = (e) => {
-        e.preventDefault();
+        // Evito che la pagina venga ricaricata topo il confirm del form
+        e.preventDefault()
+
+        // Creo la variabile om che contiene tutte le macchine in modo che
+        // le macchine undefined siano inizializzate a 0
+        const om = {}
+        macchine.forEach(m => {
+            om[m.nome] = oreMacchina[m.nome] !== undefined ? oreMacchina[m.nome] : 0
+            oreMacchina[m.nome] = 0
+        })
         const obj = {
             costMat: costMat,
             costoOrario: costoOrario,
@@ -116,30 +126,16 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
             numPezzi: numPezzi,
             totOre: totOre,
             totPreventivo: totPreventivo,
-            stozz: oreMacchina['stozz'] !== undefined ?
-                oreMacchina['stozz'] : 0,
-            squadr: oreMacchina['squadr'] !== undefined ?
-                oreMacchina['squadr'] : 0,
-            fresa: oreMacchina['fresa'] !== undefined ?
-                oreMacchina['fresa'] : 0,
-            tornio: oreMacchina['tornio'] !== undefined ?
-                oreMacchina['tornio'] : 0,
-            CN: oreMacchina['CN'] !== undefined ?
-                oreMacchina['CN'] : 0,
-            rettifica: oreMacchina['rettifica'] !== undefined ?
-                oreMacchina['rettifica'] : 0,
-            banco: oreMacchina['banco'] !== undefined ?
-                oreMacchina['banco'] : 0,
+            ...om,
         }
+        console.log('OBJ', obj)
         if (e.nativeEvent.submitter.id === 'primaryButton') {
             handleConfirm(obj)
             handleClose()
         } else {
             addArticolo(
                 obj,
-                () => {
-                    setShowAlert(true)
-                },
+                () => setShowAlert(true),
             )
         }
     }
@@ -149,14 +145,8 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
      */
     function renderMacchine() {
         // Alla prima esecuzione crea l'elenco delle macchine
-        let macchineTemp = []
         const macchineNames = []
-        getAllMacchine(
-            data => macchineTemp = data,
-            () => {},
-        )
-
-        macchineTemp.forEach(elem => macchineNames.push(elem.nome))
+        macchine.forEach(elem => macchineNames.push(elem.nome))
 
         const macchineList = macchineNames.sort().map((macchina) =>
             <div key={macchina}>
@@ -170,7 +160,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                                 value={oreMacchina[macchina]}
                                 aria-describedby="basic-addon1"
                                 name={macchina}
-                                onChange={handleChangeOreMacchina} />
+                                onChange={ handleChangeOreMacchina } />
                             <InputGroup.Append>
                                 <InputGroup.Text>Ore</InputGroup.Text>
                             </InputGroup.Append>
@@ -182,29 +172,37 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
         setMacchineRender(macchineList)
     }
 
+    /**
+     * Carica l'articolo selezionato dallo scrivv view ventro al modal.
+     * @param {Articolo} articolo l'oggetto che rappresenta l'articolo
+     */
     const onArticoloClick = (articolo) => {
-        setNumDisegno(articolo.numDisegno)
+        setNumDisegno(articolo.numDisegno + '')
         setNumPezzi(articolo.numPezzi)
-        setCostMat(articolo.costMat)
+        setCostMat(articolo.costMat + '')
         setCostoOrario(articolo.costoOrario)
-        const obj = {}
-        obj['stozz'] = articolo.stozz
-        obj['squadr'] = articolo.squadr
-        obj['fresa'] = articolo.fresa
-        obj['tornio'] = articolo.tornio
-        obj['CN'] = articolo.CN
-        obj['rettifica'] = articolo.rettifica
-        obj['banco'] = articolo.banco
+        // Viene fatta una copia dell'articolo al quale si eliminano tutti
+        // gli elementi che non sono macchine. Così obj contiene solo ed
+        // esclusivamente le macchine selezionate.
+        const obj = {...articolo}
+        delete obj.costMat
+        delete obj.id
+        delete obj.costoOrario
+        delete obj.numDisegno
+        delete obj.numPezzi
+        delete obj.createdAt
+        delete obj.totOre
+        delete obj.totPreventivo
+        delete obj.updatedAt
         setOreMacchina(obj)
         updateTotOre()
     }
 
     /**
-     * Renderizza gli articoli TODO: Migliora descrizione
+     * Renderizza gli articoli da visualizzare nel dropdown della creazione di un nuovo articolo
      */
     function renderArticoli() {
         getAllArticoli( articoli => {
-            console.log(articoli)
             const AR = articoli.map( art =>
                 <Dropdown.Item
                     key={art.id}
@@ -224,6 +222,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
             (totOre * costoOrario + parseFloat(costMat)) * numPezzi )
         updateTotOre()
         renderMacchine()
+        getAllMacchine(setMacchine, () => {})
 
         if (firstRender && modalFrom==='addCommessa') {
             renderArticoli()
@@ -246,14 +245,14 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                         variant='link'
                         title='Modifica'
                         size='sm'
-                        onClick={handleShow}>
+                        onClick={ handleShow }>
                             <FaEdit style={{ color: 'black' }}/>
                     </Button>
                 )
             }
             <Modal
                 show={show}
-                onHide={handleClose} >
+                onHide={ handleClose } >
                     <Modal.Header closeButton>
                         <Modal.Title>
                             Crea Articolo
@@ -313,7 +312,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                                     <Form.Label>Costo materiali</Form.Label>
                                 </Col>
                                 <Col>
-                                    <InputGroup hasValidation>
+                                    <InputGroup>
                                         <FormControl
                                             value={ costMat }
                                             aria-describedby="basic-addon1"
@@ -338,7 +337,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                                     <Form.Label>Costo orario</Form.Label>
                                 </Col>
                                 <Col>
-                                    <InputGroup hasValidation>
+                                    <InputGroup>
                                         <FormControl
                                             aria-describedby="basic-addon1"
                                             name='costoOrario'
@@ -358,7 +357,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                                 </Col>
                             </Form.Row>
                             <br></br>
-                            {macchineRender}
+                            { macchineRender }
                         </Form>
                         <p>Ore: {totOre} </p>
                         <p>Totale: {totPreventivo} €</p>
@@ -371,6 +370,15 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                                 Articolo salvato
                             </p>
                         }
+                        <Button // Bottone fittizio che serve per emulare il comportamento del bottone di aggiungi.
+                                // è utile perchè altrimenti premendo "invio" sul form aggiungeva l'articolo alla
+                                // lista degli articoli e non alla commessa
+                            id='primaryButton'
+                            variant="primary"
+                            type='submit'
+                            hidden={true}
+                            form='formAddCommessaSingola'>
+                        </Button>
                         {
                             modalFrom === 'addCommessa' &&
                             <Button
@@ -389,6 +397,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                             id='primaryButton'
                             variant="primary"
                             type='submit'
+                            autoFocus
                             form='formAddCommessaSingola'>
                             {
                                 ADD ?
@@ -405,7 +414,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
 }
 
 ModalCommessaSingola.propTypes = {
-    data: PropTypes.object.isRequired,
+    data: PropTypes.object,
     modalFrom: PropTypes.string.isRequired,
     handleConfirm: PropTypes.func.isRequired,
 }

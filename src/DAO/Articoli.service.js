@@ -44,8 +44,10 @@ function deleteArticolo(id, callback) {
         .get(id)
         .then(
             elem => {
-                elem.set('eliminato', true).save()
-                callback()
+                elem
+                    .set('eliminato', true)
+                    .save()
+                    .then(callback)
             },
             error => console.error('ERRORE:', error.message) )
 }

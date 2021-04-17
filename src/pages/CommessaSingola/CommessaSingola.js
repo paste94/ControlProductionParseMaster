@@ -25,10 +25,9 @@ function CommessaSingola({commessa}) {
      */
     const history = useHistory()
 
-    const [update, setUpdate] = useState(true)
     const [data, setData] = useState([])
 
-    const refresh = () => setUpdate(!update)
+    const refresh = () => getAllPreventivi(commessa.id, (data) => setData(data))
     const handleClickBack = () => history.goBack()
     const handleAdd = (newPreventivo) =>
         addPreventivo(newPreventivo, commessa.id, refresh)
@@ -38,7 +37,7 @@ function CommessaSingola({commessa}) {
 
     useEffect(() => {
         getAllPreventivi(commessa.id, (data) => setData(data))
-    }, [update, commessa.id])
+    }, [commessa.id])
 
     return (
         <div>
@@ -47,9 +46,9 @@ function CommessaSingola({commessa}) {
                     <Button
                         variant='transparent'
                         onClick={handleClickBack}
-                        title='Aggiorna tabella' >
+                        title='Indietro' >
                             <FaArrowLeft/>
-                        </Button>
+                    </Button>
                 </Col>
                 <Col lg='8'>
                     <h1>
@@ -60,19 +59,6 @@ function CommessaSingola({commessa}) {
                 </Col>
                 <Col>
                     <ModalCommessaSingola
-                        data={{
-                            numPezzi: 1,
-                            costMat: '0',
-                            costoOrario: '42',
-                            numDisegno: '',
-                            stozz: 0,
-                            squadr: 0,
-                            fresa: 0,
-                            tornio: 0,
-                            CN: 0,
-                            rettifica: 0,
-                            banco: 0,
-                        }}
                         modalFrom ='addCommessa'
                         handleConfirm={ handleAdd }
                         confirmButtonText={'Aggiungi'} />

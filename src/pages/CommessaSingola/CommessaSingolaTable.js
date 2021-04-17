@@ -7,20 +7,22 @@ import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import PropTypes from 'prop-types'
 
-/**Definisce la tabella degli impiegati
+/** Definisce la tabella degli impiegati
  * 
- * @param {Object}  props Definisce le propertyes della tabella 
+ * @param {Object}  props Definisce le propertyes della tabella
  *                  - id (string) id della commessa da mostrare
  *                  - handleConfirm (function) Gestisce la modifica dell'elemento
+ * @return {Component} il component creato
  */
 function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     /**
-     * Definisce i bottoni da inserire nell'ultima colonna della tabella 
-     * 
+     * Definisce i bottoni da inserire nell'ultima colonna della tabella
+     *
      * @param {object} cell la cella in cui sono definiti i bottoni
      * @param {object} row la riga in cui sono definiti i bottoni
      * @param {int} rowIndex l'indice di riga in cui sono definiti i bottoni
      * @param {object} formatExtraData dati extra (vedi documentazione)
+     * @return {Component} i componenti creati
      */
     const defineButtons = (cell, row, rowIndex, formatExtraData) => (
         <Row>
@@ -32,7 +34,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
                     modalFrom='editCommessa' />
             </Col>
             <Col lg='6' md='6' sm='6'>
-                <DeleteButton 
+                <DeleteButton
                     title='Elimina'
                     handleConfirm={ () => handleDelete(row.id) } >
                         <p>Eliminare definitivamente la commessa?</p>
@@ -44,7 +46,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     // Definizione delle colonne
     const columns = [{
         dataField: 'numDisegno',
-        text: 'Numero Disegno'
+        text: 'Numero Disegno',
     }, {
         dataField: 'totOre',
         text: 'Tot Ore'
@@ -62,7 +64,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
         renderer: row => {
             const firstElements = ['numPezzi', 'costMat', 'costoOrario']
             let sortedArr = Object.keys(row).sort()
-            sortedArr = sortedArr.filter( item => 
+            sortedArr = sortedArr.filter( item =>
                 item !== firstElements[0] &&
                 item !== firstElements[1] && 
                 item !== firstElements[2] &&

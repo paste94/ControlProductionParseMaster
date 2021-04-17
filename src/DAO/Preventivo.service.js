@@ -35,16 +35,21 @@ async function getAllPreventivi(commessaId, callback){
     callback(data)
 }
 
-function deletePreventivo(id, callback){
-    let query = new Parse.Query(preventivo)
-    query.get(id)
-        .then( 
+/**
+ * Elimina un elemento dal DB
+ * @param {String} id L'id dell'elemento da eliminare
+ * @param {Function} callback La funzione di callback per il successo dell'eliminazione
+ */
+function deletePreventivo(id, callback) {
+    new Parse.Query(preventivo)
+        .get(id)
+        .then(
             elem => {
                 elem.set('eliminato', true)
-                elem.save()
-                callback()
-            }, 
-            error => console.error('ERRORE:', error.message)
+                    .save()
+                    .then(callback)
+            },
+            error => console.error('ERRORE:', error.message),
         )
 }
 
