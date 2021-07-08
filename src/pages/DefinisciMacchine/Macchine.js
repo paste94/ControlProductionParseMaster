@@ -24,7 +24,7 @@ function Macchine() {
         )
     }
 
-    useEffect(() => getAllMacchine(setData, setError), []);
+    useEffect(refresh, []);
 
     return (
         <div className='page'>

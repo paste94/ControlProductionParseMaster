@@ -21,9 +21,8 @@ function Impiegati({handleShowAlert}) {
 
     // Elenco degli impiegati 
     const [data, setData] = useState([])
-    const [update, setUpdate] = useState(true)
 
-    const refresh = () => setUpdate(!update)
+    const refresh = () => getAllImpiegati( (result) => setData(result) )
 
     // Stato dei modal, quando sono true sono visibili.
     const [modalState, setModalState] = useState({
@@ -108,9 +107,7 @@ function Impiegati({handleShowAlert}) {
 
     // Il secondo parametro [] serve per farlo eseguire una
     // volta sola quando avvii la pagina
-    useEffect(() => {
-        getAllImpiegati( (result) => setData(result) )
-    }, [update]);
+    useEffect(refresh, []);
 
 
     /* RENDER */

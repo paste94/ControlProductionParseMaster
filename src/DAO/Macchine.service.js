@@ -57,8 +57,8 @@ function deleteMacchina(id, callback, errorCallback) {
         .then(
             elem => {
                 elem.set('eliminato', true)
-                elem.save()
-                callback()
+                    .save()
+                    .then(callback)
             },
             error => {
                 console.error('ERRORE:', error.message)

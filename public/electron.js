@@ -1,8 +1,11 @@
-const path = require("path");
+const path = require('path');
 
-const { app, BrowserWindow } = require("electron");
-const isDev = require("electron-is-dev");
+const { app, BrowserWindow } = require('electron');
+const isDev = require('electron-is-dev');
 
+/**
+ * Crea la finestra electron
+ */
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -11,19 +14,17 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
-  win.loadURL(
-    isDev ? "http://localhost:3010" : `file://${path.join(__dirname, "../build/index.html")}`
-  );
+  win.loadURL(isDev ? 'http://localhost:3010' : `file://${path.join(__dirname, '../build/index.html')}`);
 
   // Open the DevTools.
   if (isDev) {
-    win.webContents.openDevTools({ mode: "attach" });
+    win.webContents.openDevTools({ mode: 'attach' });
   }
 }
 

@@ -39,7 +39,7 @@ function Commesse({handleShowAlert}) {
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
-    useEffect(() => getAllCommesse(setData, setError), []);
+    useEffect(refresh, []);
 
     return (
         <div className='page'>

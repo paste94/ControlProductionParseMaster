@@ -3,7 +3,8 @@ import { Col, Row, Button } from 'react-bootstrap'
 import CommessaSingolaTable from './CommessaSingolaTable'
 import ModalCommessaSingola from '../../components/ModalCommessaSingola'
 import { FaArrowLeft } from 'react-icons/fa'
-import { useHistory } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom'
 import {
     addPreventivo,
     getAllPreventivi,
@@ -35,20 +36,19 @@ function CommessaSingola({commessa}) {
     const handleEdit = (prevId, newPreventivo) =>
         editPreventivo(prevId, newPreventivo, refresh)
 
-    useEffect(() => {
-        getAllPreventivi(commessa.id, (data) => setData(data))
-    }, [commessa.id])
+    useEffect(refresh, [commessa.id])
 
     return (
         <div>
             <Row className='align-items-center'>
                 <Col lg='1'>
-                    <Button
-                        variant='transparent'
-                        onClick={handleClickBack}
-                        title='Indietro' >
+                    <NavLink to='/commesse' key={0} activeClassName="active">
+                        <Button
+                            variant='transparent'
+                            title='Indietro' >
                             <FaArrowLeft/>
-                    </Button>
+                        </Button>
+                    </NavLink>
                 </Col>
                 <Col lg='8'>
                     <h1>

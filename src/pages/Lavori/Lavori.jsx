@@ -3,7 +3,6 @@ import { Col, Row, InputGroup, FormControl, Form } from 'react-bootstrap';
 import { getLavori } from '../../DAO/Lavori.service';
 import { getAllMacchine } from '../../DAO/Macchine.service';
 import LavoriTable from './LavoriTable';
-import PropTypes from 'prop-types'
 
 /**
  * @return {Component} il component creato

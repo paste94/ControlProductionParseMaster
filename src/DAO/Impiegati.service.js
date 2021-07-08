@@ -57,8 +57,8 @@ function deleteImpiegato(id, callback, callbackError) {
         .then(
             elem => {
                 elem.set('eliminato', true)
-                elem.save()
-                callback()
+                    .save()
+                    .then(callback)
             },
             error => {
                 console.error(error)

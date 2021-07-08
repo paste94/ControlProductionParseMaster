@@ -16,7 +16,6 @@ import ArticoliTable from './ArticoliTable'
 function Articoli() {
     // Dati della tabella
     const [data, setData] = useState([])
-    const [update] = useState(true)
 
     const refresh = () => getAllArticoli( (result) => setData(result) )
 
@@ -45,9 +44,7 @@ function Articoli() {
 
 
     // Richiama il listener con i dati da mostrare in tabella
-    useEffect(() => {
-        getAllArticoli( (result) => setData(result) )
-    }, [])
+    useEffect(refresh, [])
 
     return (
         <div className='page'>
