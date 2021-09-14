@@ -3,12 +3,13 @@ import { Modal, Button, ListGroup, Row, Col } from 'react-bootstrap';
 import packageJson from '../../package.json';
 import { FaSync } from 'react-icons/fa';
 
-/** Crea un modal di confirm usando bootstrap
- * 
+/**
+ * Crea un modal di confirm usando bootstrap
  * @param {object}  props property del component
  *                  - show (boolean) Indica se il modal deve essere mostrato o no
+ * @return {Component} il modal creato
  */
-function ModalCredits(props){
+function ModalCredits(props) {
     const [show, setShow] = useState(false)
 
     const handleClose = () => setShow(false)
@@ -16,13 +17,13 @@ function ModalCredits(props){
 
     return (
         <div>
-            <ListGroup.Item 
-                as='button' 
-                className="list-group-item list-group-item-action bg-light sidebar-btn" 
+            <ListGroup.Item
+                as='button'
+                className="list-group-item list-group-item-action bg-light sidebar-btn"
                 onClick={handleShow} >
                 Credits
             </ListGroup.Item>
-            <Modal 
+            <Modal
                 show={show}
                 onHide={handleClose}
                 centered >
@@ -34,7 +35,7 @@ function ModalCredits(props){
                 <Modal.Body>
                     <Row>
                         <Col className='text-center'>
-                            <img src={"../icon.ico"} alt='lathe icon' style={{width: '50px', marginTop: '15px', marginBottom: '10px'}} ></img>
+                            <img src={'../icon.ico'} alt='lathe icon' style={{width: '50px', marginTop: '15px', marginBottom: '10px'}} ></img>
                         </Col>
                     </Row>
                     <Row>
@@ -71,10 +72,9 @@ function ModalCredits(props){
                         Chiudi
                     </Button>
                 </Modal.Footer>
-            </Modal> 
+            </Modal>
         </div>
-
-    )   
+    )
 }
 
 export default ModalCredits;

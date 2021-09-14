@@ -4,7 +4,7 @@ import CommessaSingolaTable from './CommessaSingolaTable'
 import ModalCommessaSingola from '../../components/ModalCommessaSingola'
 import { FaArrowLeft } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
-import { useHistory, useLocation } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import {
     addPreventivo,
     getAllPreventivi,
@@ -24,12 +24,12 @@ function CommessaSingola({commessa}) {
     /**
      * Componenti usate per la gestione del bottone indietro nella navigazione
      */
-    const history = useHistory()
+    // const history = useHistory()
 
     const [data, setData] = useState([])
 
     const refresh = () => getAllPreventivi(commessa.id, (data) => setData(data))
-    const handleClickBack = () => history.goBack()
+    // const handleClickBack = () => history.goBack()
     const handleAdd = (newPreventivo) =>
         addPreventivo(newPreventivo, commessa.id, refresh)
     const handleDelete = (id) => deletePreventivo(id, refresh)
@@ -52,9 +52,7 @@ function CommessaSingola({commessa}) {
                 </Col>
                 <Col lg='8'>
                     <h1>
-                        Commessa
-                        {commessa.nome}
-                        {commessa.chiusa && '(chiusa)'}
+                        Commessa {commessa.nome} {commessa.chiusa && '(chiusa)'}
                     </h1>
                 </Col>
                 <Col>

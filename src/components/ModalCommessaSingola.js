@@ -70,7 +70,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
     // Aggiorna il totale delle ore delle macchine
     const updateTotOre = () => {
         let tot = 0
-        for (const [key, value] of Object.entries(oreMacchina)) {
+        for (const [, value] of Object.entries(oreMacchina)) {
             tot = tot + value
         }
         setTotOre(tot)

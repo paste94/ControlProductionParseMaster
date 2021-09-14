@@ -2,18 +2,19 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 
-/** Crea un modal di confirm usando bootstrap
- * 
+/**
+ * Crea un modal di confirm usando bootstrap
  * @param {object}  props property del component
  *                  - show (boolean) Indica se il modal deve essere mostrato o no
  *                  - title (string) Il titolo del modal
  *                  - children (Component) Cosa mostrare nel corpo del confirm
  *                  - handleConfirm (function) Cosa eseguire nel caso sia clickata la conferma
- *                  - handleClose (function) Indica cosa fare se il modal verrà chiuso 
+ *                  - handleClose (function) Indica cosa fare se il modal verrà chiuso
+ * @return {Component} il componente
  */
 function ModalConfirm({title, show, handleClose, handleConfirm, children}) {
     return (
-        <Modal 
+        <Modal
             show={show}
             onHide={handleClose}
             centered >
@@ -33,8 +34,8 @@ function ModalConfirm({title, show, handleClose, handleConfirm, children}) {
                     Conferma
                 </Button>
             </Modal.Footer>
-        </Modal> 
-    )   
+        </Modal>
+    )
 }
 
 

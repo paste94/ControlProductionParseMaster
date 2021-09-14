@@ -59,7 +59,6 @@ function LavoriTable({data}) {
         text: 'Tempo(ore)',
     }]
 
-    
     return (
         <div>
             <BootstrapTable

@@ -24,7 +24,7 @@ async function getAllCommesse(callback, callbackError) {
             })
            callback(data)
         }, (error) => {
-            console.log('ERRORE:', error)
+            console.error('ERRORE:', error)
             callbackError(error.message)
         })
 }

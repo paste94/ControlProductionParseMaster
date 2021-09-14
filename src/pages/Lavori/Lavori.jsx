@@ -79,7 +79,7 @@ function Lavori() {
                     <Col className='my-auto'>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>
-                                <InputGroup.Text 
+                                <InputGroup.Text
                                     id="basic-addon1" >
                                         Al
                                 </InputGroup.Text>

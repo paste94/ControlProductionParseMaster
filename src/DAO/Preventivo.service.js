@@ -18,18 +18,23 @@ async function addPreventivo(newPreventivo, commessaId, callback) {
                 (error) => console.error('ERRORE:', error.message) )
 }
 
-async function getAllPreventivi(commessaId, callback){
-    let query = new Parse.Query(preventivo)
-    let result = await query
+/**
+ * Ottiene tutti i preventivi presenti nel DB associati ad una commessa
+ * @param {*} commessaId ID della commessa da cercare
+ * @param {*} callback Funzione claabak
+ */
+async function getAllPreventivi(commessaId, callback) {
+    const query = new Parse.Query(preventivo)
+    const result = await query
                         .notEqualTo('eliminato', true)
                         .equalTo('parent', commessaId)
                         .find()
-    let data = []
+    const data = []
     result.forEach(elem => {
-        let attr = elem.attributes
+        const attr = elem.attributes
         data.push({
             id: elem.id,
-            ...attr
+            ...attr,
         })
     })
     callback(data)
@@ -53,15 +58,21 @@ function deletePreventivo(id, callback) {
         )
 }
 
-async function editPreventivo(prevId, newPreventivo, callback){
-    let query = new Parse.Query(preventivo)
+/**
+ * Modifica il preventivo
+ * @param {*} prevId ID del preventivo
+ * @param {*} newPreventivo Preventivo modificato
+ * @param {*} callback Callback
+ */
+async function editPreventivo(prevId, newPreventivo, callback) {
+    const query = new Parse.Query(preventivo)
     query.get(prevId)
-        .then( 
+        .then(
             elem => {
                 Object.keys(newPreventivo).forEach( key => elem.set(key, newPreventivo[key]) )
                 elem.save().then(() => callback())
-            }, 
-            error => console.error('ERRORE:', error.message)
+            },
+            error => console.error('ERRORE:', error.message),
         )
 }
 
@@ -69,5 +80,5 @@ export {
     addPreventivo,
     getAllPreventivi,
     deletePreventivo,
-    editPreventivo
+    editPreventivo,
 }

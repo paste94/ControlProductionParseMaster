@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 function Impiegati({handleShowAlert}) {
     /* STATE */
 
-    // Elenco degli impiegati 
+    // Elenco degli impiegati
     const [data, setData] = useState([])
 
     const refresh = () => getAllImpiegati( (result) => setData(result) )
@@ -33,8 +33,8 @@ function Impiegati({handleShowAlert}) {
 
     // Il nuovo impiegato che deve essere creato.
     const [newImp, setNewImp] = useState({
-        nome: '', 
-        chip: ''
+        nome: '',
+        chip: '',
     });
 
     // L'id dell'elemento da eliminare
@@ -63,7 +63,7 @@ function Impiegati({handleShowAlert}) {
     // Quando mostri il modal confirm
     const handleShowConfirm = () => setModalState({...modalState, confirm: true});
 
-    // Quando modifico il nome del nuovo utente 
+    // Quando modifico il nome del nuovo utente
     const handleChangeNome = (event) => setNewImp({...newImp, nome: event.target.value});
 
     // Quando modifico il chip del nuovo utente
@@ -119,11 +119,11 @@ function Impiegati({handleShowAlert}) {
                     <Col>
                         <Row>
                             <h1>Impiegati</h1>
-                            <Button 
-                                variant="link" 
-                                size="lg" 
-                                onClick={() => refresh()}> 
-                                    <MdRefresh color='grey' /> 
+                            <Button
+                                variant="link"
+                                size="lg"
+                                onClick={() => refresh()}>
+                                    <MdRefresh color='grey' />
                                 </Button>
                         </Row>
                     </Col>

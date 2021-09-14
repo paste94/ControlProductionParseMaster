@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import DeleteButton from '../../components/DeleteButton';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -8,7 +8,7 @@ import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import PropTypes from 'prop-types'
 
 /** Definisce la tabella degli impiegati
- * 
+ *
  * @param {Object}  props Definisce le propertyes della tabella
  *                  - id (string) id della commessa da mostrare
  *                  - handleConfirm (function) Gestisce la modifica dell'elemento
@@ -49,10 +49,10 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
         text: 'Numero Disegno',
     }, {
         dataField: 'totOre',
-        text: 'Tot Ore'
+        text: 'Tot Ore',
     }, {
         dataField: 'totPreventivo',
-        text: 'Preventivo (€)'
+        text: 'Preventivo (€)',
     }, {
         dataField: 'azioni',
         text: 'Azioni',
@@ -66,32 +66,32 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
             let sortedArr = Object.keys(row).sort()
             sortedArr = sortedArr.filter( item =>
                 item !== firstElements[0] &&
-                item !== firstElements[1] && 
+                item !== firstElements[1] &&
                 item !== firstElements[2] &&
                 item !== 'numDisegno' &&
                 item !== 'totOre' &&
                 item !== 'totPreventivo' &&
                 item !== 'id' &&
                 item !== 'parent' &&
-                item !== 'updatedAt' && 
-                item !== 'eliminato' && 
-                item !== 'createdAt'
+                item !== 'updatedAt' &&
+                item !== 'eliminato' &&
+                item !== 'createdAt',
             )
             sortedArr = firstElements.concat(sortedArr)
 
-            const listItems = sortedArr.map((keyname) => 
+            const listItems = sortedArr.map((keyname) =>
                 <Row key={keyname}>
-                    <Col md='4'>{keyname}:</Col> 
+                    <Col md='4'>{keyname}:</Col>
                     <Col>{row[keyname]}</Col>
                     <hr style={
                         {
-                            background:'#cfd8dc',
-                            width:'97%',
-                            marginTop:'0px', 
-                            marginBottom:'0px'
+                            background: '#cfd8dc',
+                            width: '97%',
+                            marginTop: '0px',
+                            marginBottom: '0px',
                         }
                     }/>
-                </Row>
+                </Row>,
             )
             return listItems
         },
@@ -109,10 +109,10 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
 
     return (
         <div>
-            <BootstrapTable 
-                keyField='numDisegno' 
-                data={ data } 
-                columns={ columns } 
+            <BootstrapTable
+                keyField='numDisegno'
+                data={ data }
+                columns={ columns }
                 pagination={ paginationFactory() }
                 noDataIndication="Tabella vuota"
                 expandRow={ expandRow }
