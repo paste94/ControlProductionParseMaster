@@ -1,6 +1,6 @@
 import Parse from 'parse'
 
-Parse.initialize('ParseServerAzzalin');
+Parse.initialize('ControlProductionServer', 'CP_m4st3r_k3y');
 Parse.serverURL = 'http://localhost:1337/parse'
 
 const commesse = 'commesse'

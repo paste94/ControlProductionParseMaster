@@ -2,11 +2,10 @@ import React, {useEffect, useState} from 'react';
 import CommesseTable from './CommesseTable';
 import ModalNewCommessa from './ModalNewCommessa';
 import { deleteCommessa,
-    getAllCommesse,
     updateCommessa,
-    addCommessa } from '../../DAO/Commesse.service'
+    addCommessa,
+    subscribeCommesse } from '../../DAO/Commesse.service'
 import { Col, Row, Button } from 'react-bootstrap';
-import { MdRefresh } from 'react-icons/md';
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
 
@@ -19,10 +18,9 @@ import AlertError from '../../components/AlertError'
 function Commesse({handleShowAlert}) {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
-    const refresh = () => getAllCommesse( setData, setError )
-    const handleDelete = id => deleteCommessa(id, refresh)
+    const handleDelete = id => deleteCommessa(id)
     const handleEdit = (id, newVal) =>
-        updateCommessa(id, newVal, refresh)
+        updateCommessa(id, newVal)
     const handleAdd = (newCommessa) => {
         addCommessa(
             {
@@ -33,13 +31,12 @@ function Commesse({handleShowAlert}) {
                 preventivo: [],
                 chiusa: false,
             },
-            refresh,
         )
     }
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
-    useEffect(refresh, []);
+    useEffect(() => subscribeCommesse(setData, setError), []);
 
     return (
         <div className='page'>
@@ -51,12 +48,6 @@ function Commesse({handleShowAlert}) {
                 <Col>
                     <Row className='ml-1'>
                         <h1>Commesse</h1>
-                        <Button
-                            variant="link"
-                            size="lg"
-                            onClick={() => refresh()}>
-                                <MdRefresh color='grey' />
-                            </Button>
                     </Row>
                 </Col>
                 <Col>
