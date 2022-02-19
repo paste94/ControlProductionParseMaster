@@ -56,14 +56,15 @@ async function getAllCommesse(callback, callbackError) {
         .then((result) => {
             const data = []
             result.forEach(elem => {
+            console.log(elem.get('data_offerta'), elem.get('data_offerta') != undefined)
                 data.push({
                     id: elem.id,
-                    nome: elem.get('nome'),
-                    numero: elem.get('numero'),
-                    data_offerta: elem.get('data_offerta').toISOString(),
-                    data_consegna: elem.get('data_consegna').toISOString(),
-                    chiusa: elem.get('chiusa'),
-                    preventivo: elem.get('preventivo'),
+                    nome: elem.get('nome') != undefined ? elem.get('nome') : '',
+                    numero: elem.get('numero') != undefined ? elem.get('numero') : '',
+                    data_offerta: elem.get('data_offerta') != undefined ? elem.get('data_offerta').toISOString() : '',
+                    data_consegna: elem.get('data_consegna') != undefined ? elem.get('data_consegna').toISOString() : '',
+                    chiusa: elem.get('chiusa') != undefined ? elem.get('chiusa') : '',
+                    preventivo: elem.get('preventivo') != undefined ? elem.get('preventivo') : '',
                 })
             })
            callback(data)
@@ -113,11 +114,13 @@ function updateCommessa(id, newVal) {
     newVal[key] = (key === 'data_offerta' || key === 'data_consegna') ?
         new Date(newVal[key]) :
         newVal[key]
-    query.get(id)
+    if (newVal[key] != 'Invalid Date') {
+        query.get(id)
         .then(
-            elem => elem.set( key, newVal[key] ).save(),
+            elem => elem.set( key, newVal[key] ).save().catch((err) => console.error('ERRORE: ', error.message)),
             error => console.error('ERRORE:', error.message),
         )
+    }
 }
 
 export {
