@@ -116,6 +116,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
         // le macchine undefined siano inizializzate a 0
         const om = {}
         macchine.forEach(m => {
+            //console.log("MMMMM", m)
             om[m.nome] = oreMacchina[m.nome] !== undefined ? oreMacchina[m.nome] : 0
             oreMacchina[m.nome] = 0
         })
@@ -126,7 +127,7 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
             numPezzi: numPezzi,
             totOre: totOre,
             totPreventivo: totPreventivo,
-            ...om,
+            oreMacchina: Object.entries(om).map((e) => e),
         }
         console.log('OBJ', obj)
         if (e.nativeEvent.submitter.id === 'primaryButton') {

@@ -1,66 +1,88 @@
 import {preventivo, Parse} from './http-common';
 
+let subscription;
+
 /**
  * Ottiene la subscription ai preventivi
- * @param {Integer} commessaId L'ID della commessa. 
+ * @param {int} commessaId ID della commessa parent
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-async function subdcribePreventivo(commessaId, callback, callbackError) {
-    const query = new Parse.Query(commesse);
-    const subscription = await query.subscribe();
+ async function subscribePreventivo(commessaId, callback, callbackError) {
+    const query = new Parse.Query(preventivo);
+    subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('commesse opened');
+        console.log('Preventivo opened');
         getAllPreventivi(commessaId, callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('object created: ', object);
+        console.log('Preventivo created: ', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('object updated', object);
+        console.log('Preventivo updated', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('object entered', object);
+        console.log('Preventivo entered', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('object left', object);
+        console.log('Preventivo left', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('object deleted', object);
+        console.log('Preventivo deleted', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription closed', object);
+        console.log('subscription Preventivo closed');
     });
 }
 
+/**
+ * Rimuove la sottoscrizione al DB
+ */
+ async function unsubscribePreventivo() {
+    if (subscription != undefined) {
+        subscription.unsubscribe();
+    }
+}
 /**
  * Aggiunge un preventivo al database
  * @param {Object} newPreventivo il nuovo preventivo da aggiungere
  * @param {String} commessaId ID della commessa parent
  * @param {function} callback callback per successo
  */
-async function addPreventivo(newPreventivo, commessaId, callback) {
-    const prev = new Parse.Object(preventivo)
+function addPreventivo(newPreventivo, commessaId, callback) {
+    console.log(newPreventivo);
+
+    const prev = new Parse.Object(preventivo);
+
     Object
         .keys(newPreventivo)
-        .forEach( key => prev.set(key, newPreventivo[key]) )
-    prev.set('parent', commessaId)
-    await prev.save()
-            .then(
-                () => callback(),
-                (error) => console.error('ERRORE:', error.message) )
+        .forEach( 
+            key => {
+                console.log(key, '->', newPreventivo[key])
+                prev.set(key, newPreventivo[key]) 
+            }
+        )
+    prev.set('parent', commessaId);
+
+    console.log(prev)
+
+    
+    prev.save()
+            .then(callback)
+            .catch( error => console.error('ERRORE:', error.message) )
+            
 }
 
 /**
@@ -148,4 +170,6 @@ export {
     getAllPreventivi,
     deletePreventivo,
     editPreventivo,
+    subscribePreventivo,
+    unsubscribePreventivo,
 }

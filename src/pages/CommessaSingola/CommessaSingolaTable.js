@@ -6,6 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import PropTypes from 'prop-types'
+import DettaglioRiga from './DettaglioRiga';
 
 /** Definisce la tabella degli impiegati
  *
@@ -54,6 +55,9 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
         dataField: 'totPreventivo',
         text: 'Preventivo (€)',
     }, {
+        dataField: 'numPezzi',
+        text: 'Numero Pezzi',
+    }, {
         dataField: 'azioni',
         text: 'Azioni',
         formatter: defineButtons,
@@ -62,6 +66,37 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     // Definisce cosa mostrare quando la riga nella tabella viene espansa
     const expandRow = {
         renderer: row => {
+            
+            console.log('ROW', row)
+            let macchineValue = ''
+
+            if (row['oreMacchina'] != undefined) {
+                Object.entries(row['oreMacchina'].map(e => {
+                    macchineValue = macchineValue + e[0] + ': ' + e[1] + 'h\n'
+                }))
+            }
+
+            console.log('********', macchineValue)
+
+
+            return (
+                <div>
+                    <DettaglioRiga
+                        k='Costo Materiale: '
+                        v={'€ ' + row['costMat']}
+                    />
+                    <DettaglioRiga
+                        k='Costo Orario: '
+                        v={'€ ' + row['costoOrario']}
+                    />
+                    <DettaglioRiga
+                        k='Macchine: '
+                        v={macchineValue}
+                    />
+                </div>
+            )
+
+            /*
             const firstElements = ['numPezzi', 'costMat', 'costoOrario']
             let sortedArr = Object.keys(row).sort()
             sortedArr = sortedArr.filter( item =>
@@ -94,6 +129,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
                 </Row>,
             )
             return listItems
+            */
         },
         showExpandColumn: true,
         expandByColumnOnly: true,

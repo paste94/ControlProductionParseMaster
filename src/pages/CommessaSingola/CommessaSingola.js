@@ -10,8 +10,11 @@ import {
     getAllPreventivi,
     deletePreventivo,
     editPreventivo,
+    subscribePreventivo,
+    unsubscribePreventivo,
 } from '../../DAO/Preventivo.service'
 import PropTypes from 'prop-types'
+import AlertError from '../../components/AlertError'
 
 
 /**
@@ -27,6 +30,7 @@ function CommessaSingola({commessa}) {
     // const history = useHistory()
 
     const [data, setData] = useState([])
+    const [error, setError] = useState('')
 
     const refresh = () => getAllPreventivi(commessa.id, (data) => setData(data))
     // const handleClickBack = () => history.goBack()
@@ -36,10 +40,18 @@ function CommessaSingola({commessa}) {
     const handleEdit = (prevId, newPreventivo) =>
         editPreventivo(prevId, newPreventivo, refresh)
 
-    useEffect(refresh, [commessa.id])
+    useEffect(() => {
+        subscribePreventivo(commessa.id, setData, setError);
+        return unsubscribePreventivo;
+    }, [commessa.id])
 
     return (
         <div>
+            <AlertError
+                show={error !== ''}
+                message={error}
+                handleClose={ () => setError('') } />
+
             <Row className='align-items-center'>
                 <Col lg='1' md='1' sm='1'>
                     <NavLink to='/commesse' key={0} activeClassName="active">

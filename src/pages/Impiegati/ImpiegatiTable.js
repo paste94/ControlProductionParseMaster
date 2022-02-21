@@ -6,6 +6,7 @@ import { FaTrash } from 'react-icons/fa';
 import ModalChip from './ModalChip';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
+import DeleteButton from '../../components/DeleteButton';
 
 /** Definisce la tabella degli impiegati
  *
@@ -40,12 +41,11 @@ function ImpiegatiTable({data, handleEdit, handleDelete}) {
         return (
             <div className='row align-items-center'>
                 <div className='col'>
-                    <Button
-                        variant='light'
-                        onClick={() => handleDelete(row.id)}
+                    <DeleteButton
+                        handleConfirm={() => handleDelete(row.id)}
                         title={'Elimina impiegato'} >
-                        <FaTrash style={{color: '#b71c1c'}}/>
-                    </Button>
+                            <p>Eliminare definitivamente impiegato?</p>
+                    </DeleteButton>
                 </div>
             </div>
         );

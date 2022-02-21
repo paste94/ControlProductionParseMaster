@@ -112,6 +112,6 @@ function deleteMacchina(id) {
         )
 }
 
-// TODO: Function update macchina
+// TODO: Function update macchina (se fattibile)
 
 export {subscribeMacchine, getAllMacchine, addMacchina, deleteMacchina, unsubscribeMacchine};

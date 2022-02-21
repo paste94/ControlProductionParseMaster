@@ -38,6 +38,7 @@
         "curly":"warn",
         "comma-spacing":"warn",
         "react/display-name":"off",
-        "padded-blocks":"warn"
+        "padded-blocks":"warn",
+        "eol-last":"off"
     }
 }
