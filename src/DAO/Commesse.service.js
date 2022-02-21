@@ -1,5 +1,7 @@
 import {commesse, Parse} from './http-common';
 
+let subscription;
+
 /**
  * Ottiene la subscription alle commesse
  * @param {function} callback callback per successo.
@@ -7,7 +9,7 @@ import {commesse, Parse} from './http-common';
  */
 async function subscribeCommesse(callback, callbackError) {
     const query = new Parse.Query(commesse);
-    const subscription = await query.subscribe();
+    subscription = await query.subscribe();
 
     subscription.on('open', () => {
         console.log('commesse opened');
@@ -15,33 +17,42 @@ async function subscribeCommesse(callback, callbackError) {
     })
 
     subscription.on('create', (object) => {
-        console.log('object created: ', object);
+        console.log('commesse created: ', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('object updated', object);
+        console.log('commesse updated', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('object entered', object);
+        console.log('commesse entered', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('object left', object);
+        console.log('commesse left', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('object deleted', object);
+        console.log('commesse deleted', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription closed', object);
+        console.log('subscription commesse closed');
     });
+}
+
+/**
+ * Rimuove la sottoscrizione al DB
+ */
+async function unsubscribeCommesse() {
+    if (subscription != undefined) {
+        subscription.unsubscribe();
+    }
 }
 
 /**
@@ -56,7 +67,7 @@ async function getAllCommesse(callback, callbackError) {
         .then((result) => {
             const data = []
             result.forEach(elem => {
-            console.log(elem.get('data_offerta'), elem.get('data_offerta') != undefined)
+            //console.log(elem.get('data_offerta'), elem.get('data_offerta') != undefined)
                 data.push({
                     id: elem.id,
                     nome: elem.get('nome') != undefined ? elem.get('nome') : '',
@@ -79,12 +90,12 @@ async function getAllCommesse(callback, callbackError) {
  * @param {Commessa} newCommessa la commessa da aggiungere,
  *                      campi: {nome, numero, dataOfferta, dataConsegna}
  */
-async function addCommessa(newCommessa) {
+function addCommessa(newCommessa) {
     const commessa = new Parse.Object(commesse)
     Object
         .keys(newCommessa)
         .forEach( key => commessa.set(key, newCommessa[key]) )
-    await commessa.save().catch(err => console.err('ERROR: ', err))
+    commessa.save().catch(err => console.err('ERROR: ', err))
 }
 
 /**
@@ -117,7 +128,7 @@ function updateCommessa(id, newVal) {
     if (newVal[key] != 'Invalid Date') {
         query.get(id)
         .then(
-            elem => elem.set( key, newVal[key] ).save().catch((err) => console.error('ERRORE: ', error.message)),
+            elem => elem.set( key, newVal[key] ).save().catch((err) => console.error('ERRORE: ', err.message)),
             error => console.error('ERRORE:', error.message),
         )
     }
@@ -128,4 +139,5 @@ export {
     deleteCommessa,
     updateCommessa,
     subscribeCommesse,
+    unsubscribeCommesse,
 };

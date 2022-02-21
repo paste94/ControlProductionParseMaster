@@ -1,6 +1,8 @@
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+
+// TODO: Cerca di capire come fare un confirm con il tasto enter
 
 /**
  * Crea un modal di confirm usando bootstrap
@@ -13,6 +15,11 @@ import PropTypes from 'prop-types'
  * @return {Component} il componente
  */
 function ModalConfirm({title, show, handleClose, handleConfirm, children}) {
+    const handleSumit = (e) => {
+        e.preventDefault();
+        handleConfirm();
+    }
+
     return (
         <Modal
             show={show}
@@ -30,9 +37,18 @@ function ModalConfirm({title, show, handleClose, handleConfirm, children}) {
                 <Button variant="secondary" onClick={handleClose}>
                     Annulla
                 </Button>
-                <Button variant="primary" onClick={handleConfirm}>
-                    Conferma
-                </Button>
+                <Form
+                    id='formConfirm'
+                    onSubmit={handleSumit}
+                >
+                    <Button
+                        autoFocus
+                        variant="primary"
+                        type='submit'
+                        form='formConfirm' >
+                        Conferma
+                    </Button>
+                </Form>
             </Modal.Footer>
         </Modal>
     )

@@ -1,30 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { addMacchina, getAllMacchine, deleteMacchina } from '../../DAO/Macchine.service';
+import { addMacchina, deleteMacchina, subscribeMacchine, unsubscribeMacchine } from '../../DAO/Macchine.service';
 import MacchineTable from './MacchineTable';
 import ModalNewMacchina from './ModalNewMacchina';
 import AlertError from '../../components/AlertError'
 
 /**
- * @return {Component} il componente
+ * @return {Component} il componentes
  */
 function Macchine() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
 
-    const refresh = () => getAllMacchine( setData, setError )
-    const handleDelete = id => deleteMacchina(id, refresh, setError)
-    const handleAddMacchina = (macchina, successCallback) => {
-        addMacchina(
-            macchina,
-            () => {
-                refresh()
-                successCallback()
-            },
-            setError,
-        )
-    }
-
-    useEffect(refresh, []);
+    useEffect(() => {
+        subscribeMacchine(setData, setError);
+        return unsubscribeMacchine;
+    }, []);
 
     return (
         <div className='page'>
@@ -39,14 +29,14 @@ function Macchine() {
                     </div>
                     <div className='col'>
                         <ModalNewMacchina
-                            handleAdd={handleAddMacchina}/>
+                            handleAdd={addMacchina}/>
                     </div>
                 </div>
             </div>
 
             <MacchineTable
                 data={data}
-                handleDelete={handleDelete} />
+                handleDelete={deleteMacchina} />
         </div>
     )
 }

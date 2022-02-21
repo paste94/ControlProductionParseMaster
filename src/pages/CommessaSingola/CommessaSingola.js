@@ -41,7 +41,7 @@ function CommessaSingola({commessa}) {
     return (
         <div>
             <Row className='align-items-center'>
-                <Col lg='1'>
+                <Col lg='1' md='1' sm='1'>
                     <NavLink to='/commesse' key={0} activeClassName="active">
                         <Button
                             variant='transparent'
@@ -50,7 +50,7 @@ function CommessaSingola({commessa}) {
                         </Button>
                     </NavLink>
                 </Col>
-                <Col lg='8'>
+                <Col lg='8' md='6' sm='6'>
                     <h1>
                         Commessa {commessa.nome} {commessa.chiusa && '(chiusa)'}
                     </h1>

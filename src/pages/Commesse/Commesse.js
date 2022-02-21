@@ -4,7 +4,9 @@ import ModalNewCommessa from './ModalNewCommessa';
 import { deleteCommessa,
     updateCommessa,
     addCommessa,
-    subscribeCommesse } from '../../DAO/Commesse.service'
+    subscribeCommesse,
+    unsubscribeCommesse,
+} from '../../DAO/Commesse.service'
 import { Col, Row, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
@@ -36,7 +38,10 @@ function Commesse({handleShowAlert}) {
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
-    useEffect(() => subscribeCommesse(setData, setError), []);
+    useEffect(() => {
+        subscribeCommesse(setData, setError);
+        return unsubscribeCommesse;
+    }, []);
 
     return (
         <div className='page'>

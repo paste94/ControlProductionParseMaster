@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Modal, FormControl, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 
+// TODO: Chiudi il modal quando aggiungi la nuova macchina
+
 /**
  * Modal specifico per l'aggiunta della macchina
  *
