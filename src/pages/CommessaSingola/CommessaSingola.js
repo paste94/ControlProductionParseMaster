@@ -15,6 +15,7 @@ import {
 } from '../../DAO/Preventivo.service'
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
+import ModalNuovaCommessaSingola from './ModalNuovaCommessaSingola'
 
 
 /**
@@ -26,6 +27,11 @@ import AlertError from '../../components/AlertError'
 function CommessaSingola({commessa}) {
     /**
      * Componenti usate per la gestione del bottone indietro nella navigazione
+     * 
+     * <ModalCommessaSingola
+                        modalFrom ='addCommessa'
+                        handleConfirm={ handleAdd }
+                        confirmButtonText={'Aggiungi'} />
      */
     // const history = useHistory()
 
@@ -68,10 +74,7 @@ function CommessaSingola({commessa}) {
                     </h1>
                 </Col>
                 <Col>
-                    <ModalCommessaSingola
-                        modalFrom ='addCommessa'
-                        handleConfirm={ handleAdd }
-                        confirmButtonText={'Aggiungi'} />
+                    <ModalNuovaCommessaSingola/>
                 </Col>
             </Row>
             <Row>
