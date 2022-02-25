@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import NumDisegno from './modal/component/NumDisegno';
 import { renderArticoli } from './modal/funzioni/articoli';
 import NumPezzi from './modal/component/NumPezzi';
+import CostMat from './modal/component/CostMat';
+import CostoOrario from './modal/component/CostoOrario';
 
 
 /**
@@ -33,7 +35,6 @@ function ModalNuovaCommessaSingola() {
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState({}) // Mappa [nome macchina -> ore assegnate]
-    const toggle = () => setShow(!show);
 
     const [renderedArticoli, setRenderedArticoli] = useState([])
 
@@ -42,7 +43,11 @@ function ModalNuovaCommessaSingola() {
      * @param {Articolo} articolo l'oggetto che rappresenta l'articolo
      */
      const onArticoloClick = (articolo) => {
+        console.log(articolo)
         setNumDisegno(articolo.numDisegno + '')
+        setNumPezzi(articolo.numPezzi)
+        setCostMat(articolo.costMat)
+        setCostoOrario(articolo.costoOrario)
     }
 
     /**
@@ -72,12 +77,12 @@ function ModalNuovaCommessaSingola() {
         <div>
             <Button
                 className='float-right vertical-center'
-                onClick={ toggle }>
+                onClick={ () => setShow(true) }>
                     Aggiungi Articolo CIAO
             </Button>
             <Modal
                 show={show}
-                onHide={toggle}
+                onHide={ () => setShow(false) }
                 >
                     <Modal.Header closeButton>
                         <Modal.Title>
@@ -97,8 +102,15 @@ function ModalNuovaCommessaSingola() {
                                 <br/>
                                 <NumPezzi
                                     value={numPezzi}
-                                    onChange={(e) => setNumPezzi(e.target.value)}
-                                ></NumPezzi>
+                                    onChange={(e) => setNumPezzi(e.target.value)} />
+                                <br/>
+                                 <CostMat
+                                    value={costMat}
+                                    onChange={(e) => setCostMat(e.target.value)} />
+                                <br/>
+                                <CostoOrario
+                                    value={costoOrario}
+                                    onChange={(e) => setCostoOrario(e.target.value)} />
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
