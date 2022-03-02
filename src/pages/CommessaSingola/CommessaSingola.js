@@ -15,7 +15,7 @@ import {
 } from '../../DAO/Preventivo.service'
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
-import ModalNuovaCommessaSingola from './ModalNuovaCommessaSingola'
+import ModalNuovaCommessaSingola from './modal/ModalNuovaCommessaSingola'
 
 
 /**

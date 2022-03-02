@@ -48,7 +48,7 @@ function CostoOrario({
 }
 
 CostoOrario.propTypes = {
-    value: PropTypes.int,
+    value: PropTypes.number,
     onChange: PropTypes.func,
 }
 

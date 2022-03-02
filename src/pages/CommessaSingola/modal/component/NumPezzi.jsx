@@ -24,7 +24,7 @@ function NumPezzi({
                 <InputGroup>
                     <FormControl
                         type="number"
-                        value={value}
+                        value={ value }
                         aria-describedby="basic-addon1"
                         name='numPezzi'
                         isInvalid={
@@ -44,7 +44,7 @@ function NumPezzi({
 }
 
 NumPezzi.propTypes = {
-    value: PropTypes.int,
+    value: PropTypes.number,
     onChange: PropTypes.func,
 }
 

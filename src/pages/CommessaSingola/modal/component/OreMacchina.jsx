@@ -11,31 +11,33 @@ import PropTypes from 'prop-types'
  *                  - articoliRender: l'elenco di articoli da visualizzare per l'autofill
  * @return {Component} il component creato
  */
-function CostMat({
+function OreMacchina({
     value,
     onChange,
+    nomeMacchina,
 }) {
     return (
         <Form.Row className="align-items-center">
             <Col lg='4' md='4' sm='4'>
-                <Form.Label>Costo materiali</Form.Label>
+                <Form.Label>{nomeMacchina}</Form.Label>
             </Col>
             <Col>
                 <InputGroup>
                     <FormControl
-                        value={ value }
+                        type="number"
+                        value={value}
                         aria-describedby="basic-addon1"
-                        name='costMat'
+                        name={nomeMacchina}
                         isInvalid={
                             value === '' ||
                             isNaN(value) ||
                             value < 0
                         }
-                        onChange={ onChange }/>
+                        onChange={onChange} />
                     <InputGroup.Append>
                         <InputGroup.Text
                             className='rounded-right' >
-                                €
+                                Ore
                         </InputGroup.Text>
                     </InputGroup.Append>
                     <Form.Control.Feedback type="invalid">
@@ -47,9 +49,10 @@ function CostMat({
     )
 }
 
-CostMat.propTypes = {
+OreMacchina.propTypes = {
     value: PropTypes.number,
     onChange: PropTypes.func,
+    nomeMacchina: PropTypes.string,
 }
 
-export default CostMat;
+export default OreMacchina;

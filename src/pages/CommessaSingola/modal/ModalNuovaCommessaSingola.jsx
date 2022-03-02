@@ -1,10 +1,11 @@
-import { Button, Form, Modal, Col, FormControl, InputGroup, DropdownButton, Dropdown} from 'react-bootstrap';
+import { Button, Form, Modal} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import NumDisegno from './modal/component/NumDisegno';
-import { renderArticoli } from './modal/funzioni/articoli';
-import NumPezzi from './modal/component/NumPezzi';
-import CostMat from './modal/component/CostMat';
-import CostoOrario from './modal/component/CostoOrario';
+import NumDisegno from './component/NumDisegno';
+import { renderArticoli } from './funzioni/articoli';
+import NumPezzi from './component/NumPezzi';
+import CostMat from './component/CostMat';
+import CostoOrario from './component/CostoOrario';
+import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
 
 
 /**
@@ -34,9 +35,10 @@ function ModalNuovaCommessaSingola() {
     const [costoOrario, setCostoOrario] = useState(0)
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
-    const [oreMacchina, setOreMacchina] = useState({}) // Mappa [nome macchina -> ore assegnate]
+    const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
 
     const [renderedArticoli, setRenderedArticoli] = useState([])
+    const [renderedMacchine, setRenderedMacchine] = useState([])
 
     /**
      * Carica l'articolo selezionato dallo scrivv view ventro al modal.
@@ -62,6 +64,7 @@ function ModalNuovaCommessaSingola() {
 
     useEffect(() => {
         renderArticoli(onArticoloClick, setRenderedArticoli);
+        getOreMacchina(setOreMacchina);
     }, []);
 
     useEffect(() => {
@@ -72,6 +75,20 @@ function ModalNuovaCommessaSingola() {
         setTotOre(0)
         setTotPreventivo(0)
     }, [show])
+
+    useEffect(() => {
+        console.log('*** ORE MACHINA ***', oreMacchina)
+        if (oreMacchina.length != 0) {
+            renderMacchine(
+                oreMacchina,
+                (e) => {
+                    const newArr = [...oreMacchina]
+                    newArr[i].ore = e.target.value
+                    setOreMacchina(newArr)
+                },
+                setRenderedMacchine)
+        }
+    }, [oreMacchina])
 
     return (
         <div>
@@ -111,6 +128,11 @@ function ModalNuovaCommessaSingola() {
                                 <CostoOrario
                                     value={costoOrario}
                                     onChange={(e) => setCostoOrario(e.target.value)} />
+                                <br/>
+                                {renderedMacchine}
+                                <br/>
+                                <h5>Ore: {totOre} </h5>
+                                <h5>Totale: {totPreventivo} €</h5>
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
