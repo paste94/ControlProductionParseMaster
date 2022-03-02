@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Button } from 'react-bootstrap'
 import CommessaSingolaTable from './CommessaSingolaTable'
-import ModalCommessaSingola from '../../components/ModalCommessaSingola'
 import { FaArrowLeft } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
 // import { useHistory } from 'react-router-dom'
@@ -27,7 +26,7 @@ import ModalNuovaCommessaSingola from './modal/ModalNuovaCommessaSingola'
 function CommessaSingola({commessa}) {
     /**
      * Componenti usate per la gestione del bottone indietro nella navigazione
-     * 
+     *
      * <ModalCommessaSingola
                         modalFrom ='addCommessa'
                         handleConfirm={ handleAdd }
@@ -40,8 +39,6 @@ function CommessaSingola({commessa}) {
 
     const refresh = () => getAllPreventivi(commessa.id, (data) => setData(data))
     // const handleClickBack = () => history.goBack()
-    const handleAdd = (newPreventivo) =>
-        addPreventivo(newPreventivo, commessa.id, refresh)
     const handleDelete = (id) => deletePreventivo(id, refresh)
     const handleEdit = (prevId, newPreventivo) =>
         editPreventivo(prevId, newPreventivo, refresh)
@@ -74,11 +71,13 @@ function CommessaSingola({commessa}) {
                     </h1>
                 </Col>
                 <Col>
-                    <ModalNuovaCommessaSingola/>
+                    <ModalNuovaCommessaSingola
+                        commessaId={commessa.id} />
                 </Col>
             </Row>
             <Row>
                 <Col>
+                    {console.log('DATA*******',data)}
                     <CommessaSingolaTable
                         handleConfirm = { handleEdit }
                         handleDelete = { handleDelete }

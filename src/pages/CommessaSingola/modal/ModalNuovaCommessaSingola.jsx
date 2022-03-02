@@ -6,6 +6,8 @@ import NumPezzi from './component/NumPezzi';
 import CostMat from './component/CostMat';
 import CostoOrario from './component/CostoOrario';
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
+import PropTypes from 'prop-types'
+import { addPreventivo } from '../../../DAO/Preventivo.service';
 
 
 /**
@@ -27,12 +29,14 @@ import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
  *                          mostra gli elementi per la modifica.
  * @return {Component} il componente
  */
-function ModalNuovaCommessaSingola() {
+function ModalNuovaCommessaSingola({
+    commessaId,
+}) {
     const [show, setShow] = useState(false);
     const [numDisegno, setNumDisegno] = useState('');
-    const [numPezzi, setNumPezzi] = useState(0);
+    const [numPezzi, setNumPezzi] = useState(1);
     const [costMat, setCostMat] = useState(0);
-    const [costoOrario, setCostoOrario] = useState(0)
+    const [costoOrario, setCostoOrario] = useState(42)
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
@@ -59,7 +63,17 @@ function ModalNuovaCommessaSingola() {
         // Evito che la pagina venga ricaricata topo il confirm del form
         e.preventDefault();
 
-        // TODO: Aggiungi il preventivo al DB
+        const _articolo = {
+            costMat: costMat.toString(),
+            costoOrario: costoOrario.toString(),
+            numDisegno: numDisegno.toString(),
+            numPezzi: numPezzi.toString(),
+            totOre: totOre.toString(),
+            totPreventivo: totPreventivo.toString(),
+            oreMacchina: oreMacchina.filter(m => m.ore > 0),
+        }
+
+        addPreventivo(_articolo, commessaId, () => setShow(false))
     }
 
     useEffect(() => {
@@ -77,25 +91,30 @@ function ModalNuovaCommessaSingola() {
     }, [show])
 
     useEffect(() => {
-        console.log('*** ORE MACHINA ***', oreMacchina)
         if (oreMacchina.length != 0) {
             renderMacchine(
                 oreMacchina,
-                (e) => {
-                    const newArr = [...oreMacchina]
-                    newArr[i].ore = e.target.value
-                    setOreMacchina(newArr)
-                },
+                setOreMacchina,
                 setRenderedMacchine)
         }
     }, [oreMacchina])
+
+    useEffect(() => {
+        const _totOre = oreMacchina.reduce(
+            (accumulator, current) => accumulator + parseFloat(current.ore),
+            0,
+        )
+        const _totPreventivo = (_totOre * parseFloat(costoOrario) + parseFloat(costMat)) * parseInt(numPezzi)
+        setTotOre(_totOre.toFixed(2))
+        setTotPreventivo(_totPreventivo.toFixed(2))
+    }, [oreMacchina, numPezzi, costMat, costoOrario] )
 
     return (
         <div>
             <Button
                 className='float-right vertical-center'
                 onClick={ () => setShow(true) }>
-                    Aggiungi Articolo CIAO
+                    Aggiungi Articolo
             </Button>
             <Modal
                 show={show}
@@ -136,13 +155,37 @@ function ModalNuovaCommessaSingola() {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-
+                        <Button
+                            variant="success"
+                            onClick={ () => console.log('salvva articolo') }
+                            title='Salva nella lista degli articoli' >
+                            Salva articolo
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={ () => setShow(false) }>
+                            Annulla
+                        </Button>
+                        <Button
+                            id='primaryButton'
+                            variant="primary"
+                            type='submit'
+                            autoFocus
+                            onClick={ () => console.log('aggiungi articolo') }
+                            title='Aggiungi articolo alla commessa'
+                            form='addPreventivo'>
+                            Aggiungi
+                        </Button>
                     </Modal.Footer>
             </Modal>
         </div>
 
 
     )
+}
+
+ModalNuovaCommessaSingola.propTypes = {
+    commessaId: PropTypes.string,
 }
 
 export default ModalNuovaCommessaSingola

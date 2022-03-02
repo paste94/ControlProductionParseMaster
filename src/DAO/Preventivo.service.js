@@ -62,27 +62,19 @@ let subscription;
  * @param {function} callback callback per successo
  */
 function addPreventivo(newPreventivo, commessaId, callback) {
-    console.log(newPreventivo);
-
+    newPreventivo['parent'] = commessaId;
     const prev = new Parse.Object(preventivo);
-
     Object
         .keys(newPreventivo)
-        .forEach( 
+        .forEach(
             key => {
                 console.log(key, '->', newPreventivo[key])
-                prev.set(key, newPreventivo[key]) 
-            }
+                prev.set(key, newPreventivo[key])
+            },
         )
-    prev.set('parent', commessaId);
-
-    console.log(prev)
-
-    
     prev.save()
             .then(callback)
             .catch( error => console.error('ERRORE:', error.message) )
-            
 }
 
 /**

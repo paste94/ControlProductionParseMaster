@@ -20,15 +20,19 @@ function getOreMacchina(callback) {
  * Renderizza un elenco di component OreMacchina.
  *
  * @param {array} oreMacchina Lista di oggetti macchina da renderizzare
- * @param {function} onChange funzione di change per la macchina
+ * @param {function} setOreMacchina funzione di change per la macchina
  * @param {function} callback callback per il component renderizzato
  */
-function renderMacchine(oreMacchina, onChange, callback) {
+function renderMacchine(oreMacchina, setOreMacchina, callback) {
     const renderer = oreMacchina.map( (m, i) =>
         <div key={i}>
             <OreMacchina
                 value={m.ore}
-                onChange={ onChange }
+                onChange={ (e) => {
+                    const newArr = [...oreMacchina]
+                    newArr[i].ore = e.target.value
+                    setOreMacchina(newArr)
+                } }
                 nomeMacchina={m.nome}
             />
             <br/>

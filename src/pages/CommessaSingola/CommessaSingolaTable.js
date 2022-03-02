@@ -66,18 +66,18 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     // Definisce cosa mostrare quando la riga nella tabella viene espansa
     const expandRow = {
         renderer: row => {
-            
             console.log('ROW', row)
             let macchineValue = ''
 
-            if (row['oreMacchina'] != undefined) {
-                Object.entries(row['oreMacchina'].map(e => {
-                    macchineValue = macchineValue + e[0] + ': ' + e[1] + 'h\n'
+            console.log(row['oreMacchina'])
+
+            if (row.oreMacchina != undefined && row.oreMacchina) {
+                Object.entries(row.oreMacchina.map(e => {
+                    macchineValue = macchineValue + e.nome + ': ' + e.ore + 'h\n'
                 }))
+            } else {
+                macchineValue = 'Non ci sono tempi macchina impostati per questo articolo'
             }
-
-            console.log('********', macchineValue)
-
 
             return (
                 <div>
@@ -95,41 +95,6 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
                     />
                 </div>
             )
-
-            /*
-            const firstElements = ['numPezzi', 'costMat', 'costoOrario']
-            let sortedArr = Object.keys(row).sort()
-            sortedArr = sortedArr.filter( item =>
-                item !== firstElements[0] &&
-                item !== firstElements[1] &&
-                item !== firstElements[2] &&
-                item !== 'numDisegno' &&
-                item !== 'totOre' &&
-                item !== 'totPreventivo' &&
-                item !== 'id' &&
-                item !== 'parent' &&
-                item !== 'updatedAt' &&
-                item !== 'eliminato' &&
-                item !== 'createdAt',
-            )
-            sortedArr = firstElements.concat(sortedArr)
-
-            const listItems = sortedArr.map((keyname) =>
-                <Row key={keyname}>
-                    <Col md='4'>{keyname}:</Col>
-                    <Col>{row[keyname]}</Col>
-                    <hr style={
-                        {
-                            background: '#cfd8dc',
-                            width: '97%',
-                            marginTop: '0px',
-                            marginBottom: '0px',
-                        }
-                    }/>
-                </Row>,
-            )
-            return listItems
-            */
         },
         showExpandColumn: true,
         expandByColumnOnly: true,
@@ -146,7 +111,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     return (
         <div>
             <BootstrapTable
-                keyField='numDisegno'
+                keyField='id'
                 data={ data }
                 columns={ columns }
                 pagination={ paginationFactory() }
