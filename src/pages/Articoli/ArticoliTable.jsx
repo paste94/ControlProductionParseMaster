@@ -2,10 +2,11 @@ import React from 'react'
 import BootstrapTable from 'react-bootstrap-table-next'
 import { Row, Col } from 'react-bootstrap'
 import paginationFactory from 'react-bootstrap-table2-paginator'
-import ModalCommessaSingola from '../../components/ModalCommessaSingola'
 import DeleteButton from '../../components/DeleteButton'
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa'
 import PropTypes from 'prop-types'
+import ModalModificaArticolo from '../../components/modal_articoli/ModalModificaArticolo'
+import DettaglioRiga from '../../components/DettaglioRiga'
 
 /**
  * Definisce la tabella per visualizzare e gestire gli articoli
@@ -24,13 +25,8 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
     const defineButtons = (cell, row, rowIndex, formatExtraData) => (
         <Row>
             <Col lg='6' md='6' sm='6'>
-                <ModalCommessaSingola
-                    data={row}
-                    handleConfirm={
-                        articolo => handleEditArticolo(row.id, articolo)
-                    }
-                    confirmButtonText='Modifica'
-                    modalFrom='editArticolo' />
+                <ModalModificaArticolo
+                    articolo={row} />
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton
@@ -63,37 +59,35 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
     // Definisce cosa mostrare quando la riga nella tabella viene espansa
     const expandRow = {
         renderer: row => {
-            const firstElements = ['numPezzi', 'costMat', 'costoOrario']
-            let sortedArr = Object.keys(row).sort()
-            sortedArr = sortedArr.filter( item =>
-                item !== firstElements[0] &&
-                item !== firstElements[1] &&
-                item !== firstElements[2] &&
-                item !== 'numDisegno' &&
-                item !== 'totOre' &&
-                item !== 'totPreventivo' &&
-                item !== 'id' &&
-                item !== 'parent' &&
-                item !== 'updatedAt' &&
-                item !== 'eliminato' &&
-                item !== 'createdAt' )
-            sortedArr = firstElements.concat(sortedArr)
-            sortedArr = sortedArr.filter(item => item !== 'id')
+            console.log('ROW', row)
+            let macchineValue = ''
 
-            const listItems = sortedArr.map( key =>
-                <Row key={key}>
-                    <Col md='4'>{key}:</Col>
-                    <Col>{row[key]}</Col>
-                    <hr style={
-                        {
-                            background: '#cfd8dc',
-                            width: '97%',
-                            marginTop: '0px',
-                            marginBottom: '0px',
-                        }
-                    }/>
-                </Row> )
-            return listItems
+            console.log(row['oreMacchina'])
+
+            if (row.oreMacchina != undefined && row.oreMacchina) {
+                Object.entries(row.oreMacchina.map(e => {
+                    macchineValue = macchineValue + e.nome + ': ' + e.ore + 'h\n'
+                }))
+            } else {
+                macchineValue = 'Non ci sono tempi macchina impostati per questo articolo'
+            }
+
+            return (
+                <div>
+                    <DettaglioRiga
+                        k='Costo Materiale: '
+                        v={'€ ' + row['costMat']}
+                    />
+                    <DettaglioRiga
+                        k='Costo Orario: '
+                        v={'€ ' + row['costoOrario']}
+                    />
+                    <DettaglioRiga
+                        k='Macchine: '
+                        v={macchineValue}
+                    />
+                </div>
+            )
         },
         showExpandColumn: true,
         expandByColumnOnly: true,

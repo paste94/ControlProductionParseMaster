@@ -5,8 +5,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Row, Col } from 'react-bootstrap';
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 import PropTypes from 'prop-types'
-import DettaglioRiga from './DettaglioRiga';
 import ModalModificaCommessaSingola from '../../components/modal_articoli/ModalModificaCommessaSingola';
+import DettaglioRiga from '../../components/DettaglioRiga';
 
 /** Definisce la tabella degli impiegati
  *
@@ -63,10 +63,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     // Definisce cosa mostrare quando la riga nella tabella viene espansa
     const expandRow = {
         renderer: row => {
-            console.log('ROW', row)
             let macchineValue = ''
-
-            console.log(row['oreMacchina'])
 
             if (row.oreMacchina != undefined && row.oreMacchina) {
                 Object.entries(row.oreMacchina.map(e => {

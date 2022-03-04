@@ -19,15 +19,6 @@ function Articoli() {
     // Dati della tabella
     const [data, setData] = useState([])
 
-    const refresh = () => getAllArticoli( (result) => setData(result) )
-
-    /**
-     * Aggiunge un articolo al database
-     * @param {object} articolo l'articolo da aggiungere
-     * @return {*} none
-     */
-    const handleAddArticolo = (articolo) => addArticolo(articolo, refresh)
-
     /**
      * Modifica un articolo
      * @param {string} id identificativo dell'articolo da modificare

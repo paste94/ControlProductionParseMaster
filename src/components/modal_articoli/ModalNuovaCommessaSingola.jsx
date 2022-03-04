@@ -11,22 +11,7 @@ import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
 
 
 /**
- * Definisce modal per la modifica e la aggiunta di un lavoro
- * @param {Object}  props
- *                  - data (object) l'oggetto che contiene il
- *                      lavoro da modificare. deve contenere
- *                          - numPezzi
- *                          - costMat
- *                          - costoOrario
- *                          - numDisegno
- *                          - elenco dei valori delle macchine
- *                  - handleConfirm (function) funzione da eseguire
- *                      per la conferma del modal (aggiunta o modifica)
- *                  - type (string) stringa che identifica se il component
- *                          serve per aggiungere un elemento o modificarlo.
- *                          Se vale 'add' allora mostra le informazioni
- *                          riguardanti l'aggiunta di un elemento altrimenti
- *                          mostra gli elementi per la modifica.
+ * Definisce modal per l'aggiunta del preventivo
  * @return {Component} il componente
  */
 function ModalNuovaCommessaSingola() {

@@ -115,8 +115,9 @@ function deleteArticolo(id) {
  * Modifica l'articolo dato l'ID
  * @param {String} artId L'ID dell'articolo da modificare
  * @param {Articolo} newArticolo L'articolo nuovo
+ * @param {function} callback funzione di callback di successo
  */
-function editArticolo(artId, newArticolo) {
+function editArticolo(artId, newArticolo, callback) {
     new Parse.Query(articoli)
         .get(artId)
         .then(
@@ -124,7 +125,7 @@ function editArticolo(artId, newArticolo) {
                 Object
                     .keys(newArticolo)
                     .forEach( key => elem.set(key, newArticolo[key]) )
-                elem.save()
+                elem.save().then(callback)
             })
         .catch(error => console.error('ERRORE:', error.message))
 }

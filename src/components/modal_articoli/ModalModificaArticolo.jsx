@@ -7,19 +7,20 @@ import CostoOrario from './component/CostoOrario';
 import PropTypes from 'prop-types'
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
 import { FaEdit } from 'react-icons/fa';
+import { editArticolo } from '../../DAO/Articoli.service';
 
 
 /**
- * Definisce modal per la modifica del preventivo
+ * Definisce modal per la modifica dell'artiolo
  * @param {Object}  props
- *                  - commessaSingola (object) contiene la commessa singola (preventivo) da modificare
+ *                  - articolo (object) contiene l'articolo da modificare
  * @return {Component} il componente
  */
-function ModalModificaCommessaSingola({
-    commessaSingola,
+function ModalModificaArticolo({
+    articolo,
 }) {
     const [show, setShow] = useState(false);
-    const [numDisegno, setNumDisegno] = useState(commessaSingola.numDisegno);
+    const [numDisegno, setNumDisegno] = useState(articolo.numDisegno);
     const [numPezzi, setNumPezzi] = useState(1);
     const [costMat, setCostMat] = useState(0);
     const [costoOrario, setCostoOrario] = useState(42)
@@ -47,10 +48,10 @@ function ModalModificaCommessaSingola({
             totOre: totOre.toString(),
             totPreventivo: totPreventivo.toString(),
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
-            parent: commessaSingola.parent,
+            parent: articolo.parent,
         }
 
-        editPreventivo(commessaSingola.id, _articolo, handleHideModal)
+        editArticolo(articolo.id, _articolo, handleHideModal)
     }
 
     useEffect(() => {
@@ -63,23 +64,23 @@ function ModalModificaCommessaSingola({
             setTotPreventivo(0)
             setOreMacchina([])
         } else {
-            setNumDisegno(commessaSingola.numDisegno)
-            setNumPezzi(commessaSingola.numPezzi)
-            setCostMat(commessaSingola.costMat)
-            setCostoOrario(commessaSingola.costoOrario)
-            setTotOre(commessaSingola.totOre)
-            setTotPreventivo(commessaSingola.totPreventivo)
-            // Prendo le ore macchina della commessaSingola ed aggiungo le ore macchina
+            setNumDisegno(articolo.numDisegno)
+            setNumPezzi(articolo.numPezzi)
+            setCostMat(articolo.costMat)
+            setCostoOrario(articolo.costoOrario)
+            setTotOre(articolo.totOre)
+            setTotPreventivo(articolo.totPreventivo)
+            // Prendo le ore macchina della articolo ed aggiungo le ore macchina
             // a 0 delle macchine nuove non utilizzate.
             getOreMacchina((macchine) => {
-                // Deep copy dell'oggetto oreMacchina di commessaSingola
-                const _oreMacchina = JSON.parse(JSON.stringify(commessaSingola.oreMacchina))
-                // Estraggo gli ID delle macchine già presenti in commessaSingola
+                // Deep copy dell'oggetto oreMacchina di articolo
+                const _oreMacchina = JSON.parse(JSON.stringify(articolo.oreMacchina))
+                // Estraggo gli ID delle macchine già presenti in articolo
                 const _oreMacchinaIds = _oreMacchina.map(m => m.id)
-                // Tolgo le macchine presenti in commessaSingola dall'elenco delle macchine totali
+                // Tolgo le macchine presenti in articolo dall'elenco delle macchine totali
                 const _macchineFiltered = macchine.filter(e => !_oreMacchinaIds.includes(e.id))
                 // Imposto come oreMacchina l'elenco dato dalla concatenazione delle macchine
-                // presenti nella commessaSingola e dalle macchine totali
+                // presenti nella articolo e dalle macchine totali
                 setOreMacchina(_oreMacchina.concat(_macchineFiltered))
             })
         }
@@ -174,8 +175,8 @@ function ModalModificaCommessaSingola({
     )
 }
 
-ModalModificaCommessaSingola.propTypes = {
-    commessaSingola: PropTypes.object,
+ModalModificaArticolo.propTypes = {
+    articolo: PropTypes.object,
 }
 
-export default ModalModificaCommessaSingola
+export default ModalModificaArticolo
