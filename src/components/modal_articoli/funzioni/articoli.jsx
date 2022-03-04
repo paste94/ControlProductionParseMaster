@@ -1,5 +1,5 @@
 import { Dropdown } from 'react-bootstrap';
-import { getAllArticoli } from '../../../../DAO/Articoli.service';
+import { getAllArticoli } from '../../../DAO/Articoli.service';
 import React from 'react';
 
 /**

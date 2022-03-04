@@ -1,6 +1,6 @@
 import React from 'react';
-import { getAllMacchine } from '../../../../DAO/Macchine.service';
 import OreMacchina from '../component/OreMacchina';
+import { getAllMacchine } from '../../../DAO/Macchine.service';
 
 // https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
 

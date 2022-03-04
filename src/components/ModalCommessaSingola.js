@@ -242,13 +242,13 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                             Aggiungi Articolo
                     </Button>
                 ) : (
-                    <Button
-                        variant='link'
-                        title='Modifica'
-                        size='sm'
-                        onClick={ handleShow }>
-                            <FaEdit style={{ color: 'black' }}/>
-                    </Button>
+                        <Button
+                            variant='link'
+                            title='Modifica'
+                            size='sm'
+                            onClick={ handleShow }>
+                                <FaEdit style={{ color: 'black' }}/>
+                        </Button>
                 )
             }
             <Modal

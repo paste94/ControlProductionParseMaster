@@ -50,7 +50,7 @@ function OreMacchina({
 }
 
 OreMacchina.propTypes = {
-    value: PropTypes.number,
+    value: PropTypes.string,
     onChange: PropTypes.func,
     nomeMacchina: PropTypes.string,
 }

@@ -30,15 +30,16 @@ function NumDisegno({
                     aria-describedby="basic-addon1"
                     name='numDisegno'
                     placeholder='Numero Disegno'
+                    disabled={disabled}
                     onChange={onChange} />
-                        <DropdownButton
+                        {!disabled && <DropdownButton
                             as={ InputGroup.Append }
                             title='Scegli'
                             variant='secondary'
                             disabled={ disabled }
                             >
                                 {articoliRender}
-                        </DropdownButton>
+                        </DropdownButton>}
                 </InputGroup>
             </Col>
         </Form.Row>

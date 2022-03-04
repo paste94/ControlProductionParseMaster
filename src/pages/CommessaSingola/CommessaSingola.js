@@ -14,7 +14,7 @@ import {
 } from '../../DAO/Preventivo.service'
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
-import ModalNuovaCommessaSingola from './modal/ModalNuovaCommessaSingola'
+import ModalNuovaCommessaSingola from '../../components/modal_articoli/ModalNuovaCommessaSingola';
 
 
 /**
@@ -71,8 +71,7 @@ function CommessaSingola({commessa}) {
                     </h1>
                 </Col>
                 <Col>
-                    <ModalNuovaCommessaSingola
-                        commessaId={commessa.id} />
+                    <ModalNuovaCommessaSingola/>
                 </Col>
             </Row>
             <Row>

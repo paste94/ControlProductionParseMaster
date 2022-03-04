@@ -145,7 +145,7 @@ function deletePreventivo(id, callback) {
  * @param {*} newPreventivo Preventivo modificato
  * @param {*} callback Callback
  */
-async function editPreventivo(prevId, newPreventivo, callback) {
+function editPreventivo(prevId, newPreventivo, callback) {
     const query = new Parse.Query(preventivo)
     query.get(prevId)
         .then(

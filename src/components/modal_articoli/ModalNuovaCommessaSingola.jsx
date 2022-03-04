@@ -5,9 +5,9 @@ import { renderArticoli } from './funzioni/articoli';
 import NumPezzi from './component/NumPezzi';
 import CostMat from './component/CostMat';
 import CostoOrario from './component/CostoOrario';
+import { addPreventivo } from '../../DAO/Preventivo.service';
+import { addArticolo } from '../../DAO/Articoli.service';
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
-import PropTypes from 'prop-types'
-import { addPreventivo } from '../../../DAO/Preventivo.service';
 
 
 /**
@@ -29,9 +29,7 @@ import { addPreventivo } from '../../../DAO/Preventivo.service';
  *                          mostra gli elementi per la modifica.
  * @return {Component} il componente
  */
-function ModalNuovaCommessaSingola({
-    commessaId,
-}) {
+function ModalNuovaCommessaSingola() {
     const [show, setShow] = useState(false);
     const [numDisegno, setNumDisegno] = useState('');
     const [numPezzi, setNumPezzi] = useState(1);
@@ -76,6 +74,20 @@ function ModalNuovaCommessaSingola({
         addPreventivo(_articolo, commessaId, () => setShow(false))
     }
 
+    const handleSalvaArticolo = () => {
+        const _articolo = {
+            costMat: costMat.toString(),
+            costoOrario: costoOrario.toString(),
+            numDisegno: numDisegno.toString(),
+            numPezzi: numPezzi.toString(),
+            totOre: totOre.toString(),
+            totPreventivo: totPreventivo.toString(),
+            oreMacchina: oreMacchina.filter(m => m.ore > 0),
+        }
+
+        addArticolo(_articolo, () => console.log('ARTICOLO AGGIUNTO'))
+    }
+
     useEffect(() => {
         renderArticoli(onArticoloClick, setRenderedArticoli);
         getOreMacchina(setOreMacchina);
@@ -99,6 +111,7 @@ function ModalNuovaCommessaSingola({
         }
     }, [oreMacchina])
 
+    // Modifica i contatori totali
     useEffect(() => {
         const _totOre = oreMacchina.reduce(
             (accumulator, current) => accumulator + parseFloat(current.ore),
@@ -132,7 +145,6 @@ function ModalNuovaCommessaSingola({
                                 <NumDisegno
                                     value={numDisegno}
                                     onChange={(e) => setNumDisegno(e.target.value)}
-                                    disabled={false}
                                     articoliRender={renderedArticoli}
                                 />
                                 <br/>
@@ -157,7 +169,7 @@ function ModalNuovaCommessaSingola({
                     <Modal.Footer>
                         <Button
                             variant="success"
-                            onClick={ () => console.log('salvva articolo') }
+                            onClick={ handleSalvaArticolo }
                             title='Salva nella lista degli articoli' >
                             Salva articolo
                         </Button>
@@ -171,7 +183,6 @@ function ModalNuovaCommessaSingola({
                             variant="primary"
                             type='submit'
                             autoFocus
-                            onClick={ () => console.log('aggiungi articolo') }
                             title='Aggiungi articolo alla commessa'
                             form='addPreventivo'>
                             Aggiungi
@@ -182,10 +193,6 @@ function ModalNuovaCommessaSingola({
 
 
     )
-}
-
-ModalNuovaCommessaSingola.propTypes = {
-    commessaId: PropTypes.string,
 }
 
 export default ModalNuovaCommessaSingola

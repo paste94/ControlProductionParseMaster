@@ -11,33 +11,29 @@ import PropTypes from 'prop-types'
  *                  - articoliRender: l'elenco di articoli da visualizzare per l'autofill
  * @return {Component} il component creato
  */
-function CostoOrario({
+function NumPezzi({
     value,
     onChange,
 }) {
     return (
         <Form.Row className="align-items-center">
             <Col lg='4' md='4' sm='4'>
-                <Form.Label>Costo orario</Form.Label>
+                <Form.Label>Numero pezzi</Form.Label>
             </Col>
             <Col>
                 <InputGroup>
                     <FormControl
+                        type="number"
                         value={ value }
                         aria-describedby="basic-addon1"
-                        name='CostoOrario'
+                        name='numPezzi'
                         isInvalid={
                             value === '' ||
                             isNaN(value) ||
                             value < 0
                         }
-                        onChange={ onChange }/>
-                    <InputGroup.Append>
-                        <InputGroup.Text
-                            className='rounded-right' >
-                                €
-                        </InputGroup.Text>
-                    </InputGroup.Append>
+                        onChange={onChange}
+                        className='rounded-right' />
                     <Form.Control.Feedback type="invalid">
                         {'Valore non valido'}
                     </Form.Control.Feedback>
@@ -47,9 +43,9 @@ function CostoOrario({
     )
 }
 
-CostoOrario.propTypes = {
-    value: PropTypes.number,
+NumPezzi.propTypes = {
+    value: PropTypes.string,
     onChange: PropTypes.func,
 }
 
-export default CostoOrario;
+export default NumPezzi;

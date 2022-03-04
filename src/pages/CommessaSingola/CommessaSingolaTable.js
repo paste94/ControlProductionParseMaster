@@ -7,6 +7,7 @@ import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import PropTypes from 'prop-types'
 import DettaglioRiga from './DettaglioRiga';
+import ModalModificaCommessaSingola from '../../components/modal_articoli/ModalModificaCommessaSingola';
 
 /** Definisce la tabella degli impiegati
  *
@@ -28,11 +29,8 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
     const defineButtons = (cell, row, rowIndex, formatExtraData) => (
         <Row>
             <Col lg='6' md='6' sm='6'>
-                <ModalCommessaSingola
-                    data={row}
-                    handleConfirm={ (newPreventivo) => handleConfirm(row.id, newPreventivo) }
-                    confirmButtonText={'Modifica'}
-                    modalFrom='editCommessa' />
+                <ModalModificaCommessaSingola
+                    commessaSingola={row}/>
             </Col>
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton
