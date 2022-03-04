@@ -67,7 +67,6 @@ async function getAllCommesse(callback, callbackError) {
         .then((result) => {
             const data = []
             result.forEach(elem => {
-            //console.log(elem.get('data_offerta'), elem.get('data_offerta') != undefined)
                 data.push({
                     id: elem.id,
                     nome: elem.get('nome') != undefined ? elem.get('nome') : '',

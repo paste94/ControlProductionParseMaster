@@ -9,6 +9,7 @@ import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
 import { MdRefresh } from 'react-icons/md';
 import PropTypes from 'prop-types'
+import AlertError from '../../components/AlertError';
 
 /** Pagina degli impiegati
  *
@@ -21,6 +22,7 @@ function Impiegati({handleShowAlert}) {
 
     // Elenco degli impiegati
     const [data, setData] = useState([])
+    const [error, setError] = useState('')
 
     const refresh = () => getAllImpiegati( (result) => setData(result) )
 
@@ -113,29 +115,24 @@ function Impiegati({handleShowAlert}) {
     /* RENDER */
     return (
         <div className='page'>
-
-            <div className='container' style={{marginBottom: 10}}>
-                <Row className='align-items-center'>
-                    <Col>
-                        <Row>
-                            <h1>Impiegati</h1>
-                            <Button
-                                variant="link"
-                                size="lg"
-                                onClick={() => refresh()}>
-                                    <MdRefresh color='grey' />
-                                </Button>
-                        </Row>
-                    </Col>
-                    <Col>
-                        <Button
-                            className='float-right vertical-center'
-                            onClick={handleShowNewImpiegato}>
-                                Aggiungi impiegato
-                        </Button>
-                    </Col>
-                </Row>
-            </div>
+            <AlertError
+                show={error !== ''}
+                message={error}
+                handleClose={ () => setError('') } />
+            <Row className='align-items-center'>
+                <Col>
+                    <Row className='ml-1'>
+                        <h1>Impiegati</h1>
+                    </Row>
+                </Col>
+                <Col>
+                    <Button
+                        className='float-right vertical-center'
+                        onClick={ handleShowNewImpiegato }>
+                        Aggiungi impiegato
+                    </Button>
+                </Col>
+            </Row>
 
             <ImpiegatiTable
                 data={data}

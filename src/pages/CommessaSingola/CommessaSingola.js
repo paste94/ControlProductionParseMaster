@@ -3,9 +3,7 @@ import { Col, Row, Button } from 'react-bootstrap'
 import CommessaSingolaTable from './CommessaSingolaTable'
 import { FaArrowLeft } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
-// import { useHistory } from 'react-router-dom'
 import {
-    addPreventivo,
     getAllPreventivi,
     deletePreventivo,
     editPreventivo,
@@ -24,21 +22,10 @@ import ModalNuovaCommessaSingola from '../../components/modal_articoli/ModalNuov
  * @return {Component} il component
  */
 function CommessaSingola({commessa}) {
-    /**
-     * Componenti usate per la gestione del bottone indietro nella navigazione
-     *
-     * <ModalCommessaSingola
-                        modalFrom ='addCommessa'
-                        handleConfirm={ handleAdd }
-                        confirmButtonText={'Aggiungi'} />
-     */
-    // const history = useHistory()
-
     const [data, setData] = useState([])
     const [error, setError] = useState('')
 
     const refresh = () => getAllPreventivi(commessa.id, (data) => setData(data))
-    // const handleClickBack = () => history.goBack()
     const handleDelete = (id) => deletePreventivo(id, refresh)
     const handleEdit = (prevId, newPreventivo) =>
         editPreventivo(prevId, newPreventivo, refresh)
@@ -76,7 +63,6 @@ function CommessaSingola({commessa}) {
             </Row>
             <Row>
                 <Col>
-                    {console.log('DATA*******',data)}
                     <CommessaSingolaTable
                         handleConfirm = { handleEdit }
                         handleDelete = { handleDelete }

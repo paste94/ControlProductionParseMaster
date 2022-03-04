@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
-import {Button} from 'react-bootstrap';
-import { FaTrash } from 'react-icons/fa';
 import ModalChip from './ModalChip';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'

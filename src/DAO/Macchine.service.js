@@ -108,7 +108,7 @@ function deleteMacchina(id) {
         .get(id)
         .then(
             elem => elem.set('eliminato', true).save(),
-            error => console.error('ERRORE:', error.message)
+            error => console.error('ERRORE:', error.message),
         )
 }
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import ModalCommessaSingola from '../../components/ModalCommessaSingola';
+import ModalNuovoArticolo from '../../components/modal_articoli/ModalNuovoArticolo'
 import {
     addArticolo,
     editArticolo,
     deleteArticolo,
     getAllArticoli,
+    subscribeArticoli,
+    unsubscribeArticoli,
 } from '../../DAO/Articoli.service';
 import ArticoliTable from './ArticoliTable'
 
@@ -32,7 +34,7 @@ function Articoli() {
      * @param {object} articolo oggetto con le modifiche effettuate
      */
     const handleEditArticolo = (id, articolo) => {
-        editArticolo(id, articolo, refresh)
+        editArticolo(id, articolo)
     }
 
     /**
@@ -40,11 +42,13 @@ function Articoli() {
      * @param {string} id identificativo dell'elemento da eliminare dal DB
      * @return {*} none
      */
-    const handleDeleteArticolo = (id) => deleteArticolo(id, refresh)
+    const handleDeleteArticolo = (id) => deleteArticolo(id)
 
 
-    // Richiama il listener con i dati da mostrare in tabella
-    useEffect(refresh, [])
+    useEffect(() => {
+        subscribeArticoli(setData, () => {});
+        return unsubscribeArticoli;
+    }, [])
 
     return (
         <div className='page'>
@@ -53,10 +57,7 @@ function Articoli() {
                     <h1>Articoli</h1>
                 </Col>
                 <Col>
-                    <ModalCommessaSingola
-                        modalFrom='addArticolo'
-                        handleConfirm={ handleAddArticolo }
-                        confirmButtonText={'Aggiungi'} />
+                    <ModalNuovoArticolo />
                 </Col>
             </Row>
             <Row>

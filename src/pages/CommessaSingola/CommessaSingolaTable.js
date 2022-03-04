@@ -4,7 +4,6 @@ import DeleteButton from '../../components/DeleteButton';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { Row, Col } from 'react-bootstrap';
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
-import ModalCommessaSingola from '../../components/ModalCommessaSingola';
 import PropTypes from 'prop-types'
 import DettaglioRiga from './DettaglioRiga';
 import ModalModificaCommessaSingola from '../../components/modal_articoli/ModalModificaCommessaSingola';

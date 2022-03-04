@@ -116,7 +116,6 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
         // le macchine undefined siano inizializzate a 0
         const om = {}
         macchine.forEach(m => {
-            //console.log("MMMMM", m)
             om[m.nome] = oreMacchina[m.nome] !== undefined ? oreMacchina[m.nome] : 0
             oreMacchina[m.nome] = 0
         })
@@ -203,17 +202,21 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
      * Renderizza gli articoli da visualizzare nel dropdown della creazione di un nuovo articolo
      */
     function renderArticoli() {
-        getAllArticoli( articoli => {
-            const AR = articoli.map( art =>
-                <Dropdown.Item
-                    key={art.id}
-                    onClick={ () => onArticoloClick(art) } >
-                    {
-                        art.numDisegno
-                    }
-                </Dropdown.Item> )
-            setArticoliRender(AR)
-        })
+        getAllArticoli(
+            articoli => {
+                console.log(articoli)
+                const AR = articoli.map( art =>
+                    <Dropdown.Item
+                        key={art.id}
+                        onClick={ () => onArticoloClick(art) } >
+                        {
+                            art.numDisegno
+                        }
+                    </Dropdown.Item> )
+                setArticoliRender(AR)
+            },
+            () => {},
+        )
     }
 
     useEffect(()=>{

@@ -42,6 +42,9 @@ function ModalNuovaCommessaSingola() {
     const [renderedArticoli, setRenderedArticoli] = useState([])
     const [renderedMacchine, setRenderedMacchine] = useState([])
 
+    const handleShowModal = () => setShow(true)
+    const handleHideModal = () => setShow(false)
+
     /**
      * Carica l'articolo selezionato dallo scrivv view ventro al modal.
      * @param {Articolo} articolo l'oggetto che rappresenta l'articolo
@@ -71,7 +74,7 @@ function ModalNuovaCommessaSingola() {
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
         }
 
-        addPreventivo(_articolo, commessaId, () => setShow(false))
+        addPreventivo( _articolo, commessaId, handleHideModal )
     }
 
     const handleSalvaArticolo = () => {
@@ -85,7 +88,7 @@ function ModalNuovaCommessaSingola() {
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
         }
 
-        addArticolo(_articolo, () => console.log('ARTICOLO AGGIUNTO'))
+        addArticolo(_articolo, handleHideModal)
     }
 
     useEffect(() => {
@@ -126,12 +129,12 @@ function ModalNuovaCommessaSingola() {
         <div>
             <Button
                 className='float-right vertical-center'
-                onClick={ () => setShow(true) }>
+                onClick={ handleShowModal }>
                     Aggiungi Articolo
             </Button>
             <Modal
                 show={show}
-                onHide={ () => setShow(false) }
+                onHide={ handleHideModal }
                 >
                     <Modal.Header closeButton>
                         <Modal.Title>
@@ -175,7 +178,7 @@ function ModalNuovaCommessaSingola() {
                         </Button>
                         <Button
                             variant="secondary"
-                            onClick={ () => setShow(false) }>
+                            onClick={ handleHideModal }>
                             Annulla
                         </Button>
                         <Button

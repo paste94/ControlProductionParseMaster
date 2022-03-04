@@ -48,7 +48,7 @@ function CostMat({
 }
 
 CostMat.propTypes = {
-    value: PropTypes.number,
+    value: PropTypes.string,
     onChange: PropTypes.func,
 }
 

@@ -8,17 +8,21 @@ import React from 'react';
  * @param {function} callback Funzione di callback (che serve a impostare l'articolo in una variabile di stato  del component)
  */
 function renderArticoli(onArticoloClick, callback) {
-    getAllArticoli( articoli => {
-        const AR = articoli.map( art =>
-            <Dropdown.Item
-                key={art.id}
-                onClick={ () => onArticoloClick(art) } >
-                {
-                    art.numDisegno
-                }
-            </Dropdown.Item> )
-        callback(AR)
-    })
+    getAllArticoli(
+        articoli => {
+            console.log(articoli)
+            const AR = articoli.map( art =>
+                <Dropdown.Item
+                    key={art.id}
+                    onClick={ () => onArticoloClick(art) } >
+                    {
+                        art.numDisegno
+                    }
+                </Dropdown.Item> )
+            callback(AR)
+        },
+        () => {},
+    )
 }
 
 export {renderArticoli};

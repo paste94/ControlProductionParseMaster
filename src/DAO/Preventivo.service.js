@@ -55,6 +55,7 @@ let subscription;
         subscription.unsubscribe();
     }
 }
+
 /**
  * Aggiunge un preventivo al database
  * @param {Object} newPreventivo il nuovo preventivo da aggiungere
@@ -102,23 +103,6 @@ async function getAllPreventivi(commessaId, callback, callbackError) {
             console.error('ERRORE:', error)
             callbackError(error.message)
         })
-
-    /*
-    const query = new Parse.Query(preventivo)
-    const result = await query
-                        .notEqualTo('eliminato', true)
-                        .equalTo('parent', commessaId)
-                        .find()
-    const data = []
-    result.forEach(elem => {
-        const attr = elem.attributes
-        data.push({
-            id: elem.id,
-            ...attr,
-        })
-    })
-    callback(data)
-    */
 }
 
 /**

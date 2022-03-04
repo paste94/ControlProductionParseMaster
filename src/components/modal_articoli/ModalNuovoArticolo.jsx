@@ -1,12 +1,12 @@
 import { Button, Form, Modal} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import NumDisegno from './component/NumDisegno';
+import { renderArticoli } from './funzioni/articoli';
 import NumPezzi from './component/NumPezzi';
 import CostMat from './component/CostMat';
 import CostoOrario from './component/CostoOrario';
-import PropTypes from 'prop-types'
+import { addArticolo } from '../../DAO/Articoli.service';
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
-import { FaEdit } from 'react-icons/fa';
 
 
 /**
@@ -28,11 +28,9 @@ import { FaEdit } from 'react-icons/fa';
  *                          mostra gli elementi per la modifica.
  * @return {Component} il componente
  */
-function ModalModificaCommessaSingola({
-    commessaSingola,
-}) {
+function ModalNuovoArticolo() {
     const [show, setShow] = useState(false);
-    const [numDisegno, setNumDisegno] = useState(commessaSingola.numDisegno);
+    const [numDisegno, setNumDisegno] = useState('');
     const [numPezzi, setNumPezzi] = useState(1);
     const [costMat, setCostMat] = useState(0);
     const [costoOrario, setCostoOrario] = useState(42)
@@ -40,10 +38,22 @@ function ModalModificaCommessaSingola({
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
 
+    const [renderedArticoli, setRenderedArticoli] = useState([])
     const [renderedMacchine, setRenderedMacchine] = useState([])
 
     const handleShowModal = () => setShow(true)
     const handleHideModal = () => setShow(false)
+
+    /**
+     * Carica l'articolo selezionato dallo scrivv view ventro al modal.
+     * @param {Articolo} articolo l'oggetto che rappresenta l'articolo
+     */
+     const onArticoloClick = (articolo) => {
+        setNumDisegno(articolo.numDisegno + '')
+        setNumPezzi(articolo.numPezzi)
+        setCostMat(articolo.costMat)
+        setCostoOrario(articolo.costoOrario)
+    }
 
     /**
      * @param {Event} e L'evento di bubmit
@@ -60,45 +70,25 @@ function ModalModificaCommessaSingola({
             totOre: totOre.toString(),
             totPreventivo: totPreventivo.toString(),
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
-            parent: commessaSingola.parent,
         }
 
-        editPreventivo(commessaSingola.id, _articolo, handleHideModal)
+        addArticolo(_articolo, handleHideModal)
     }
 
     useEffect(() => {
-        if (!show) {
-            setNumDisegno('')
-            setNumPezzi(0)
-            setCostMat(0)
-            setCostoOrario(0)
-            setTotOre(0)
-            setTotPreventivo(0)
-            setOreMacchina([])
-        } else {
-            setNumDisegno(commessaSingola.numDisegno)
-            setNumPezzi(commessaSingola.numPezzi)
-            setCostMat(commessaSingola.costMat)
-            setCostoOrario(commessaSingola.costoOrario)
-            setTotOre(commessaSingola.totOre)
-            setTotPreventivo(commessaSingola.totPreventivo)
-            // Prendo le ore macchina della commessaSingola ed aggiungo le ore macchina
-            // a 0 delle macchine nuove non utilizzate.
-            getOreMacchina((macchine) => {
-                // Deep copy dell'oggetto oreMacchina di commessaSingola
-                const _oreMacchina = JSON.parse(JSON.stringify(commessaSingola.oreMacchina))
-                // Estraggo gli ID delle macchine già presenti in commessaSingola
-                const _oreMacchinaIds = _oreMacchina.map(m => m.id)
-                // Tolgo le macchine presenti in commessaSingola dall'elenco delle macchine totali
-                const _macchineFiltered = macchine.filter(e => !_oreMacchinaIds.includes(e.id))
-                // Imposto come oreMacchina l'elenco dato dalla concatenazione delle macchine
-                // presenti nella commessaSingola e dalle macchine totali
-                setOreMacchina(_oreMacchina.concat(_macchineFiltered))
-            })
-        }
+        renderArticoli(onArticoloClick, setRenderedArticoli);
+        getOreMacchina(setOreMacchina);
+    }, []);
+
+    useEffect(() => {
+        setNumDisegno('')
+        setNumPezzi(0)
+        setCostMat(0)
+        setCostoOrario(0)
+        setTotOre(0)
+        setTotPreventivo(0)
     }, [show])
 
-    // Renderizza le macchine alla modifica
     useEffect(() => {
         if (oreMacchina.length != 0) {
             renderMacchine(
@@ -122,11 +112,9 @@ function ModalModificaCommessaSingola({
     return (
         <div>
             <Button
-                variant='link'
-                title='Modifica'
-                size='sm'
+                className='float-right vertical-center'
                 onClick={ handleShowModal }>
-                    <FaEdit style={{ color: 'black' }}/>
+                    Aggiungi Articolo
             </Button>
             <Modal
                 show={show}
@@ -139,11 +127,12 @@ function ModalModificaCommessaSingola({
                     </Modal.Header>
                     <Modal.Body>
                         <Form
-                            id='addPreventivo'
+                            id='addArticolo'
                             onSubmit={ handleSubmit } >
                                 <NumDisegno
                                     value={numDisegno}
-                                    disabled={true}
+                                    onChange={(e) => setNumDisegno(e.target.value)}
+                                    articoliRender={renderedArticoli}
                                 />
                                 <br/>
                                 <NumPezzi
@@ -175,9 +164,9 @@ function ModalModificaCommessaSingola({
                             variant="primary"
                             type='submit'
                             autoFocus
-                            title='Modifica articolo alla commessa'
-                            form='addPreventivo'>
-                            Modifica
+                            title='Aggiungi articolo'
+                            form='addArticolo'>
+                            Aggiungi
                         </Button>
                     </Modal.Footer>
             </Modal>
@@ -187,8 +176,4 @@ function ModalModificaCommessaSingola({
     )
 }
 
-ModalModificaCommessaSingola.propTypes = {
-    commessaSingola: PropTypes.object,
-}
-
-export default ModalModificaCommessaSingola
+export default ModalNuovoArticolo
