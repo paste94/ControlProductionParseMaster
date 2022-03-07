@@ -1,3 +1,4 @@
+import { deleteCommessa } from './Commesse.service';
 import {commesse, Parse} from './http-common';
 
 let subscription;
@@ -7,7 +8,7 @@ let subscription;
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-async function subscribeCommesse(callback, callbackError) {
+async function subscribeCommesseArchiviate(callback, callbackError) {
     const query = new Parse.Query(commesse);
     subscription = await query.subscribe();
 
@@ -53,7 +54,7 @@ async function subscribeCommesse(callback, callbackError) {
 /**
  * Rimuove la sottoscrizione al DB
  */
-async function unsubscribeCommesse() {
+async function unsubscribeCommesseArchiviate() {
     if (subscription != undefined) {
         subscription.unsubscribe();
     }
@@ -67,7 +68,7 @@ async function unsubscribeCommesse() {
 async function getAllCommesse(callback, callbackError) {
     new Parse.Query(commesse)
         .notEqualTo('eliminato', true)
-        .notEqualTo('archiviata', true)
+        .equalTo('archiviata', true)
         .find()
         .then((result) => {
             const data = []
@@ -90,58 +91,16 @@ async function getAllCommesse(callback, callbackError) {
 }
 
 /**
- * Aggiunge una commesssa al database
- * @param {Commessa} newCommessa la commessa da aggiungere,
- *                      campi: {nome, numero, dataOfferta, dataConsegna}
- */
-function addCommessa(newCommessa) {
-    const commessa = new Parse.Object(commesse)
-    Object
-        .keys(newCommessa)
-        .forEach( key => commessa.set(key, newCommessa[key]) )
-    commessa.save().catch(err => console.err('ERROR: ', err))
-}
-
-/**
  * Elimina la commessa con ID selezionato.
  * L'elemento viene eliminato impostando un flag 'eliminato' a true
  * @param {int} id identificativo della macchina
  */
-function deleteCommessa(id) {
-    new Parse.Query(commesse)
-        .get(id)
-        .then(
-            elem => elem.set('eliminato', true).save(),
-            error => console.error('ERRORE:', error.message),
-        )
-}
-
-/**
- * Aggiorna un campi della commessa
- * @param {int} id id dell'elemento da modificare
- * @param {Object} newVal Oggetto {key: value} dove
- *                 key_ è il campo da modificare e _value_ è il nuovo valore
- * @param {function} callback callback per successo
- */
-function updateCommessa(id, newVal) {
-    const [key] = Object.keys(newVal)
-    const query = new Parse.Query(commesse)
-    newVal[key] = (key === 'data_offerta' || key === 'data_consegna') ?
-        new Date(newVal[key]) :
-        newVal[key]
-    if (newVal[key] != 'Invalid Date') {
-        query.get(id)
-        .then(
-            elem => elem.set( key, newVal[key] ).save().catch((err) => console.error('ERRORE: ', err.message)),
-            error => console.error('ERRORE:', error.message),
-        )
-    }
+function deleteCommessaArchiviata(id) {
+    deleteCommessa(id)
 }
 
 export {
-    addCommessa,
-    deleteCommessa,
-    updateCommessa,
-    subscribeCommesse,
-    unsubscribeCommesse,
+    deleteCommessaArchiviata,
+    subscribeCommesseArchiviate,
+    unsubscribeCommesseArchiviate,
 };

@@ -12,6 +12,7 @@ import PropTypes from 'prop-types'
 import Macchine from '../pages/DefinisciMacchine/Macchine'
 import Impostazioni from '../pages/Impostazioni/impostazioni'
 import { Parse } from '../DAO/http-common'
+import CommesseArchiviate from '../pages/CommesseArchiviate/CommesseArchiviate'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
@@ -50,10 +51,19 @@ function AppRoutes() {
             main: () => {
                 return (
                     <Page>
-                        <Commesse
-                            alertState={alertState}
-                            handleShowAlert={handleShowAlert}
-                            handleCloseAlert={handleCloseAlert} />
+                        <Commesse />
+                    </Page>
+                )
+            },
+        },
+        {
+            id: 6,
+            path: '/commesse_archiviate',
+            text: 'Commesse Archiviate',
+            main: () => {
+                return (
+                    <Page>
+                        <CommesseArchiviate />
                     </Page>
                 )
             },

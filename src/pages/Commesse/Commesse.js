@@ -14,10 +14,9 @@ import AlertError from '../../components/AlertError'
 /**
  * Pagina delle commesse
  * @param {object}  props properties
- *                  - handleShowAlert (function) handler che mostra l'alert
  * @return {Component} Il componente creato
  */
-function Commesse({handleShowAlert}) {
+function Commesse() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
     const handleDelete = id => deleteCommessa(id)
@@ -68,10 +67,6 @@ function Commesse({handleShowAlert}) {
 
         </div>
     )
-}
-
-Commesse.propTypes = {
-    handleShowAlert: PropTypes.func.isRequired,
 }
 
 export default Commesse;

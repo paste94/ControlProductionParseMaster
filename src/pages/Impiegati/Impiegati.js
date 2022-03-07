@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import '../../css/Pages.css';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import { Button, Col, Row } from 'react-bootstrap'
-import { addImpiegato, deleteImpiegato, updateImpiegato, getAllImpiegati} from '../../DAO/Impiegati.service';
+import { addImpiegato, deleteImpiegato, updateImpiegato, subscribeImpiegati, unsubscribeImpiegati} from '../../DAO/Impiegati.service';
 import ModalChip from './ModalChip';
 import ModalNewImpiegato from './ModalNewImpiegato';
 import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
-import { MdRefresh } from 'react-icons/md';
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError';
 
@@ -18,13 +17,8 @@ import AlertError from '../../components/AlertError';
  * @return {Component} il component creato
  */
 function Impiegati({handleShowAlert}) {
-    /* STATE */
-
-    // Elenco degli impiegati
     const [data, setData] = useState([])
     const [error, setError] = useState('')
-
-    const refresh = () => getAllImpiegati( (result) => setData(result), () => {} )
 
     // Stato dei modal, quando sono true sono visibili.
     const [modalState, setModalState] = useState({
@@ -81,13 +75,13 @@ function Impiegati({handleShowAlert}) {
 
     // newVal può essere un oggetto {nome: newName} oppure {chip: newChip}
     const handleEdit = (id, newVal) => {
-        updateImpiegato(id, newVal, refresh)
+        updateImpiegato(id, newVal)
     }
 
     // Quando creo il nuovo impiegato
     const handleAddImpiegato = (e) => {
         e.preventDefault()
-        addImpiegato(newImp, refresh)
+        addImpiegato(newImp)
         handleCloseNewImpiegato()
     };
 
@@ -101,7 +95,7 @@ function Impiegati({handleShowAlert}) {
     const handleDeleteConfirm = () => {
         const id = deleteId;
         setDeleteId('');
-        deleteImpiegato(id, refresh)
+        deleteImpiegato(id)
         handleCloseConfirm()
     }
 
@@ -109,7 +103,10 @@ function Impiegati({handleShowAlert}) {
 
     // Il secondo parametro [] serve per farlo eseguire una
     // volta sola quando avvii la pagina
-    useEffect(refresh, []);
+    useEffect(() => {
+        subscribeImpiegati(setData, (err) => console.log('ERROR Impiegati.jsx', err))
+        return unsubscribeImpiegati
+    }, []);
 
 
     /* RENDER */
