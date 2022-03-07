@@ -14,6 +14,8 @@
     "chokidar": "^3.5.1",
     "cross-env": "^7.0.2",
     "electron-is-dev": "^1.2.0",
+    "electron-json-storage": "^4.5.0",
+    "electron-settings": "^4.0.2",
     "express": "^4.17.1",
     "firebase": "^8.1.2",
     "mongoose": "^5.10.15",
@@ -65,7 +67,7 @@
       "not dead",
       "not op_mini all"
     ],
-  "development": [
+    "development": [
       ">0.3%",
       "not ie 11",
       "not dead",

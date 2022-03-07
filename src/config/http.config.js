@@ -1,9 +1,7 @@
-const http = {
-    //BASEURL: 'http://localhost:3030',
-    BASEURL: 'http://localhost:1337',
+const c = {
+    // BASEURL: 'http://localhost:3030',
+    BASEURL: localStorage.getItem('ServerUrl'),
     HEADERS: {
         'Content-Type': 'application/json',
     },
 };
-
-export {http};

@@ -12,7 +12,7 @@ function Macchine() {
     const [error, setError] = useState('')
 
     useEffect(() => {
-        subscribeMacchine(setData, setError);
+        subscribeMacchine(setData, () => {});
         return unsubscribeMacchine;
     }, []);
 

@@ -24,7 +24,7 @@ function Impiegati({handleShowAlert}) {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
 
-    const refresh = () => getAllImpiegati( (result) => setData(result) )
+    const refresh = () => getAllImpiegati( (result) => setData(result), () => {} )
 
     // Stato dei modal, quando sono true sono visibili.
     const [modalState, setModalState] = useState({

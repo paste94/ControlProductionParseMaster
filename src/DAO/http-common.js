@@ -1,7 +1,7 @@
 import Parse from 'parse'
 
 Parse.initialize('ControlProductionServer', 'CP_m4st3r_k3y');
-Parse.serverURL = 'http://localhost:1337/parse'
+Parse.serverURL = localStorage.getItem('ServerUrl') + '/parse'
 
 const commesse = 'commesse'
 const impiegati = 'impiegati'

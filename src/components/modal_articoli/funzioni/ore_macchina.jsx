@@ -13,7 +13,8 @@ function getOreMacchina(callback) {
     getAllMacchine(macchine => {
         const oreMacchina = macchine.map( m => ({...m, ore: 0}) )
         callback(oreMacchina)
-    })
+    },
+    (err) => console.log('ore_macchina.jsx ERROR:', err))
 }
 
 /**

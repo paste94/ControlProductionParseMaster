@@ -44,6 +44,10 @@ async function subscribeCommesse(callback, callbackError) {
     subscription.on('close', () => {
         console.log('subscription commesse closed');
     });
+
+    Parse.LiveQuery.on('error', (error) => {
+        console.log(error);
+    });
 }
 
 /**

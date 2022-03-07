@@ -31,7 +31,7 @@ function CommessaSingola({commessa}) {
         editPreventivo(prevId, newPreventivo, refresh)
 
     useEffect(() => {
-        subscribePreventivo(commessa.id, setData, setError);
+        subscribePreventivo(commessa.id, setData, () => console.log("error"));
         return unsubscribePreventivo;
     }, [commessa.id])
 

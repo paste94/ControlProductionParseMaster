@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
 import Page from '../pages/Page'
 import Sidebar from './Sidebar'
@@ -10,6 +10,8 @@ import Articoli from '../pages/Articoli/Articoli'
 import CommessaSingola from '../pages/CommessaSingola/CommessaSingola'
 import PropTypes from 'prop-types'
 import Macchine from '../pages/DefinisciMacchine/Macchine'
+import Impostazioni from '../pages/Impostazioni/impostazioni'
+import { Parse } from '../DAO/http-common'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
@@ -29,6 +31,16 @@ function AppRoutes() {
 
     // Chiudi l'alert e cancella il messaggio
     const handleCloseAlert = () => setAlertState({message: '', show: false});
+
+    useEffect(() => {
+        Parse.LiveQuery.on('error', (error) => {
+            console.log(error);
+            setAlertState({
+                show: true,
+                message: `Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`,
+            })
+        });
+    }, [])
 
     const routes = [
         {
@@ -103,6 +115,18 @@ function AppRoutes() {
                 )
             },
         },
+        {
+            id: 5,
+            path: '/Impostazioni',
+            text: 'Impostazioni',
+            main: () => {
+                return (
+                    <Page>
+                        <Impostazioni/>
+                    </Page>
+                )
+            },
+        },
     ]
 
     return (
@@ -143,8 +167,7 @@ function AppRoutes() {
                         type="danger"
                         headline="Errore"
                         onDismiss={handleCloseAlert}
-                        showIcon={true}
-                        timeout={5000} >
+                        showIcon={true} >
                             {alertState.message}
                     </Alert>
                 ) : null}

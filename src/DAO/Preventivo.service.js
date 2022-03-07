@@ -45,6 +45,10 @@ let subscription;
     subscription.on('close', () => {
         console.log('subscription Preventivo closed');
     });
+
+    subscription.on('error', () => {
+        console.log('ERROR');
+    });
 }
 
 /**
@@ -103,6 +107,7 @@ async function getAllPreventivi(commessaId, callback, callbackError) {
             console.error('ERRORE:', error)
             callbackError(error.message)
         })
+        .catch(() => console.log('CATCH'))
 }
 
 /**
