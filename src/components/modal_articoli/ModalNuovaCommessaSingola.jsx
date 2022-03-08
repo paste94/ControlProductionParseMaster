@@ -8,13 +8,16 @@ import CostoOrario from './component/CostoOrario';
 import { addPreventivo } from '../../DAO/Preventivo.service';
 import { addArticolo } from '../../DAO/Articoli.service';
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
+import PropTypes from 'prop-types'
 
 
 /**
  * Definisce modal per l'aggiunta del preventivo
  * @return {Component} il componente
  */
-function ModalNuovaCommessaSingola() {
+function ModalNuovaCommessaSingola({
+    commessaId,
+}) {
     const [show, setShow] = useState(false);
     const [numDisegno, setNumDisegno] = useState('');
     const [numPezzi, setNumPezzi] = useState(1);
@@ -181,6 +184,10 @@ function ModalNuovaCommessaSingola() {
 
 
     )
+}
+
+ModalNuovaCommessaSingola.propTypes = {
+    commessaId: PropTypes.string.isRequired,
 }
 
 export default ModalNuovaCommessaSingola

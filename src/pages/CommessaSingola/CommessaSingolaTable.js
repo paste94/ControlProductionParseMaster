@@ -7,15 +7,18 @@ import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
 import PropTypes from 'prop-types'
 import ModalModificaCommessaSingola from '../../components/modal_articoli/ModalModificaCommessaSingola';
 import DettaglioRiga from '../../components/DettaglioRiga';
+import { deletePreventivo } from '../../DAO/Preventivo.service';
 
 /** Definisce la tabella degli impiegati
  *
  * @param {Object}  props Definisce le propertyes della tabella
  *                  - id (string) id della commessa da mostrare
- *                  - handleConfirm (function) Gestisce la modifica dell'elemento
  * @return {Component} il component creato
  */
-function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
+function CommessaSingolaTable({
+    data,
+    archiviata,
+}) {
     /**
      * Definisce i bottoni da inserire nell'ultima colonna della tabella
      *
@@ -27,14 +30,15 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
      */
     const defineButtons = (cell, row, rowIndex, formatExtraData) => (
         <Row>
-            <Col lg='6' md='6' sm='6'>
-                <ModalModificaCommessaSingola
-                    commessaSingola={row}/>
-            </Col>
+            { !archiviata &&
+                <Col lg='6' md='6' sm='6'>
+                    <ModalModificaCommessaSingola commessaSingola={row} />
+                </Col>
+            }
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton
                     title='Elimina'
-                    handleConfirm={ () => handleDelete(row.id) } >
+                    handleConfirm={ () => deletePreventivo(row.id) } >
                         <p>Eliminare definitivamente la commessa?</p>
                 </DeleteButton>
             </Col>
@@ -118,8 +122,7 @@ function CommessaSingolaTable({data, handleConfirm, handleDelete}) {
 
 CommessaSingolaTable.propTypes = {
     data: PropTypes.array.isRequired,
-    handleConfirm: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
+    archiviata: PropTypes.bool,
 }
 
 export default CommessaSingolaTable

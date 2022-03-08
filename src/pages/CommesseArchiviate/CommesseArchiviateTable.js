@@ -4,9 +4,10 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
 import DeleteButton from '../../components/DeleteButton'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import { Row, Col, Button } from 'react-bootstrap'
-import { FaCheck, FaEye } from 'react-icons/fa'
+import { FaArrowUp, FaEye } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { unarchiveCommessa } from '../../DAO/CommesseArchiviate.service';
 
 /**
  * Definisce la tabella degli impiegati
@@ -40,14 +41,10 @@ function CommesseArchiviateTable({data, handleDelete}) {
                 <Col lg='4' md='4' sm='4'>
                     <Button
                         variant='link'
-                        title='Apri/chiudi commessa'
+                        title="Rimuovi dall'archivio"
                         size='sm'
-                        onClick={ () => {
-                            'chiusa' in row ?
-                                thisHandleEdit(row.id, {chiusa: !row.chiusa}) :
-                                thisHandleEdit(row.id, {chiusa: true})
-                        }} >
-                            <FaCheck style={{color: 'black'}}/>
+                        onClick={ () => unarchiveCommessa(row.id) } >
+                            <FaArrowUp style={{color: 'black'}}/>
                     </Button>
                 </Col>
                 <Col lg='4' md='4' sm='4'>
@@ -60,15 +57,6 @@ function CommesseArchiviateTable({data, handleDelete}) {
             </Row>
         );
     };
-
-    const thisHandleEdit = (id, newValue) => {
-        if ('data_offerta' in newValue) {
-            newValue.data_offerta = new Date(newValue.data_offerta)
-        } else if ('data_consegna' in newValue) {
-            newValue.data_consegna = new Date(newValue.data_consegna)
-        }
-        handleEdit(id, newValue)
-    }
 
     // Definizione delle colonne
     const columns = [{

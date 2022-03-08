@@ -80,6 +80,7 @@ async function getAllCommesse(callback, callbackError) {
                     data_consegna: elem.get('data_consegna') != undefined ? elem.get('data_consegna').toISOString() : '',
                     chiusa: elem.get('chiusa') != undefined ? elem.get('chiusa') : '',
                     preventivo: elem.get('preventivo') != undefined ? elem.get('preventivo') : '',
+                    archiviata: elem.get('archiviata') != undefined ? elem.get('archiviata') : '',
                 })
             })
            callback(data)
@@ -117,6 +118,20 @@ function deleteCommessa(id) {
 }
 
 /**
+ * Archivia la commessa con ID selezionato.
+ * L'elemento viene archiviato impostando un flag 'archiviato' a true
+ * @param {int} id identificativo della macchina
+ */
+ function archiveCommessa(id) {
+    new Parse.Query(commesse)
+        .get(id)
+        .then(
+            elem => elem.set('archiviata', true).save(),
+            error => console.error('ERRORE:', error.message),
+        )
+}
+
+/**
  * Aggiorna un campi della commessa
  * @param {int} id id dell'elemento da modificare
  * @param {Object} newVal Oggetto {key: value} dove
@@ -144,4 +159,5 @@ export {
     updateCommessa,
     subscribeCommesse,
     unsubscribeCommesse,
+    archiveCommessa,
 };

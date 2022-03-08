@@ -4,9 +4,6 @@ import CommessaSingolaTable from './CommessaSingolaTable'
 import { FaArrowLeft } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
 import {
-    getAllPreventivi,
-    deletePreventivo,
-    editPreventivo,
     subscribePreventivo,
     unsubscribePreventivo,
 } from '../../DAO/Preventivo.service'
@@ -24,14 +21,13 @@ import ModalNuovaCommessaSingola from '../../components/modal_articoli/ModalNuov
 function CommessaSingola({commessa}) {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
-
-    const refresh = () => getAllPreventivi(commessa.id, (data) => setData(data))
-    const handleDelete = (id) => deletePreventivo(id, refresh)
-    const handleEdit = (prevId, newPreventivo) =>
-        editPreventivo(prevId, newPreventivo, refresh)
+    const [backDestination, setBackDestination] = useState('/commesse')
 
     useEffect(() => {
-        subscribePreventivo(commessa.id, setData, () => console.log("error"));
+        if (commessa.archiviata) {
+            setBackDestination('/commesse_archiviate')
+        }
+        subscribePreventivo(commessa.id, setData, () => console.log('error'));
         return unsubscribePreventivo;
     }, [commessa.id])
 
@@ -44,7 +40,7 @@ function CommessaSingola({commessa}) {
 
             <Row className='align-items-center'>
                 <Col lg='1' md='1' sm='1'>
-                    <NavLink to='/commesse' key={0} activeClassName="active">
+                    <NavLink to={backDestination} key={0} activeClassName="active">
                         <Button
                             variant='transparent'
                             title='Indietro' >
@@ -58,16 +54,14 @@ function CommessaSingola({commessa}) {
                     </h1>
                 </Col>
                 <Col>
-                    <ModalNuovaCommessaSingola/>
+                    {!commessa.archiviata && <ModalNuovaCommessaSingola commessaId={ commessa.id } />}
                 </Col>
             </Row>
             <Row>
                 <Col>
                     <CommessaSingolaTable
-                        handleConfirm = { handleEdit }
-                        handleDelete = { handleDelete }
                         data = { data }
-                        id={ commessa.id }/>
+                        archiviata={ commessa.archiviata } />
                 </Col>
             </Row>
         </div>

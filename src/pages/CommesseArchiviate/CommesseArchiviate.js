@@ -34,8 +34,6 @@ function CommesseArchiviate() {
                         <h1>Commesse Archiviate</h1>
                     </Row>
                 </Col>
-                <Col>
-                </Col>
             </Row>
 
             <CommesseArchiviateTable

@@ -4,9 +4,10 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
 import DeleteButton from '../../components/DeleteButton'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import { Row, Col, Button } from 'react-bootstrap'
-import { FaCheck, FaEye } from 'react-icons/fa'
+import { FaCheck, FaEye, FaArrowDown } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { archiveCommessa } from '../../DAO/Commesse.service';
 
 /**
  * Definisce la tabella degli impiegati
@@ -23,7 +24,7 @@ function CommesseTable({data, handleDelete, handleEdit}) {
         const commessa = data[rowIndex]
         return (
             <Row>
-                <Col lg='4' md='4' sm='4'>
+                <Col lg='3' md='3' sm='3'>
                     <NavLink
                         to={{
                             pathname: '/commessasingola',
@@ -37,7 +38,7 @@ function CommesseTable({data, handleDelete, handleEdit}) {
                         </Button>
                     </NavLink>
                 </Col>
-                <Col lg='4' md='4' sm='4'>
+                <Col lg='3' md='3' sm='3'>
                     <Button
                         variant='link'
                         title='Apri/chiudi commessa'
@@ -50,7 +51,16 @@ function CommesseTable({data, handleDelete, handleEdit}) {
                             <FaCheck style={{color: 'black'}}/>
                     </Button>
                 </Col>
-                <Col lg='4' md='4' sm='4'>
+                <Col lg='3' md='3' sm='3'>
+                    <Button
+                        variant='link'
+                        title='Archivia commessa'
+                        size='sm'
+                        onClick={ () => archiveCommessa(row.id) } >
+                            <FaArrowDown style={{color: 'black'}}/>
+                    </Button>
+                </Col>
+                <Col lg='3' md='3' sm='3'>
                     <DeleteButton
                         title={'Elimina commessa'}
                         handleConfirm={() => handleDelete(row.id)} >
@@ -112,7 +122,7 @@ function CommesseTable({data, handleDelete, handleEdit}) {
         text: 'Azioni',
         formatter: defineButtons,
         headerStyle: (colum, colIndex) => {
-            return { width: '150px', textAlign: 'center' };
+            return { width: '200px', textAlign: 'center' };
         },
         editable: false,
     }];

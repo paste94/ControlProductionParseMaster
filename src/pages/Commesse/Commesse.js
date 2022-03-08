@@ -8,7 +8,6 @@ import { deleteCommessa,
     unsubscribeCommesse,
 } from '../../DAO/Commesse.service'
 import { Col, Row } from 'react-bootstrap';
-import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
 
 /**

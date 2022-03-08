@@ -7,6 +7,7 @@ import CostoOrario from './component/CostoOrario';
 import PropTypes from 'prop-types'
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
 import { FaEdit } from 'react-icons/fa';
+import { editPreventivo } from '../../DAO/Preventivo.service';
 
 
 /**
