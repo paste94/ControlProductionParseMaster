@@ -54,7 +54,7 @@ function CommessaSingolaTable({
         text: 'Tot Ore',
     }, {
         dataField: 'totPreventivo',
-        text: 'Preventivo (€)',
+        text: 'Ordine (€)',
     }, {
         dataField: 'numPezzi',
         text: 'Numero Pezzi',

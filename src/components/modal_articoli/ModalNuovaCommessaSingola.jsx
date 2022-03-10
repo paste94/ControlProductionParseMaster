@@ -53,12 +53,12 @@ function ModalNuovaCommessaSingola({
         e.preventDefault();
 
         const _articolo = {
-            costMat: costMat.toString(),
-            costoOrario: costoOrario.toString(),
+            costMat: parseFloat(costMat),
+            costoOrario: parseFloat(costoOrario),
             numDisegno: numDisegno.toString(),
-            numPezzi: numPezzi.toString(),
-            totOre: totOre.toString(),
-            totPreventivo: totPreventivo.toString(),
+            numPezzi: parseInt(numPezzi),
+            totOre: parseFloat(totOre),
+            totPreventivo: parseFloat(totPreventivo),
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
         }
 
@@ -91,6 +91,9 @@ function ModalNuovaCommessaSingola({
         setCostoOrario(0)
         setTotOre(0)
         setTotPreventivo(0)
+        const newArr = [...oreMacchina]
+        newArr.forEach( e => e.ore = 0 )
+        setOreMacchina(newArr)
     }, [show])
 
     useEffect(() => {
