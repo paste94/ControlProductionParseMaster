@@ -81,6 +81,8 @@ async function getAllCommesseArchiviate(callback, callbackError) {
                     data_consegna: elem.get('data_consegna') != undefined ? elem.get('data_consegna').toISOString() : '',
                     chiusa: elem.get('chiusa') != undefined ? elem.get('chiusa') : '',
                     preventivo: elem.get('preventivo') != undefined ? elem.get('preventivo') : '',
+                    totPreventivo: elem.get('totPreventivo') != undefined ? elem.get('totPreventivo') : 0,
+                    totOre: elem.get('totOre') != undefined ? elem.get('totOre') : 0,
                     archiviata: elem.get('archiviata') != undefined ? elem.get('archiviata') : false,
                 })
             })

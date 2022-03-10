@@ -31,7 +31,7 @@ function renderMacchine(oreMacchina, setOreMacchina, callback) {
                 value={m.ore}
                 onChange={ (e) => {
                     const newArr = [...oreMacchina]
-                    newArr[i].ore = e.target.value
+                    newArr[i].ore = parseFloat(e.target.value)
                     setOreMacchina(newArr)
                 } }
                 nomeMacchina={m.nome}

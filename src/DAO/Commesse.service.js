@@ -79,6 +79,8 @@ async function getAllCommesse(callback, callbackError) {
                     data_offerta: elem.get('data_offerta') != undefined ? elem.get('data_offerta').toISOString() : '',
                     data_consegna: elem.get('data_consegna') != undefined ? elem.get('data_consegna').toISOString() : '',
                     chiusa: elem.get('chiusa') != undefined ? elem.get('chiusa') : '',
+                    totPreventivo: elem.get('totPreventivo') != undefined ? elem.get('totPreventivo') : 0,
+                    totOre: elem.get('totOre') != undefined ? elem.get('totOre') : 0,
                     preventivo: elem.get('preventivo') != undefined ? elem.get('preventivo') : '',
                     archiviata: elem.get('archiviata') != undefined ? elem.get('archiviata') : '',
                 })

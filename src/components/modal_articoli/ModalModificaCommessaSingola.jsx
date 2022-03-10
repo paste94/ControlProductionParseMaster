@@ -41,12 +41,12 @@ function ModalModificaCommessaSingola({
         e.preventDefault();
 
         const _articolo = {
-            costMat: costMat.toString(),
-            costoOrario: costoOrario.toString(),
+            costMat: parseFloat(costMat),
+            costoOrario: parseFloat(costoOrario),
             numDisegno: numDisegno.toString(),
-            numPezzi: numPezzi.toString(),
-            totOre: totOre.toString(),
-            totPreventivo: totPreventivo.toString(),
+            numPezzi: parseInt(numPezzi),
+            totOre: parseFloat(totOre),
+            totPreventivo: parseFloat(totPreventivo),
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
             parent: commessaSingola.parent,
         }
@@ -101,7 +101,7 @@ function ModalModificaCommessaSingola({
         const _totOre = oreMacchina.reduce(
             (accumulator, current) => accumulator + parseFloat(current.ore),
             0,
-        )
+        ) * numPezzi
         const _totPreventivo = (_totOre * parseFloat(costoOrario) + parseFloat(costMat)) * parseInt(numPezzi)
         setTotOre(_totOre.toFixed(2))
         setTotPreventivo(_totPreventivo.toFixed(2))

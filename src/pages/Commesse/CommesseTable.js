@@ -114,6 +114,14 @@ function CommesseTable({data, handleDelete, handleEdit}) {
         },
         editor: {type: Type.DATE},
     }, {
+        dataField: 'totOre',
+        text: 'Ore totali',
+        editable: false,
+    }, {
+        dataField: 'totPreventivo',
+        text: 'Ordine (€)',
+        editable: false,
+    }, {
         dataField: 'chiusa',
         text: 'Chiusa',
         hidden: true,

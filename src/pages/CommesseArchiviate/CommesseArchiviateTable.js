@@ -96,6 +96,14 @@ function CommesseArchiviateTable({data, handleDelete}) {
         text: 'Chiusa',
         hidden: true,
     }, {
+        dataField: 'totOre',
+        text: 'Ore totali',
+        editable: false,
+    }, {
+        dataField: 'totPreventivo',
+        text: 'Ordine (€)',
+        editable: false,
+    }, {
         dataField: 'actions',
         text: 'Azioni',
         formatter: defineButtons,
