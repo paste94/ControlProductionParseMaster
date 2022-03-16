@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
+import filterFactory, { multiSelectFilter } from 'react-bootstrap-table2-filter';
+
 
 /**
  * Crea tabella dei lavori
@@ -9,6 +11,27 @@ import PropTypes from 'prop-types'
  * @return {COmponent} il component
  */
 function LavoriTable({data}) {
+    const [selectMacchine, setSelectMacchine] = useState([])
+    const [selectNumCommessa, setSelectNumCommessa] = useState([])
+    const [selectNumDisegno, setSelectNumDisegno] = useState([])
+
+    const createFilter = (arr, field) => {
+        const unique = [...new Set(arr.map(elem => elem[field]))].sort()
+        const obj = {}
+        unique.forEach(m => obj[m] = m)
+        return obj
+    }
+
+    useEffect(() => {
+        setSelectMacchine(createFilter(data, 'macchina'))
+        setSelectNumCommessa(createFilter(data, 'commessaNome'))
+        setSelectNumDisegno(createFilter(data, 'preventivoNome'))
+    }, [data])
+
+    useEffect(() => {
+        console.log('SelectMacchine:', selectMacchine)
+    }, [selectMacchine])
+
     const columns = [{
         dataField: 'id',
         text: 'ID',
@@ -16,12 +39,21 @@ function LavoriTable({data}) {
     }, {
         dataField: 'commessaNome',
         text: 'Numero commessa',
+        filter: multiSelectFilter({
+            options: selectNumCommessa,
+        }),
     }, {
         dataField: 'preventivoNome',
         text: 'Numero Disegno',
+        filter: multiSelectFilter({
+            options: selectNumDisegno,
+        }),
     }, {
         dataField: 'macchina',
         text: 'Macchina',
+        filter: multiSelectFilter({
+            options: selectMacchine,
+        }),
     }, {
         dataField: 'inizio',
         text: 'Data inizio',
@@ -66,6 +98,7 @@ function LavoriTable({data}) {
                 data={data}
                 columns={ columns }
                 pagination={ paginationFactory() }
+                filter={ filterFactory() }
                 noDataIndication="Tabella vuota" />
         </div>
     )
