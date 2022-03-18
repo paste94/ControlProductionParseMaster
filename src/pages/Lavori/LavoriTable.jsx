@@ -40,18 +40,21 @@ function LavoriTable({data}) {
         dataField: 'commessaNome',
         text: 'Numero commessa',
         filter: multiSelectFilter({
+            placeholder: 'Tutte',
             options: selectNumCommessa,
         }),
     }, {
         dataField: 'preventivoNome',
         text: 'Numero Disegno',
         filter: multiSelectFilter({
+            placeholder: 'Tutti',
             options: selectNumDisegno,
         }),
     }, {
         dataField: 'macchina',
         text: 'Macchina',
         filter: multiSelectFilter({
+            placeholder: 'Tutte',
             options: selectMacchine,
         }),
     }, {

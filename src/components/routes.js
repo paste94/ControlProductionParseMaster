@@ -13,6 +13,7 @@ import Macchine from '../pages/DefinisciMacchine/Macchine'
 import Impostazioni from '../pages/Impostazioni/impostazioni'
 import { Parse } from '../DAO/http-common'
 import CommesseArchiviate from '../pages/CommesseArchiviate/CommesseArchiviate'
+import { Col, Row } from 'react-bootstrap'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
@@ -142,33 +143,41 @@ function AppRoutes() {
     return (
         <div>
             <Router>
-                <div style={{display: 'flex'}}>
-                    <Sidebar data={routes} />
-                    <Redirect from='/' to='/commesse' />
-                    {
-                        routes.map(
-                            (route) => (
-                                <Route
-                                    key={route.path}
-                                    path={route.path}
-                                    exact={route.exact}
-                                    component={route.main}
-                                />
-                            ),
-                        )
-                    }
-                    <Route
-                        key='100'
-                        path='/commessasingola'
-                        component={(props)=>{
-                            return (
-                                <Page>
-                                    <CommessaSingola commessa={props.location.state.commessa}/>
-                                </Page>
-                            )
-                        }}
-                    />
-                </div>
+                <Row>
+                    <Col>
+                        <Sidebar data={routes} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <div style={{display: 'flex'}}>
+                            <Redirect from='/' to='/commesse' />
+                            {
+                                routes.map(
+                                    (route) => (
+                                        <Route
+                                            key={route.path}
+                                            path={route.path}
+                                            exact={route.exact}
+                                            component={route.main}
+                                        />
+                                    ),
+                                )
+                            }
+                            <Route
+                                key='100'
+                                path='/commessasingola'
+                                component={(props)=>{
+                                    return (
+                                        <Page>
+                                            <CommessaSingola commessa={props.location.state.commessa}/>
+                                        </Page>
+                                    )
+                                }}
+                            />
+                        </div>
+                    </Col>
+                </Row>
             </Router>
 
             <AlertContainer position="top-right">

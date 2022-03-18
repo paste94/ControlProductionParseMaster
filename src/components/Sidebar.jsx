@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { Container, ListGroup, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import '../css/simple-sidebar.css';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import ModalCredits from './ModalCredits';
 import PropTypes from 'prop-types'
 
@@ -13,12 +13,27 @@ import PropTypes from 'prop-types'
  */
 const Sidebar = ({data}) => {
     const listItems = data.map((r) =>
-        <NavLink to={r.path} key={r.id} activeClassName="active">
-            <ListGroup.Item as='button' className="list-group-item list-group-item-action bg-light sidebar-btn">
+        <NavItem key={r.id} href={r.path} >
+            <Nav.Link as={Link} to={r.path}>
                 {r.text}
-            </ListGroup.Item>
-        </NavLink>,
+            </Nav.Link>
+        </NavItem>,
     )
+
+    return (
+        <Navbar bg="light" expand="lg">
+            <Navbar.Brand>Control Production</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+                {listItems}
+            </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+    )
+
+    /*
+    
 
     return (
         <div className="bg-light border-right" id='sidebar-wrapper'>
@@ -29,6 +44,7 @@ const Sidebar = ({data}) => {
             </ListGroup>
         </div>
     )
+    */
 }
 
 Sidebar.propTypes = {

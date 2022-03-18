@@ -12,7 +12,6 @@ function Lavori() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
     const [elencoMacchine, setElencoMacchine] = useState([])
-    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         getMacchineLavori(setElencoMacchine)
@@ -32,18 +31,7 @@ function Lavori() {
                         <h1>Lavori</h1>
                     </Row>
                 </Col>
-                <Col>
-                    <Button
-                        className='float-right vertical-center'
-                        title='Mostra filtri'
-                        onClick={() => setOpen(!open)}>
-                            Filtri
-                    </Button>
-                </Col>
             </Row>
-            <Collapse in={open}>
-                <p>spdnsdpkvnspvnkvnsdkvnsdkvn</p>
-            </Collapse>
 
             <LavoriTable
                 data={data}/>
