@@ -34,6 +34,26 @@ function Impostazioni() {
                 <Col>
                     <h1>Impostazioni</h1>
                 </Col>
+                <Row
+                    style={{
+                        marginRight: '0px',
+                    }}
+                    className='float-right vertical-center' >
+                    <Col>
+                        <BtnConfirm
+                            handleConfirm={handleSaveSettings}
+                            title={'Salvare le nuove impostzioni?'} >
+                            Salva
+                        </BtnConfirm>
+                    </Col>
+                    <Col>
+                        <BtnConfirm
+                            handleConfirm={handleResetDefaultSettings}
+                            title={'Resettare le impostazioni di default?'}>
+                                Reset
+                        </BtnConfirm>
+                    </Col>
+                </Row>
             </Row>
             <br/>
             <Row>
@@ -48,27 +68,13 @@ function Impostazioni() {
                     </InputGroup>
                 </Col>
             </Row>
-            <Row
+            <div
                 style={{
                     position: 'absolute',
                     right: 30,
                     bottom: 20,
                 }}>
-                <Col>
-                    <BtnConfirm
-                        handleConfirm={handleSaveSettings}
-                        title={'Salvare le nuove impostzioni?'} >
-                        Salva
-                    </BtnConfirm>
-                </Col>
-                <Col>
-                    <BtnConfirm
-                        handleConfirm={handleResetDefaultSettings}
-                        title={'Resettare le impostazioni di default?'}>
-                            Reset
-                    </BtnConfirm>
-                </Col>
-            </Row>
+            </div>
         </div>
     )
 }

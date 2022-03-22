@@ -143,13 +143,14 @@ function AppRoutes() {
     return (
         <div>
             <Router>
-                <Row>
-                    <Col>
+                <Row id='row-router-header-navbar'>
+                    <Col id='col-router-header-navbar'>
                         <Sidebar data={routes} />
                     </Col>
                 </Row>
-                <Row>
-                    <Col>
+                <Row
+                    id='row-router-body-page' >
+                    <Col id='col-router-body-page'>
                         <div style={{display: 'flex'}}>
                             <Redirect from='/' to='/commesse' />
                             {

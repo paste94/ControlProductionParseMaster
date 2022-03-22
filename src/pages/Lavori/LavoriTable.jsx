@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
-import filterFactory, { multiSelectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { multiSelectFilter, dateFilter } from 'react-bootstrap-table2-filter';
 
 
 /**
@@ -73,6 +73,7 @@ function LavoriTable({data}) {
                 '0'+cell.getMinutes() : cell.getMinutes()
             return dd + '/' + mm + '/' + yy + ' ' + hh + ':' + min
         },
+        filter: dateFilter(),
     }, {
         dataField: 'fine',
         text: 'Data fine',
@@ -89,6 +90,7 @@ function LavoriTable({data}) {
                 '0'+cell.getMinutes() : cell.getMinutes()
             return dd + '/' + mm + '/' + yy + ' ' + hh + ':' + min
         },
+        filter: dateFilter(),
     }, {
         dataField: 'tempo',
         text: 'Tempo(ore)',
