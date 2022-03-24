@@ -40,7 +40,7 @@ function ModalCredits(props) {
                     </Row>
                     <Row>
                         <Col className='text-center'>
-                            <b>Control Production</b>
+                            <b>Control Production {packageJson.version}</b>
                         </Col>
                     </Row>
                     <Row>
@@ -60,7 +60,7 @@ function ModalCredits(props) {
                     </Row>
                     <Row>
                         <Col className='text-center'>
-                            <a href='mailto:94paste94@gmail.com'>94paste94@gmail.com</a>
+                            <a href='mailto:riccardopasteris@gmail.com'>riccardopasteris@gmail.com</a>
                         </Col>
                     </Row>
                 </Modal.Body>
