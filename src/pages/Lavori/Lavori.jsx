@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, InputGroup, FormControl, Form } from 'react-bootstrap';
-import { getLavori } from '../../DAO/Lavori.service';
+import { Col, Row, InputGroup, FormControl, Form, Collapse, Button } from 'react-bootstrap';
+import AlertError from '../../components/AlertError';
+import { getLavori, getMacchineLavori, subscribeLavori } from '../../DAO/Lavori.service';
 import { getAllMacchine } from '../../DAO/Macchine.service';
 import LavoriTable from './LavoriTable';
 
@@ -8,6 +9,36 @@ import LavoriTable from './LavoriTable';
  * @return {Component} il component creato
  */
 function Lavori() {
+    const [data, setData] = useState([])
+    const [error, setError] = useState('')
+    const [elencoMacchine, setElencoMacchine] = useState([])
+
+    useEffect(() => {
+        getMacchineLavori(setElencoMacchine)
+        subscribeLavori(setData, (err) => console.error(err))
+    }, [])
+
+    return (
+        <div className='page'>
+            <AlertError
+                show={error !== ''}
+                message={error}
+                handleClose={ () => setError('') } />
+
+            <Row className='align-items-center'>
+                <Col>
+                    <Row className='ml-1'>
+                        <h1>Lavori</h1>
+                    </Row>
+                </Col>
+            </Row>
+
+            <LavoriTable
+                data={data}/>
+        </div>
+    )
+
+    /*
     const [data, setData] = useState([])
     const [macchine, setMacchine] = useState([])
     const [selectedMacchina, setSelectedMacchina] = useState('Tutte')
@@ -32,12 +63,14 @@ function Lavori() {
 
     return (
         <div className='page'>
-            <div className='container' style={{marginBottom: 10}}>
-                <div className='row align-items-center'>
-                    <div className='col'>
-                        <h1>Macchine</h1>
-                    </div>
-                </div>
+                <Row className='row align-items-center'>
+                    <Col>
+                        <h1>Lavori</h1>
+                    </Col>
+                </Row>
+                <Collapse in={open}>
+
+                </Collapse>
                 <Row>
                     <Col className='my-auto'>
                         <InputGroup className="mb-3">
@@ -58,7 +91,7 @@ function Lavori() {
                                             value={elem.nome} >
                                                 {elem.nome}
                                         </option>)
-                                    }
+                                }
                             </select>
                         </InputGroup>
                     </Col>
@@ -103,9 +136,9 @@ function Lavori() {
                             data={ data } />
                     </Col>
                 </Row>
-            </div>
         </div>
     )
+    */
 }
 
 export default Lavori;

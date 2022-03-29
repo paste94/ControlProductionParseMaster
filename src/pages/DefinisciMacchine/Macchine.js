@@ -3,6 +3,7 @@ import { addMacchina, deleteMacchina, subscribeMacchine, unsubscribeMacchine } f
 import MacchineTable from './MacchineTable';
 import ModalNewMacchina from './ModalNewMacchina';
 import AlertError from '../../components/AlertError'
+import { Col, Row } from 'react-bootstrap';
 
 /**
  * @return {Component} il componentes
@@ -22,17 +23,18 @@ function Macchine() {
                 show={error !== ''}
                 message={error}
                 handleClose={ () => setError('') } />
-            <div className='container' style={{ marginBottom: 10 }}>
-                <div className='row align-items-center'>
-                    <div className='col'>
+
+            <Row className='align-items-center'>
+                <Col>
+                    <Row className='ml-1'>
                         <h1>Macchine</h1>
-                    </div>
-                    <div className='col'>
-                        <ModalNewMacchina
-                            handleAdd={addMacchina}/>
-                    </div>
-                </div>
-            </div>
+                    </Row>
+                </Col>
+                <Col>
+                    <ModalNewMacchina
+                        handleAdd={addMacchina}/>
+                </Col>
+            </Row>
 
             <MacchineTable
                 data={data}

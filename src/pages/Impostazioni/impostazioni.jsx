@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, FormCheck, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
 import BtnConfirm from './BtnConfirm';
+import packageJson from '../../../package.json';
+
 
 /**
  * Pagina per la visualizzazione degli articoli salvati.
@@ -26,14 +28,34 @@ function Impostazioni() {
         setServerUrl(_url)
     }, [])
 
-    // TODO: Salva server url
-    // TODO: Chiedi conferma con modal avvisando che è pericoloso modificare questa impostazione!
+    // TODO: Aggiungi pagina di changelog
+    // TODO: Aggiungi pagina di richiesta nuove features
     return (
         <div className='page'>
             <Row className='align-items-center'>
                 <Col>
                     <h1>Impostazioni</h1>
                 </Col>
+                <Row
+                    style={{
+                        marginRight: '0px',
+                    }}
+                    className='float-right vertical-center' >
+                    <Col>
+                        <BtnConfirm
+                            handleConfirm={handleSaveSettings}
+                            title={'Salvare le nuove impostzioni?'} >
+                            Salva
+                        </BtnConfirm>
+                    </Col>
+                    <Col>
+                        <BtnConfirm
+                            handleConfirm={handleResetDefaultSettings}
+                            title={'Resettare le impostazioni di default?'}>
+                                Reset
+                        </BtnConfirm>
+                    </Col>
+                </Row>
             </Row>
             <br/>
             <Row>
@@ -48,27 +70,29 @@ function Impostazioni() {
                     </InputGroup>
                 </Col>
             </Row>
-            <Row
+            <hr/>
+            <Row>
+                <Col>
+                    <h3>Credits</h3>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <p>Control Production Master (v{packageJson.version})</p>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <p>Creato da Riccardo Pasteris (<a href='mailto:riccardopasteris@gmail.com'>riccardopasteris@gmail.com</a>)</p>
+                </Col>
+            </Row>
+            <div
                 style={{
                     position: 'absolute',
                     right: 30,
                     bottom: 20,
                 }}>
-                <Col>
-                    <BtnConfirm
-                        handleConfirm={handleSaveSettings}
-                        title={'Salvare le nuove impostzioni?'} >
-                        Salva
-                    </BtnConfirm>
-                </Col>
-                <Col>
-                    <BtnConfirm
-                        handleConfirm={handleResetDefaultSettings}
-                        title={'Resettare le impostazioni di default?'}>
-                            Reset
-                    </BtnConfirm>
-                </Col>
-            </Row>
+            </div>
         </div>
     )
 }
