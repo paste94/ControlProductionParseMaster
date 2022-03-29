@@ -86,6 +86,11 @@ function Impostazioni() {
                     <p>Creato da Riccardo Pasteris (<a href='mailto:riccardopasteris@gmail.com'>riccardopasteris@gmail.com</a>)</p>
                 </Col>
             </Row>
+            <Row>
+                <Col>
+                    <p>Davide Santià (<a href='mailto:davsan@infinito.it'>davsan@infinito.it</a>)</p>
+                </Col>
+            </Row>
             <div
                 style={{
                     position: 'absolute',
