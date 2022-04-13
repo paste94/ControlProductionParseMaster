@@ -1,6 +1,6 @@
 {
   "name": "control-production-master",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -49,10 +49,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "react:start": "set PORT=3010 && react-scripts start",
-    "react:build": "set PORT=3010 && react-scripts build",
-    "react:test": "set PORT=3010 && react-scripts test",
-    "react:eject": "set PORT=3010 && react-scripts eject",
+    "react:start": "react-scripts start",
+    "react:build": "react-scripts build",
+    "react:test": "react-scripts test",
+    "react:eject": "react-scripts eject",
     "electron:build": "electron-builder",
     "release": "npm run react:build && npm run electron-builder --publish=always",
     "build": "npm run react:build && npm run electron:build",
