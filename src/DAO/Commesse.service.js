@@ -155,6 +155,17 @@ function updateCommessa(id, newVal) {
     }
 }
 
+/**
+ * Clona commessa
+ * @param {*} id id della commessa da clonare
+ */
+function cloneCommessa(id) {
+    Parse.Cloud.run('cloneCommessa', {'commessaId': id}).
+        then(() => {
+            console.log('OK')
+        }).catch((err) => console.log('ERROR: ', err))
+}
+
 export {
     addCommessa,
     deleteCommessa,
@@ -162,4 +173,5 @@ export {
     subscribeCommesse,
     unsubscribeCommesse,
     archiveCommessa,
+    cloneCommessa,
 };

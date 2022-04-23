@@ -31,20 +31,6 @@ const Sidebar = ({data}) => {
             </Navbar.Collapse>
         </Navbar>
     )
-
-    /*
-    
-
-    return (
-        <div className="bg-light border-right" id='sidebar-wrapper'>
-            <div className="sidebar-heading"> Operazioni </div>
-            <ListGroup>
-                {listItems}
-                <ModalCredits></ModalCredits>
-            </ListGroup>
-        </div>
-    )
-    */
 }
 
 Sidebar.propTypes = {
