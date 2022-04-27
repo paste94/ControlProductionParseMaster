@@ -83,6 +83,7 @@ async function getAllCommesse(callback, callbackError) {
                     totOre: elem.get('totOre') != undefined ? elem.get('totOre') : 0,
                     preventivo: elem.get('preventivo') != undefined ? elem.get('preventivo') : '',
                     archiviata: elem.get('archiviata') != undefined ? elem.get('archiviata') : '',
+                    minutiReali: elem.get('minutiReali') != undefined ? elem.get('minutiReali') : 0,
                 })
             })
            callback(data)

@@ -120,7 +120,16 @@ function CommesseTable({data, handleDelete, handleEdit}) {
         editor: {type: Type.DATE},
     }, {
         dataField: 'totOre',
-        text: 'Ore totali',
+        text: 'Ore preventivate',
+        editable: false,
+    }, {
+        dataField: 'minutiReali',
+        text: 'Ore reali',
+        formatter: cell => {
+            const h = Math.floor(cell/60)
+            const min = Math.floor(cell-(h*60))
+            return h + 'h ' + min + 'm'
+        },
         editable: false,
     }, {
         dataField: 'totPreventivo',

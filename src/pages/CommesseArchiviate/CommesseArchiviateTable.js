@@ -8,6 +8,7 @@ import { FaArrowUp, FaEye } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { unarchiveCommessa } from '../../DAO/CommesseArchiviate.service';
+import ModalCloneCommessa from '../Commesse/ModalCloneCommessa';
 
 /**
  * Definisce la tabella degli impiegati
@@ -24,7 +25,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
         const commessa = data[rowIndex]
         return (
             <Row>
-                <Col lg='4' md='4' sm='4'>
+                <Col lg='2' md='2' sm='2'>
                     <NavLink
                         to={{
                             pathname: '/commessasingola',
@@ -38,7 +39,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
                         </Button>
                     </NavLink>
                 </Col>
-                <Col lg='4' md='4' sm='4'>
+                <Col lg='2' md='2' sm='2'>
                     <Button
                         variant='link'
                         title="Rimuovi dall'archivio"
@@ -47,7 +48,11 @@ function CommesseArchiviateTable({data, handleDelete}) {
                             <FaArrowUp style={{color: 'black'}}/>
                     </Button>
                 </Col>
-                <Col lg='4' md='4' sm='4'>
+                <Col lg='2' md='2' sm='2'>
+                    <ModalCloneCommessa
+                        originalCommessa={row} />
+                </Col>
+                <Col lg='2' md='2' sm='2'>
                     <DeleteButton
                         title={'Elimina commessa'}
                         handleConfirm={() => handleDelete(row.id)} >
@@ -97,7 +102,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
         hidden: true,
     }, {
         dataField: 'totOre',
-        text: 'Ore totali',
+        text: 'Ore preventivate',
         editable: false,
     }, {
         dataField: 'totPreventivo',
