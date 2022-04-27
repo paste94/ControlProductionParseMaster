@@ -4,10 +4,11 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
 import DeleteButton from '../../components/DeleteButton'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import { Row, Col, Button } from 'react-bootstrap'
-import { FaCheck, FaEye, FaArrowDown, FaCopy } from 'react-icons/fa'
+import { FaCheck, FaEye, FaArrowDown } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { archiveCommessa, cloneCommessa } from '../../DAO/Commesse.service';
+import { archiveCommessa } from '../../DAO/Commesse.service';
+import ModalCloneCommessa from './ModalCloneCommessa';
 
 /**
  * Definisce la tabella degli impiegati
@@ -61,13 +62,8 @@ function CommesseTable({data, handleDelete, handleEdit}) {
                     </Button>
                 </Col>
                 <Col lg='2' md='2' sm='2'>
-                    <Button
-                        variant='link'
-                        title='Copia commessa'
-                        size='sm'
-                        onClick={ () => cloneCommessa(row.id)} >
-                            <FaCopy style={{color: 'black'}}/>
-                    </Button>
+                    <ModalCloneCommessa
+                        originalCommessa={row} />
                 </Col>
                 <Col lg='2' md='2' sm='2'>
                     <DeleteButton

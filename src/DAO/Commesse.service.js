@@ -102,6 +102,7 @@ function addCommessa(newCommessa) {
     Object
         .keys(newCommessa)
         .forEach( key => commessa.set(key, newCommessa[key]) )
+    console.log('ADD*****', newCommessa)
     commessa.save().catch(err => console.err('ERROR: ', err))
 }
 
@@ -157,13 +158,21 @@ function updateCommessa(id, newVal) {
 
 /**
  * Clona commessa
- * @param {*} id id della commessa da clonare
+ * @param {string} id id della commessa da clonare
+ * @param {commessa} newCommessa nuova commessa da creare (con nuovo nome, numero e date)
  */
-function cloneCommessa(id) {
-    Parse.Cloud.run('cloneCommessa', {'commessaId': id}).
-        then(() => {
-            console.log('OK')
-        }).catch((err) => console.log('ERROR: ', err))
+function cloneCommessa(id, newCommessa) {
+    const c = {
+        'commessaId': id,
+        'nome': newCommessa.nome,
+        'numero': newCommessa.numero,
+        'data_offerta': new Date(newCommessa.data_offerta),
+        'data_consegna': new Date(newCommessa.data_consegna),
+    }
+    console.log('CLONE*****', c)
+    Parse.Cloud.run('cloneCommessa', c)
+        .then(() => console.log('OK'))
+        .catch((err) => console.log('ERROR: ', err))
 }
 
 export {
