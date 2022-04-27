@@ -84,6 +84,7 @@ async function getAllCommesseArchiviate(callback, callbackError) {
                     totPreventivo: elem.get('totPreventivo') != undefined ? elem.get('totPreventivo') : 0,
                     totOre: elem.get('totOre') != undefined ? elem.get('totOre') : 0,
                     archiviata: elem.get('archiviata') != undefined ? elem.get('archiviata') : false,
+                    minutiReali: elem.get('minutiReali') != undefined ? elem.get('minutiReali') : 0,
                 })
             })
            callback(data)

@@ -105,6 +105,15 @@ function CommesseArchiviateTable({data, handleDelete}) {
         text: 'Ore preventivate',
         editable: false,
     }, {
+        dataField: 'minutiReali',
+        text: 'Ore reali',
+        formatter: cell => {
+            const h = Math.floor(cell/60)
+            const min = Math.floor(cell-(h*60))
+            return h + 'h ' + min + 'm'
+        },
+        editable: false,
+    }, {
         dataField: 'totPreventivo',
         text: 'Ordine (€)',
         editable: false,
