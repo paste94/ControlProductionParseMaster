@@ -118,9 +118,10 @@ function deleteCommessa(id, successCallback, errorCallback) {
     new Parse.Query(commesse)
         .get(id)
         .then(
-            elem =>
-                elem.set('eliminato', true).save(),
-                successCallback('Commessa eliminata con successo'),
+            elem =>{
+                elem.set('eliminato', true).save()
+                successCallback(`Commessa ${elem.attributes.numero} eliminata con successo`)
+            },
             error => errorCallback('ERRORE:', error.message),
         )
 }
@@ -129,12 +130,18 @@ function deleteCommessa(id, successCallback, errorCallback) {
  * Archivia la commessa con ID selezionato.
  * L'elemento viene archiviato impostando un flag 'archiviato' a true
  * @param {int} id identificativo della macchina
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
- function archiveCommessa(id) {
+ function archiveCommessa(id, successCallback, errorCallback) {
     new Parse.Query(commesse)
         .get(id)
         .then(
-            elem => elem.set('archiviata', true).save(),
+            elem => {
+                elem.set('archiviata', true).save()
+                console.log(elem.attributes)
+                successCallback(`Commessa ${elem.attributes.numero} archiviata con successo`)
+            },
             error => console.error('ERRORE:', error.message),
         )
 }
@@ -164,7 +171,7 @@ function updateCommessa(id, newVal) {
 /**
  * Clona commessa
  * @param {string} id id della commessa da clonare
- * @param {commessa} newCommessa nuova commessa da creare (con nuovo nome, numero e date)
+ * @param {object} newCommessa nuova commessa da creare (con nuovo nome, numero e date)
  * @param {function} successCallback
  * @param {function} errorCallback
  */
@@ -178,7 +185,7 @@ function cloneCommessa(id, newCommessa, successCallback, errorCallback) {
     }
     Parse.Cloud.run('cloneCommessa', c)
         .then(
-            elem => successCallback( 'Commessa copiata con successo' ),
+            elem => successCallback( `Commessa ${newCommessa.numero} copiata con successo` ),
             err => errorCallback('ERRORE:', err.message),
         )
 }

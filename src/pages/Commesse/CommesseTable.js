@@ -57,7 +57,7 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
                         variant='link'
                         title='Archivia commessa'
                         size='sm'
-                        onClick={ () => archiveCommessa(row.id) } >
+                        onClick={ () => archiveCommessa(row.id, setSuccess, setError) } >
                             <FaArrowDown style={{color: 'black'}}/>
                     </Button>
                 </Col>

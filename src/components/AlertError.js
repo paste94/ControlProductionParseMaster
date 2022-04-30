@@ -13,7 +13,7 @@ import PropTypes from 'prop-types'
   */
 function AlertError({show, message, handleClose}) {
     return (
-        <AlertContainer position="top-right">
+        <AlertContainer position="bottom-right">
             { show ? (
                 <Alert
                     type="danger"

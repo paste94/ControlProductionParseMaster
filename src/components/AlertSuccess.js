@@ -13,7 +13,7 @@ import PropTypes from 'prop-types'
   */
 function AlertSuccess({show, message, handleClose}) {
     return (
-        <AlertContainer position="top-right">
+        <AlertContainer position="bottom-right">
             { show ? (
                 <Alert
                     type="success"
