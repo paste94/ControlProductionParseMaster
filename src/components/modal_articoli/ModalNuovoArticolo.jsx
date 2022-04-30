@@ -66,12 +66,17 @@ function ModalNuovoArticolo() {
     }, []);
 
     useEffect(() => {
-        setNumDisegno('')
-        setNumPezzi(0)
-        setCostMat(0)
-        setCostoOrario(0)
-        setTotOre(0)
-        setTotPreventivo(0)
+        if (!show) {
+            setNumDisegno('')
+            setNumPezzi(0)
+            setCostMat(0)
+            setCostoOrario(0)
+            setTotOre(0)
+            setTotPreventivo(0)
+            const arr = [...oreMacchina]
+            arr.forEach(e => e.ore = 0)
+            setOreMacchina(arr)
+        }
     }, [show])
 
     useEffect(() => {

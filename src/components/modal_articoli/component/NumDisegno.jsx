@@ -1,6 +1,44 @@
-import React from 'react';
-import { InputGroup, FormControl, DropdownButton, Form, Col } from 'react-bootstrap';
+import React, {useState} from 'react';
+import { InputGroup, FormControl, DropdownButton, Form, Col, Dropdown } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+
+// forwardRef again here!
+// Dropdown needs access to the DOM of the Menu to measure it
+const CustomMenu = React.forwardRef(
+    ({ children, style, className, labeledBy }, ref) => {
+      const [value, setValue] = useState('');
+
+      return (
+        <div
+          ref={ref}
+          style={style}
+          className={className}
+          aria-labelledby={labeledBy}
+        >
+          <FormControl
+            autoFocus
+            className="mx-3 my-2 w-auto"
+            placeholder="Type to filter..."
+            onChange={(e) => setValue(e.target.value)}
+            value={value}
+          />
+          <ul className="list-unstyled">
+            {React.Children.toArray(children).filter(
+              (child) =>
+                !value || child.props.children.toLowerCase().startsWith(value),
+            )}
+          </ul>
+        </div>
+      );
+    },
+  );
+
+CustomMenu.propTypes = {
+    children: PropTypes.arrayOf(PropTypes.node),
+    style: PropTypes.object,
+    className: PropTypes.string,
+    labeledBy: PropTypes.string,
+}
 
 /**
  *
@@ -38,7 +76,9 @@ function NumDisegno({
                             variant='secondary'
                             disabled={ disabled }
                             >
-                                {articoliRender}
+                                <Dropdown.Menu as={CustomMenu}>
+                                    {articoliRender}
+                                </Dropdown.Menu>
                         </DropdownButton>}
                 </InputGroup>
             </Col>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import CommesseTable from './CommesseTable';
 import ModalNewCommessa from './ModalNewCommessa';
-import { deleteCommessa,
+import {
     updateCommessa,
     addCommessa,
     subscribeCommesse,
@@ -9,6 +9,7 @@ import { deleteCommessa,
 } from '../../DAO/Commesse.service'
 import { Col, Row } from 'react-bootstrap';
 import AlertError from '../../components/AlertError'
+import AlertSuccess from '../../components/AlertSuccess';
 
 /**
  * Pagina delle commesse
@@ -18,9 +19,8 @@ import AlertError from '../../components/AlertError'
 function Commesse() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
-    const handleDelete = id => deleteCommessa(id)
-    const handleEdit = (id, newVal) =>
-        updateCommessa(id, newVal)
+    const [success, setSuccess] = useState('')
+
     const handleAdd = (newCommessa) => {
         addCommessa(
             {
@@ -47,6 +47,10 @@ function Commesse() {
                 show={error !== ''}
                 message={error}
                 handleClose={ () => setError('') } />
+            <AlertSuccess
+                show={success !== ''}
+                message={success}
+                handleClose={ () => setSuccess('') } />
             <Row className='align-items-center'>
                 <Col>
                     <Row className='ml-1'>
@@ -61,8 +65,10 @@ function Commesse() {
 
             <CommesseTable
                 data={data}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit} />
+                handleEdit={updateCommessa}
+                setSuccess={setSuccess}
+                setError={setError}
+                 />
 
         </div>
     )

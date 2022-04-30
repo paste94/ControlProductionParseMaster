@@ -3,7 +3,6 @@ import { getAllArticoli } from '../../../DAO/Articoli.service';
 import React from 'react';
 
 /**
- * 
  * @param {function} onArticoloClick Cosa fare al click dell'articolo? (Impostare tutti i valori al posto giusto)
  * @param {function} callback Funzione di callback (che serve a impostare l'articolo in una variabile di stato  del component)
  */

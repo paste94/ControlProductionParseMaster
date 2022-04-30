@@ -111,13 +111,17 @@ function addCommessa(newCommessa) {
  * Elimina la commessa con ID selezionato.
  * L'elemento viene eliminato impostando un flag 'eliminato' a true
  * @param {int} id identificativo della macchina
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
-function deleteCommessa(id) {
+function deleteCommessa(id, successCallback, errorCallback) {
     new Parse.Query(commesse)
         .get(id)
         .then(
-            elem => elem.set('eliminato', true).save(),
-            error => console.error('ERRORE:', error.message),
+            elem =>
+                elem.set('eliminato', true).save(),
+                successCallback('Commessa eliminata con successo'),
+            error => errorCallback('ERRORE:', error.message),
         )
 }
 
@@ -161,8 +165,10 @@ function updateCommessa(id, newVal) {
  * Clona commessa
  * @param {string} id id della commessa da clonare
  * @param {commessa} newCommessa nuova commessa da creare (con nuovo nome, numero e date)
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
-function cloneCommessa(id, newCommessa) {
+function cloneCommessa(id, newCommessa, successCallback, errorCallback) {
     const c = {
         'commessaId': id,
         'nome': newCommessa.nome,
@@ -170,10 +176,11 @@ function cloneCommessa(id, newCommessa) {
         'data_offerta': new Date(newCommessa.data_offerta),
         'data_consegna': new Date(newCommessa.data_consegna),
     }
-    console.log('CLONE*****', c)
     Parse.Cloud.run('cloneCommessa', c)
-        .then(() => console.log('OK'))
-        .catch((err) => console.log('ERROR: ', err))
+        .then(
+            elem => successCallback( 'Commessa copiata con successo' ),
+            err => errorCallback('ERRORE:', err.message),
+        )
 }
 
 export {

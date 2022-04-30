@@ -7,7 +7,7 @@ import { Row, Col, Button } from 'react-bootstrap'
 import { FaCheck, FaEye, FaArrowDown } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { archiveCommessa } from '../../DAO/Commesse.service';
+import { archiveCommessa, deleteCommessa } from '../../DAO/Commesse.service';
 import ModalCloneCommessa from './ModalCloneCommessa';
 
 /**
@@ -19,7 +19,7 @@ import ModalCloneCommessa from './ModalCloneCommessa';
  *                  - handleEdit (function) Gestisce la modifica dell'elemento
  * @return {Component} il component creato
  */
-function CommesseTable({data, handleDelete, handleEdit}) {
+function CommesseTable({data, handleEdit, setSuccess, setError}) {
     // Definizione dei bottoni nell'ultima colonna
     const defineButtons = (cell, row, rowIndex, formatExtraData) => {
         const commessa = data[rowIndex]
@@ -63,12 +63,14 @@ function CommesseTable({data, handleDelete, handleEdit}) {
                 </Col>
                 <Col lg='2' md='2' sm='2'>
                     <ModalCloneCommessa
-                        originalCommessa={row} />
+                        originalCommessa={row}
+                        setError={setError}
+                        setSuccess={setSuccess} />
                 </Col>
                 <Col lg='2' md='2' sm='2'>
                     <DeleteButton
                         title={'Elimina commessa'}
-                        handleConfirm={() => handleDelete(row.id)} >
+                        handleConfirm={() => deleteCommessa(row.id, setSuccess, setError)} >
                             <p>Eliminare definitivamente la commessa?</p>
                     </DeleteButton>
                 </Col>
@@ -185,6 +187,8 @@ CommesseTable.propTypes = {
     data: PropTypes.array,
     handleDelete: PropTypes.func,
     handleEdit: PropTypes.func,
+    setSuccess: PropTypes.func,
+    setError: PropTypes.func,
 }
 
 export default CommesseTable

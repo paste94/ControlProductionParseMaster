@@ -11,7 +11,7 @@ import { cloneCommessa } from '../../DAO/Commesse.service';
  *                      della commessa
  * @return {Component} il componente
  */
-function ModalCloneCommessa({originalCommessa}) {
+function ModalCloneCommessa({originalCommessa, setSuccess, setError}) {
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: originalCommessa.nome,
@@ -33,7 +33,7 @@ function ModalCloneCommessa({originalCommessa}) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        cloneCommessa(originalCommessa.id, newCommessa)
+        cloneCommessa(originalCommessa.id, newCommessa, setSuccess, setError)
         toggle()
     }
 
@@ -137,6 +137,8 @@ function ModalCloneCommessa({originalCommessa}) {
 
 ModalCloneCommessa.propTypes = {
     originalCommessa: PropTypes.object.isRequired,
+    setSuccess: PropTypes.func,
+    setError: PropTypes.func,
 }
 
 
