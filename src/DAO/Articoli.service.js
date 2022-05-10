@@ -92,8 +92,8 @@ function addArticolo(newArticolo, successCallback, errorCallback) {
     Object.keys(newArticolo).forEach( key => art.set(key, newArticolo[key]) )
     art.save()
             .then(
-                elem => callbackSuccess(`Commessa ${elem.attributes.numDisegno} salvata con successo`),
-                (error) => callbackSuccess(error.message),
+                elem => successCallback(`Commessa ${elem.attributes.numDisegno} salvata con successo`),
+                (error) => errorCallback(error.message),
             )
 }
 

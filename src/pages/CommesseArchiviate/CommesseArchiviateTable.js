@@ -80,19 +80,21 @@ function CommesseArchiviateTable({setSuccess, setError}) {
     }, {
         dataField: 'nome',
         text: 'Nome',
+        editable: false,
     }, {
         dataField: 'numero',
         text: 'Numero',
+        editable: false,
     }, {
         dataField: 'data_offerta',
         text: 'Data Offerta',
         formatter: dateFormatter,
-        editor: {type: Type.DATE},
+        editable: false,
     }, {
         dataField: 'data_consegna',
         text: 'Data Consegna',
         formatter: dateFormatter,
-        editor: {type: Type.DATE},
+        editable: false,
     }, {
         dataField: 'chiusa',
         text: 'Chiusa',

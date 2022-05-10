@@ -57,7 +57,7 @@ function ModalNuovoArticolo() {
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
         }
 
-        addArticolo(_articolo, handleHideModal)
+        addArticolo(_articolo, handleHideModal, console.log)
     }
 
     useEffect(() => {
