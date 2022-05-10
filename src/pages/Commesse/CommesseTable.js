@@ -7,19 +7,19 @@ import { Row, Col, Button } from 'react-bootstrap'
 import { FaCheck, FaEye, FaArrowDown } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { archiveCommessa, deleteCommessa } from '../../DAO/Commesse.service';
+import { archiveCommessa, deleteCommessa, updateCommessa } from '../../DAO/Commesse.service';
 import ModalCloneCommessa from './ModalCloneCommessa';
+import {dateFormatter, timeFormatter} from '../../utils/dateTimeFormatter';
 
 /**
  * Definisce la tabella degli impiegati
  * @param {Object}  props Definisce le propertyes della tabella
  *                  - data (array) elenco degli elementi
- *                  - handleDelete (function) Gestisce l'eliminazione
  *                      dell'elemento
  *                  - handleEdit (function) Gestisce la modifica dell'elemento
  * @return {Component} il component creato
  */
-function CommesseTable({data, handleEdit, setSuccess, setError}) {
+function CommesseTable({data, setSuccess, setError}) {
     // Definizione dei bottoni nell'ultima colonna
     const defineButtons = (cell, row, rowIndex, formatExtraData) => {
         const commessa = data[rowIndex]
@@ -46,8 +46,8 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
                         size='sm'
                         onClick={ () => {
                             'chiusa' in row ?
-                                thisHandleEdit(row.id, {chiusa: !row.chiusa}) :
-                                thisHandleEdit(row.id, {chiusa: true})
+                                handleEdit(row.id, {chiusa: !row.chiusa}) :
+                                handleEdit(row.id, {chiusa: true})
                         }} >
                             <FaCheck style={{color: 'black'}}/>
                     </Button>
@@ -78,13 +78,13 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
         );
     };
 
-    const thisHandleEdit = (id, newValue) => {
+    const handleEdit = (id, newValue) => {
         if ('data_offerta' in newValue) {
             newValue.data_offerta = new Date(newValue.data_offerta)
         } else if ('data_consegna' in newValue) {
             newValue.data_consegna = new Date(newValue.data_consegna)
         }
-        handleEdit(id, newValue)
+        updateCommessa(id, newValue)
     }
 
     // Definizione delle colonne
@@ -101,24 +101,12 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
     }, {
         dataField: 'data_offerta',
         text: 'Data Offerta',
-        formatter: (cell) => {
-            if (cell == null || cell === '') {
-                return '-/-/-'
-            }
-            const [y, m, d] = cell.split('T')[0].split('-')
-            return d + '/' + m + '/' + y
-        },
+        formatter: dateFormatter,
         editor: {type: Type.DATE},
     }, {
         dataField: 'data_consegna',
         text: 'Data Consegna',
-        formatter: (cell) => {
-            if (cell == null || cell === '') {
-                return '-/-/-'
-            }
-            const [y, m, d] = cell.split('T')[0].split('-')
-            return d + '/' + m + '/' + y
-        },
+        formatter: dateFormatter,
         editor: {type: Type.DATE},
     }, {
         dataField: 'totOre',
@@ -127,11 +115,7 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
     }, {
         dataField: 'minutiReali',
         text: 'Ore reali',
-        formatter: cell => {
-            const h = Math.floor(cell/60)
-            const min = Math.floor(cell-(h*60))
-            return h + 'h ' + min + 'm'
-        },
+        formatter: timeFormatter,
         editable: false,
     }, {
         dataField: 'totPreventivo',
@@ -154,9 +138,7 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
     // TODO Snellisci questa funzione
     const rowStyle = (row, index) => {
         const style = {}
-        if (row.chiusa) {
-            style.backgroundColor='#00e676'
-        }
+        if (row.chiusa) style.backgroundColor='#00e676'
         return style
     }
 
@@ -185,8 +167,6 @@ function CommesseTable({data, handleEdit, setSuccess, setError}) {
 
 CommesseTable.propTypes = {
     data: PropTypes.array,
-    handleDelete: PropTypes.func,
-    handleEdit: PropTypes.func,
     setSuccess: PropTypes.func,
     setError: PropTypes.func,
 }
