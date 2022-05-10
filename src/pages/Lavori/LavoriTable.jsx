@@ -11,9 +11,9 @@ import filterFactory, { multiSelectFilter, dateFilter } from 'react-bootstrap-ta
  * @return {COmponent} il component
  */
 function LavoriTable({data}) {
-    const [selectMacchine, setSelectMacchine] = useState([])
-    const [selectNumCommessa, setSelectNumCommessa] = useState([])
-    const [selectNumDisegno, setSelectNumDisegno] = useState([])
+    const [selectMacchine, setSelectMacchine] = useState({})
+    const [selectNumCommessa, setSelectNumCommessa] = useState({})
+    const [selectNumDisegno, setSelectNumDisegno] = useState({})
 
     const createFilter = (arr, field) => {
         const unique = [...new Set(arr.map(elem => elem[field]))].sort()
@@ -27,10 +27,6 @@ function LavoriTable({data}) {
         setSelectNumCommessa(createFilter(data, 'commessaNome'))
         setSelectNumDisegno(createFilter(data, 'preventivoNome'))
     }, [data])
-
-    useEffect(() => {
-        console.log('SelectMacchine:', selectMacchine)
-    }, [selectMacchine])
 
     const columns = [{
         dataField: 'id',

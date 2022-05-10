@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+import { addCommessa } from '../../DAO/Commesse.service';
 
 /**
  * Modal specifico per l'aggiunta della commessa
  * @param {Object}  props properties
- *                  - handleAdd (function) handler che gestisce la creazione
- *                      della commessa
  * @return {Component} il componente
  */
-function ModalNewCommessa({handleAdd}) {
+function ModalNewCommessa({ setSuccess, setError}) {
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: '',
@@ -40,7 +39,18 @@ function ModalNewCommessa({handleAdd}) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleAdd(newCommessa)
+        addCommessa(
+            {
+                nome: newCommessa.nome,
+                numero: newCommessa.numero,
+                data_offerta: new Date(newCommessa.data_offerta),
+                data_consegna: new Date(newCommessa.data_consegna),
+                preventivo: [],
+                chiusa: false,
+            },
+            setSuccess,
+            setError,
+        )
         handleClose()
     }
 
@@ -123,7 +133,8 @@ function ModalNewCommessa({handleAdd}) {
 }
 
 ModalNewCommessa.propTypes = {
-    handleAdd: PropTypes.func.isRequired,
+    setSuccess: PropTypes.func,
+    setError: PropTypes.func,
 }
 
 

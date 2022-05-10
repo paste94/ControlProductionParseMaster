@@ -12,7 +12,6 @@ import { getAllMacchine } from '../../../DAO/Macchine.service';
 function getOreMacchina(callback) {
     getAllMacchine(macchine => {
         const oreMacchina = macchine.map( m => ({...m, ore: 0}) )
-        console.log('******', oreMacchina)
         callback(oreMacchina)
     },
     (err) => console.log('ore_macchina.jsx ERROR:', err))

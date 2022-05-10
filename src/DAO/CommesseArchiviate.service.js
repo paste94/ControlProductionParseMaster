@@ -98,13 +98,21 @@ async function getAllCommesseArchiviate(callback, callbackError) {
  * Disarchivia la commessa con ID selezionato.
  * L'elemento viene archiviato impostando un flag 'archiviato' a true
  * @param {int} id identificativo della macchina
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
- function unarchiveCommessa(id) {
+ function unarchiveCommessa(id, successCallback, errorCallback) {
     new Parse.Query(commesse)
         .get(id)
         .then(
-            elem => elem.set('archiviata', false).save(),
-            error => console.error('ERRORE:', error.message),
+            elem => elem.
+                set('archiviata', false).
+                save().
+                then(
+                    () => successCallback(`Commessa ${elem.attributes.numero} rimossa dall'archivio`),
+                    error => errorCallback(error.message),
+                ),
+            error => errorCallback(error.message),
         )
 }
 
@@ -112,9 +120,11 @@ async function getAllCommesseArchiviate(callback, callbackError) {
  * Elimina la commessa con ID selezionato.
  * L'elemento viene eliminato impostando un flag 'eliminato' a true
  * @param {int} id identificativo della macchina
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
-function deleteCommessaArchiviata(id) {
-    deleteCommessa(id)
+function deleteCommessaArchiviata(id, successCallback, errorCallback) {
+    deleteCommessa(id, successCallback, errorCallback)
 }
 
 export {

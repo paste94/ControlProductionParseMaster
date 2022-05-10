@@ -5,7 +5,6 @@ import Sidebar from './Sidebar'
 import Impiegati from '../pages/Impiegati/Impiegati'
 import Lavori from '../pages/Lavori/Lavori'
 import Commesse from '../pages/Commesse/Commesse'
-import { Alert, AlertContainer } from 'react-bs-notifier'
 import Articoli from '../pages/Articoli/Articoli'
 import CommessaSingola from '../pages/CommessaSingola/CommessaSingola'
 import PropTypes from 'prop-types'
@@ -14,6 +13,8 @@ import Impostazioni from '../pages/Impostazioni/impostazioni'
 import { Parse } from '../DAO/http-common'
 import CommesseArchiviate from '../pages/CommesseArchiviate/CommesseArchiviate'
 import { Col, Row } from 'react-bootstrap'
+import AlertError from './AlertError'
+import AlertSuccess from './AlertSuccess'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
@@ -22,25 +23,12 @@ import { Col, Row } from 'react-bootstrap'
  * @return {Component} il componente creato
  */
 function AppRoutes() {
-    // Lo stato dell'alert usato come errore
-    const [alertState, setAlertState] = useState({
-        show: false,
-        message: '',
-    });
-
-    // Mostra l'alert di errore
-    const handleShowAlert = (msg) => setAlertState({message: msg, show: true});
-
-    // Chiudi l'alert e cancella il messaggio
-    const handleCloseAlert = () => setAlertState({message: '', show: false});
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
 
     useEffect(() => {
         Parse.LiveQuery.on('error', (error) => {
-            console.log(error);
-            setAlertState({
-                show: true,
-                message: `Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`,
-            })
+            setError(`Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`)
         });
     }, [])
 
@@ -76,10 +64,7 @@ function AppRoutes() {
             main: () => {
                 return (
                     <Page>
-                        <Impiegati
-                            alertState={alertState}
-                            handleShowAlert={handleShowAlert}
-                            handleCloseAlert={handleCloseAlert} />
+                        <Impiegati />
                     </Page>
                 )
             },
@@ -91,10 +76,7 @@ function AppRoutes() {
             main: () => {
                 return (
                     <Page>
-                        <Lavori
-                            alertState={alertState}
-                            handleShowAlert={handleShowAlert}
-                            handleCloseAlert={handleCloseAlert} />
+                        <Lavori/>
                     </Page>
                 )
             },
@@ -118,10 +100,7 @@ function AppRoutes() {
             main: () => {
                 return (
                     <Page>
-                        <Articoli
-                            alertState={alertState}
-                            handleShowAlert={handleShowAlert}
-                            handleCloseAlert={handleCloseAlert} />
+                        <Articoli/>
                     </Page>
                 )
             },
@@ -152,7 +131,7 @@ function AppRoutes() {
                     id='row-router-body-page' >
                     <Col id='col-router-body-page'>
                         <div style={{display: 'flex'}}>
-                            <Redirect from='/' to='/commesse' />
+
                             {
                                 routes.map(
                                     (route) => (
@@ -180,19 +159,6 @@ function AppRoutes() {
                     </Col>
                 </Row>
             </Router>
-
-            <AlertContainer position="top-right">
-                {alertState.show ? (
-                    <Alert
-                        type="danger"
-                        headline="Errore"
-                        onDismiss={handleCloseAlert}
-                        showIcon={true} >
-                            {alertState.message}
-                    </Alert>
-                ) : null}
-            </AlertContainer>
-
         </div>
     )
 }

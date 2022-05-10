@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, ListGroup, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import '../css/simple-sidebar.css';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import ModalCredits from './ModalCredits';
 import PropTypes from 'prop-types'
 
@@ -15,7 +15,7 @@ const Sidebar = ({data}) => {
     const listItems = data.map((r) =>
         <NavItem key={r.id} href={r.path} >
             <Nav.Link as={Link} to={r.path}>
-                {r.text}
+                {useLocation().pathname === r.path ? (<u>{r.text}</u>) : r.text}
             </Nav.Link>
         </NavItem>,
     )

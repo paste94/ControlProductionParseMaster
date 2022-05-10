@@ -9,6 +9,7 @@ import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError';
+import AlertSuccess from '../../components/AlertSuccess';
 
 /** Pagina degli impiegati
  *
@@ -16,9 +17,21 @@ import AlertError from '../../components/AlertError';
  *                  - handleShowAlert (function) handler che mostra l'alert
  * @return {Component} il component creato
  */
-function Impiegati({handleShowAlert}) {
+function Impiegati() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+
+    const alerts = <>
+        <AlertError
+            show={error !== ''}
+            message={error}
+            handleClose={() => setError('')} />
+        <AlertSuccess
+            show={success !== ''}
+            message={success}
+            handleClose={() => setSuccess('')} />
+    </>
 
     // Stato dei modal, quando sono true sono visibili.
     const [modalState, setModalState] = useState({
@@ -95,7 +108,7 @@ function Impiegati({handleShowAlert}) {
     const handleDeleteConfirm = () => {
         const id = deleteId;
         setDeleteId('');
-        deleteImpiegato(id)
+        deleteImpiegato(id, setSuccess, setError)
         handleCloseConfirm()
     }
 
@@ -112,10 +125,7 @@ function Impiegati({handleShowAlert}) {
     /* RENDER */
     return (
         <div className='page'>
-            <AlertError
-                show={error !== ''}
-                message={error}
-                handleClose={ () => setError('') } />
+            {alerts}
             <Row className='align-items-center'>
                 <Col>
                     <Row className='ml-1'>
@@ -134,8 +144,7 @@ function Impiegati({handleShowAlert}) {
             <ImpiegatiTable
                 data={data}
                 handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                handleShowAlert={ handleShowAlert } />
+                handleEdit={handleEdit} />
 
             <ModalNewImpiegato
                 show={modalState.newImp}
@@ -166,7 +175,6 @@ function Impiegati({handleShowAlert}) {
 }
 
 Impiegati.propTypes = {
-    handleShowAlert: PropTypes.func.isRequired,
 }
 
 export default Impiegati;

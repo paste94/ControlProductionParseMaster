@@ -59,7 +59,6 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
                 const om = {}
                 macchineList.forEach(m => {
                     om[m.nome] = data === undefined ? 0 : data[m.nome]
-                    console.log([m.nome], '->', data === undefined ? 0 : data[m.nome])
                 })
                 setOreMacchina(om)
             },
@@ -78,7 +77,6 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
 
     const handleShow = () => {
         setShow(true)
-        console.log(data)
         initNewCommessa()
     }
     const handleClose = () => {
@@ -128,7 +126,6 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
             totPreventivo: totPreventivo,
             oreMacchina: Object.entries(om).map((e) => e),
         }
-        console.log('OBJ', obj)
         if (e.nativeEvent.submitter.id === 'primaryButton') {
             handleConfirm(obj)
             handleClose()
@@ -204,7 +201,6 @@ function ModalCommessaSingola({data, modalFrom, handleConfirm}) {
     function renderArticoli() {
         getAllArticoli(
             articoli => {
-                console.log(articoli)
                 const AR = articoli.map( art =>
                     <Dropdown.Item
                         key={art.id}

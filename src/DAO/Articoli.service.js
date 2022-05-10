@@ -84,15 +84,17 @@ function getAllArticoli(callback, callbackError) {
 /**
  * Aggiunge un articolo al DB
  * @param {Articolo} newArticolo L'articolo da aggiungere al DB
- * @param {function} callback Callback di successo
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
-function addArticolo(newArticolo, callback) {
+function addArticolo(newArticolo, successCallback, errorCallback) {
     const art = new Parse.Object(articoli)
     Object.keys(newArticolo).forEach( key => art.set(key, newArticolo[key]) )
     art.save()
             .then(
-                () => callback(),
-                (error) => console.error('ERRORE:', error.message) )
+                elem => callbackSuccess(`Commessa ${elem.attributes.numDisegno} salvata con successo`),
+                (error) => callbackSuccess(error.message),
+            )
 }
 
 /**

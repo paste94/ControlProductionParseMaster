@@ -97,14 +97,18 @@ async function getAllCommesse(callback, callbackError) {
  * Aggiunge una commesssa al database
  * @param {Commessa} newCommessa la commessa da aggiungere,
  *                      campi: {nome, numero, dataOfferta, dataConsegna}
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
-function addCommessa(newCommessa) {
+function addCommessa(newCommessa, successCallback, errorCallback) {
     const commessa = new Parse.Object(commesse)
     Object
         .keys(newCommessa)
         .forEach( key => commessa.set(key, newCommessa[key]) )
-    console.log('ADD*****', newCommessa)
-    commessa.save().catch(err => console.err('ERROR: ', err))
+    commessa.save().then(
+        elem => successCallback(`Commessa ${elem.attributes.numero} aggiunta con successo`),
+        err => errorCallback(err.message),
+    )
 }
 
 /**
@@ -118,11 +122,14 @@ function deleteCommessa(id, successCallback, errorCallback) {
     new Parse.Query(commesse)
         .get(id)
         .then(
-            elem =>{
-                elem.set('eliminato', true).save()
-                successCallback(`Commessa ${elem.attributes.numero} eliminata con successo`)
-            },
-            error => errorCallback('ERRORE:', error.message),
+            elem => elem.
+                set('eliminato', true).
+                save().
+                then(
+                    () => successCallback(`Commessa ${elem.attributes.numero} eliminata con successo`),
+                    error => callbackError(error.message),
+                ),
+            error => errorCallback(error.message),
         )
 }
 
@@ -139,10 +146,9 @@ function deleteCommessa(id, successCallback, errorCallback) {
         .then(
             elem => {
                 elem.set('archiviata', true).save()
-                console.log(elem.attributes)
                 successCallback(`Commessa ${elem.attributes.numero} archiviata con successo`)
             },
-            error => console.error('ERRORE:', error.message),
+            error => errorCallback(error.message),
         )
 }
 

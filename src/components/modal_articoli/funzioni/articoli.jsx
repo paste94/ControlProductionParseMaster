@@ -9,7 +9,6 @@ import React from 'react';
 function renderArticoli(onArticoloClick, callback) {
     getAllArticoli(
         articoli => {
-            console.log(articoli)
             const AR = articoli.map( art =>
                 <Dropdown.Item
                     key={art.id}

@@ -1,15 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import CommesseTable from './CommesseTable';
 import ModalNewCommessa from './ModalNewCommessa';
-import {
-    updateCommessa,
-    addCommessa,
-    subscribeCommesse,
-    unsubscribeCommesse,
-} from '../../DAO/Commesse.service'
+import { subscribeCommesse, unsubscribeCommesse } from '../../DAO/Commesse.service'
 import { Col, Row } from 'react-bootstrap';
-import AlertError from '../../components/AlertError'
+import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
+
 
 /**
  * Pagina delle commesse
@@ -21,36 +17,27 @@ function Commesse() {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
 
-    const handleAdd = (newCommessa) => {
-        addCommessa(
-            {
-                nome: newCommessa.nome,
-                numero: newCommessa.numero,
-                data_offerta: new Date(newCommessa.data_offerta),
-                data_consegna: new Date(newCommessa.data_consegna),
-                preventivo: [],
-                chiusa: false,
-            },
-        )
-    }
+    const alerts = <>
+        <AlertError
+            show={error !== ''}
+            message={error}
+            handleClose={() => setError('')} />
+        <AlertSuccess
+            show={success !== ''}
+            message={success}
+            handleClose={() => setSuccess('')} />
+    </>
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
-    useEffect(() => {
+    useEffect((s) => {
         subscribeCommesse(setData, setError);
         return unsubscribeCommesse;
     }, []);
 
     return (
         <div className='page'>
-            <AlertError
-                show={error !== ''}
-                message={error}
-                handleClose={ () => setError('') } />
-            <AlertSuccess
-                show={success !== ''}
-                message={success}
-                handleClose={ () => setSuccess('') } />
+            {alerts}
             <Row className='align-items-center'>
                 <Col>
                     <Row className='ml-1'>
@@ -58,20 +45,21 @@ function Commesse() {
                     </Row>
                 </Col>
                 <Col>
-                    <ModalNewCommessa
-                        handleAdd={handleAdd}/>
+                    <ModalNewCommessa setSuccess={setSuccess} setError={setError} />
                 </Col>
             </Row>
 
             <CommesseTable
                 data={data}
-                handleEdit={updateCommessa}
                 setSuccess={setSuccess}
                 setError={setError}
                  />
 
         </div>
     )
+}
+
+Commesse.propTypes = {
 }
 
 export default Commesse;

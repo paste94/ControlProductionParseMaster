@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next'
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
 import DeleteButton from '../../components/DeleteButton'
@@ -7,19 +7,28 @@ import { Row, Col, Button } from 'react-bootstrap'
 import { FaArrowUp, FaEye } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { unarchiveCommessa } from '../../DAO/CommesseArchiviate.service';
+import { deleteCommessaArchiviata, unarchiveCommessa } from '../../DAO/CommesseArchiviate.service';
 import ModalCloneCommessa from '../Commesse/ModalCloneCommessa';
+import { dateFormatter, timeFormatter } from '../../utils/dateTimeFormatter';
+import { subscribeCommesseArchiviate, unsubscribeCommesseArchiviate } from '../../DAO/CommesseArchiviate.service';
 
 /**
  * Definisce la tabella degli impiegati
  * @param {Object}  props Definisce le propertyes della tabella
  *                  - data (array) elenco degli elementi
- *                  - handleDelete (function) Gestisce l'eliminazione
- *                      dell'elemento
- *                  - handleEdit (function) Gestisce la modifica dell'elemento
  * @return {Component} il component creato
  */
-function CommesseArchiviateTable({data, handleDelete}) {
+function CommesseArchiviateTable({setSuccess, setError}) {
+    const [data, setData] = useState([])
+
+    // Il secondo parametro [] serve per farlo eseguire una volta
+    // sola quando avvii la pagina
+    useEffect(() => {
+        subscribeCommesseArchiviate(setData, setError);
+        return unsubscribeCommesseArchiviate;
+    }, []);
+
+
     // Definizione dei bottoni nell'ultima colonna
     const defineButtons = (cell, row, rowIndex, formatExtraData) => {
         const commessa = data[rowIndex]
@@ -44,7 +53,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
                         variant='link'
                         title="Rimuovi dall'archivio"
                         size='sm'
-                        onClick={ () => unarchiveCommessa(row.id) } >
+                        onClick={ () => unarchiveCommessa(row.id, setSuccess, setError) } >
                             <FaArrowUp style={{color: 'black'}}/>
                     </Button>
                 </Col>
@@ -55,7 +64,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
                 <Col lg='2' md='2' sm='2'>
                     <DeleteButton
                         title={'Elimina commessa'}
-                        handleConfirm={() => handleDelete(row.id)} >
+                        handleConfirm={() => deleteCommessaArchiviata(row.id, setSuccess, setError)} >
                             <p>Eliminare definitivamente la commessa?</p>
                     </DeleteButton>
                 </Col>
@@ -77,24 +86,12 @@ function CommesseArchiviateTable({data, handleDelete}) {
     }, {
         dataField: 'data_offerta',
         text: 'Data Offerta',
-        formatter: (cell) => {
-            if (cell == null || cell === '') {
-                return '-/-/-'
-            }
-            const [y, m, d] = cell.split('T')[0].split('-')
-            return d + '/' + m + '/' + y
-        },
+        formatter: dateFormatter,
         editor: {type: Type.DATE},
     }, {
         dataField: 'data_consegna',
         text: 'Data Consegna',
-        formatter: (cell) => {
-            if (cell == null || cell === '') {
-                return '-/-/-'
-            }
-            const [y, m, d] = cell.split('T')[0].split('-')
-            return d + '/' + m + '/' + y
-        },
+        formatter: dateFormatter,
         editor: {type: Type.DATE},
     }, {
         dataField: 'chiusa',
@@ -107,11 +104,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
     }, {
         dataField: 'minutiReali',
         text: 'Ore reali',
-        formatter: cell => {
-            const h = Math.floor(cell/60)
-            const min = Math.floor(cell-(h*60))
-            return h + 'h ' + min + 'm'
-        },
+        formatter: timeFormatter,
         editable: false,
     }, {
         dataField: 'totPreventivo',
@@ -130,9 +123,7 @@ function CommesseArchiviateTable({data, handleDelete}) {
     // TODO Snellisci questa funzione
     const rowStyle = (row, index) => {
         const style = {}
-        if (row.chiusa) {
-            style.backgroundColor='#00e676'
-        }
+        if (row.chiusa) style.backgroundColor='#00e676'
         return style
     }
 
@@ -160,8 +151,8 @@ function CommesseArchiviateTable({data, handleDelete}) {
 }
 
 CommesseArchiviateTable.propTypes = {
-    data: PropTypes.array,
-    handleDelete: PropTypes.func,
+    setSuccess: PropTypes.func,
+    setError: PropTypes.func,
 }
 
 export default CommesseArchiviateTable

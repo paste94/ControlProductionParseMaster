@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import ModalNuovoArticolo from '../../components/modal_articoli/ModalNuovoArticolo'
 import {
-    addArticolo,
     editArticolo,
     deleteArticolo,
-    getAllArticoli,
     subscribeArticoli,
     unsubscribeArticoli,
 } from '../../DAO/Articoli.service';
 import ArticoliTable from './ArticoliTable'
+import PropTypes from 'prop-types'
+import AlertError from '../../components/AlertError';
+import AlertSuccess from '../../components/AlertSuccess';
 
 /**
  * Pagina per la visualizzazione degli articoli salvati.
@@ -18,6 +19,19 @@ import ArticoliTable from './ArticoliTable'
 function Articoli() {
     // Dati della tabella
     const [data, setData] = useState([])
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+
+    const alerts = <>
+        <AlertError
+            show={error !== ''}
+            message={error}
+            handleClose={() => setError('')} />
+        <AlertSuccess
+            show={success !== ''}
+            message={success}
+            handleClose={() => setSuccess('')} />
+    </>
 
     /**
      * Modifica un articolo
@@ -43,6 +57,7 @@ function Articoli() {
 
     return (
         <div className='page'>
+            {alerts}
             <Row className='align-items-center'>
                 <Col>
                     <h1>Articoli</h1>
@@ -61,6 +76,9 @@ function Articoli() {
             </Row>
         </div>
     )
+}
+
+Articoli.propTypes = {
 }
 
 export default Articoli;

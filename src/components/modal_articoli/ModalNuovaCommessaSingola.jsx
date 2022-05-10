@@ -9,7 +9,8 @@ import { addPreventivo } from '../../DAO/Preventivo.service';
 import { addArticolo } from '../../DAO/Articoli.service';
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
 import PropTypes from 'prop-types'
-
+import AlertSuccess from '../AlertSuccess';
+import AlertError from '../../components/AlertError'
 
 /**
  * Definisce modal per l'aggiunta del preventivo
@@ -26,6 +27,8 @@ function ModalNuovaCommessaSingola({
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
+    const [success, setSuccess] = useState('')
+    const [error, setError] = useState('')
 
     const [renderedArticoli, setRenderedArticoli] = useState([])
     const [renderedMacchine, setRenderedMacchine] = useState([])
@@ -38,7 +41,6 @@ function ModalNuovaCommessaSingola({
      * @param {Articolo} articolo l'oggetto che rappresenta l'articolo
      */
      const onArticoloClick = (articolo) => {
-        console.log(articolo)
         setNumDisegno(articolo.numDisegno + '')
         setNumPezzi(articolo.numPezzi)
         setCostMat(articolo.costMat)
@@ -76,7 +78,7 @@ function ModalNuovaCommessaSingola({
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
         }
 
-        addArticolo(_articolo, handleHideModal)
+        addArticolo(_articolo, setSuccess, setError)
     }
 
     useEffect(() => {
@@ -118,6 +120,14 @@ function ModalNuovaCommessaSingola({
 
     return (
         <div>
+            <AlertError
+                show={error !== ''}
+                message={error}
+                handleClose={ () => setError('') } />
+            <AlertSuccess
+                show={success !== ''}
+                message={success}
+                handleClose={ () => setSuccess('') } />
             <Button
                 className='float-right vertical-center'
                 onClick={ handleShowModal }>

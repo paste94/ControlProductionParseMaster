@@ -97,14 +97,19 @@ function addImpiegato(newImpiegato) {
 /** Elimina l'impiegato selezionato
  *
  * @param {String} id ID dell'impiegato da eliminare.
+ * @param {function} successCallback
+ * @param {function} errorCallback
  */
-function deleteImpiegato(id) {
+function deleteImpiegato(id, successCallback, errorCallback) {
+    console.log(id)
     new Parse.Query(impiegati)
         .get(id)
         .then(
             elem => {
                 elem.set('eliminato', true)
-                    .save()
+                    .save().then(
+                        (elem) => successCallback(`Impiegato ${elem.attributes.nome} rimosso con successo`),
+                        (err) => errorCallback(err.message))
             })
 }
 

@@ -14,7 +14,7 @@ function Lavori() {
     const [elencoMacchine, setElencoMacchine] = useState([])
 
     useEffect(() => {
-        getMacchineLavori(setElencoMacchine)
+        //getMacchineLavori(setElencoMacchine)
         subscribeLavori(setData, (err) => console.error(err))
     }, [])
 

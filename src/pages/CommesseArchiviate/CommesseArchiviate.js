@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { Col, Row } from 'react-bootstrap';
-import AlertError from '../../components/AlertError'
 import CommesseArchiviateTable from './CommesseArchiviateTable';
-import { deleteCommessaArchiviata, subscribeCommesseArchiviate, unsubscribeCommesseArchiviate } from '../../DAO/CommesseArchiviate.service';
+import PropTypes from 'prop-types'
+import AlertError from '../../components/AlertError';
+import AlertSuccess from '../../components/AlertSuccess';
 
 /**
  * Pagina delle commesse
@@ -10,24 +11,22 @@ import { deleteCommessaArchiviata, subscribeCommesseArchiviate, unsubscribeComme
  * @return {Component} Il componente creato
  */
 function CommesseArchiviate() {
-    const [data, setData] = useState([])
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
 
-    const handleDelete = id => deleteCommessaArchiviata(id)
-
-    // Il secondo parametro [] serve per farlo eseguire una volta
-    // sola quando avvii la pagina
-    useEffect(() => {
-        subscribeCommesseArchiviate(setData, setError);
-        return unsubscribeCommesseArchiviate;
-    }, []);
-
+    const alerts = <>
+        <AlertError
+            show={error !== ''}
+            message={error}
+            handleClose={() => setError('')} />
+        <AlertSuccess
+            show={success !== ''}
+            message={success}
+            handleClose={() => setSuccess('')} />
+    </>
     return (
         <div className='page'>
-            <AlertError
-                show={error !== ''}
-                message={error}
-                handleClose={ () => setError('') } />
+            {alerts}
             <Row className='align-items-center'>
                 <Col>
                     <Row className='ml-1'>
@@ -37,10 +36,16 @@ function CommesseArchiviate() {
             </Row>
 
             <CommesseArchiviateTable
-                data={data}
-                handleDelete={handleDelete} />
+                setSuccess={setSuccess}
+                setError={setError}
+                />
         </div>
     )
+}
+
+CommesseArchiviate.propTypes = {
+    setSuccess: PropTypes.func,
+    setError: PropTypes.func,
 }
 
 export default CommesseArchiviate;
