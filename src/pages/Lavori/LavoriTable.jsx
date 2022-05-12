@@ -14,6 +14,7 @@ function LavoriTable({data}) {
     const [selectMacchine, setSelectMacchine] = useState({})
     const [selectNumCommessa, setSelectNumCommessa] = useState({})
     const [selectNumDisegno, setSelectNumDisegno] = useState({})
+    const [selectImpiegatoNome, setSelectImpiegatoNome] = useState({})
 
     const createFilter = (arr, field) => {
         const unique = [...new Set(arr.map(elem => elem[field]))].sort()
@@ -26,6 +27,7 @@ function LavoriTable({data}) {
         setSelectMacchine(createFilter(data, 'macchina'))
         setSelectNumCommessa(createFilter(data, 'commessaNome'))
         setSelectNumDisegno(createFilter(data, 'preventivoNome'))
+        setSelectImpiegatoNome(createFilter(data, 'impiegatoNome'))
     }, [data])
 
     const columns = [{
@@ -52,6 +54,13 @@ function LavoriTable({data}) {
         filter: multiSelectFilter({
             placeholder: 'Tutte',
             options: selectMacchine,
+        }),
+    }, {
+        dataField: 'impiegatoNome',
+        text: 'Impiegato',
+        filter: multiSelectFilter({
+            placeholder: 'Tutti',
+            options: selectImpiegatoNome,
         }),
     }, {
         dataField: 'inizio',
