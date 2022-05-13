@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { InputGroup, FormControl, DropdownButton, Form, Col, Dropdown } from 'react-bootstrap';
+import { InputGroup, FormControl, DropdownButton, Form, Col, Dropdown, ButtonGroup, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 
 // forwardRef again here!
@@ -18,7 +18,7 @@ const CustomMenu = React.forwardRef(
           <FormControl
             autoFocus
             className="mx-3 my-2 w-auto"
-            placeholder="Type to filter..."
+            placeholder="Cerca..."
             onChange={(e) => setValue(e.target.value)}
             value={value}
           />
@@ -70,21 +70,34 @@ function NumDisegno({
                     placeholder='Numero Disegno'
                     disabled={disabled}
                     onChange={onChange} />
-                        {!disabled && <DropdownButton
-                            as={ InputGroup.Append }
-                            title='Scegli'
-                            variant='secondary'
-                            disabled={ disabled }
-                            >
-                                <Dropdown.Menu as={CustomMenu}>
-                                    {articoliRender}
-                                </Dropdown.Menu>
-                        </DropdownButton>}
+                        {!disabled &&
+                            <Dropdown as={ButtonGroup}>
+                              <Dropdown.Toggle variant="success" id="dropdown-basic" style={{borderRadius:'0px 4px 4px 0px'}}>
+                                Scegli
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu as={CustomMenu}>
+                                {articoliRender}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                        }
                 </InputGroup>
             </Col>
         </Form.Row>
     )
 }
+
+/**
+ * <DropdownButton
+                              as={ InputGroup.Append }
+                              title='Scegli'
+                              variant='secondary'
+                              disabled={ disabled }
+                              >
+                                  <Dropdown.Menu as={CustomMenu}>
+                                      {articoliRender}
+                                  </Dropdown.Menu>
+                          </DropdownButton>
+ */
 
 NumDisegno.propTypes = {
     value: PropTypes.string,

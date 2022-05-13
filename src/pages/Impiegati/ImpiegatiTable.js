@@ -57,6 +57,7 @@ function ImpiegatiTable({data, handleEdit, handleDelete}) {
     }, {
         dataField: 'nome',
         text: 'Nome',
+        editable: false,
     }, {
         dataField: 'chip',
         text: 'Chip',
