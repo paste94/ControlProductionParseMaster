@@ -102,18 +102,11 @@ async function getAllCommesseArchiviate(callback, callbackError) {
  * @param {function} errorCallback
  */
  function unarchiveCommessa(id, successCallback, errorCallback) {
-    new Parse.Query(commesse)
-        .get(id)
-        .then(
-            elem => elem.
-                set('archiviata', false).
-                save().
-                then(
-                    () => successCallback(`Commessa ${elem.attributes.numero} rimossa dall'archivio`),
-                    error => errorCallback(error.message),
-                ),
-            error => errorCallback(error.message),
-        )
+    Parse.Cloud.run('disarchiviaCommessa', {'id': id})
+    .then(
+        () => successCallback( `Commessa archiviata con successo` ),
+        err => errorCallback('ERRORE:', err.message),
+    )
 }
 
 /**

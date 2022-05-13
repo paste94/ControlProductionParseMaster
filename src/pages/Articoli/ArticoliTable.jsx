@@ -53,6 +53,9 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
             dataField: 'azioni',
             text: 'Azioni',
             formatter: defineButtons,
+            headerStyle: (colum, colIndex) => {
+                return { width: '120px'};
+            },
         },
     ];
 

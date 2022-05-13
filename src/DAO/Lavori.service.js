@@ -63,6 +63,7 @@ let subscription;
  function getAllLavori(callback, callbackError) {
     new Parse.Query(lavori)
         .notEqualTo('eliminato', true)
+        .notEqualTo('archiviato', true)
         .find()
         .then( result => {
             const data = []

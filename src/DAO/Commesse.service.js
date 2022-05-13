@@ -141,15 +141,11 @@ function deleteCommessa(id, successCallback, errorCallback) {
  * @param {function} errorCallback
  */
  function archiveCommessa(id, successCallback, errorCallback) {
-    new Parse.Query(commesse)
-        .get(id)
-        .then(
-            elem => {
-                elem.set('archiviata', true).save()
-                successCallback(`Commessa ${elem.attributes.numero} archiviata con successo`)
-            },
-            error => errorCallback(error.message),
-        )
+    Parse.Cloud.run('archiviaCommessa', {'id': id})
+    .then(
+        () => successCallback( `Commessa archiviata con successo` ),
+        err => errorCallback('ERRORE:', err.message),
+    )
 }
 
 /**
