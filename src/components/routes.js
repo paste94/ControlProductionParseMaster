@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import {HashRouter as Router, Redirect, Route } from 'react-router-dom'
 import Page from '../pages/Page'
 import Sidebar from './Sidebar'
 import Impiegati from '../pages/Impiegati/Impiegati'
@@ -13,8 +13,6 @@ import Impostazioni from '../pages/Impostazioni/impostazioni'
 import { Parse } from '../DAO/http-common'
 import CommesseArchiviate from '../pages/CommesseArchiviate/CommesseArchiviate'
 import { Col, Row } from 'react-bootstrap'
-import AlertError from './AlertError'
-import AlertSuccess from './AlertSuccess'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
@@ -131,8 +129,14 @@ function AppRoutes() {
                     id='row-router-body-page' >
                     <Col id='col-router-body-page'>
                         <div style={{display: 'flex'}}>
-
-                            {
+                        <Route
+                            exact
+                            path='/'
+                            render={() => {
+                                return <Redirect to='/commesse' />
+                            }}
+                        />
+                        {
                                 routes.map(
                                     (route) => (
                                         <Route
@@ -145,6 +149,7 @@ function AppRoutes() {
                                 )
                             }
                             <Route
+                                exact
                                 key='100'
                                 path='/commessasingola'
                                 component={(props)=>{
