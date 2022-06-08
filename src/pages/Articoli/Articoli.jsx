@@ -8,7 +8,7 @@ import {
     unsubscribeArticoli,
 } from '../../DAO/Articoli.service';
 import ArticoliTable from './ArticoliTable'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
 

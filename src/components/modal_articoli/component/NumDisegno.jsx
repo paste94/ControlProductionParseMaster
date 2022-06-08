@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { InputGroup, FormControl, DropdownButton, Form, Col, Dropdown, ButtonGroup, Button } from 'react-bootstrap';
+import { InputGroup, FormControl, Form, Col, Dropdown, ButtonGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 
 // forwardRef again here!
@@ -72,7 +72,7 @@ function NumDisegno({
                     onChange={onChange} />
                         {!disabled &&
                             <Dropdown as={ButtonGroup}>
-                              <Dropdown.Toggle variant="success" id="dropdown-basic" style={{borderRadius:'0px 4px 4px 0px'}}>
+                              <Dropdown.Toggle variant="success" id="dropdown-basic" style={{borderRadius: '0px 4px 4px 0px'}}>
                                 Scegli
                               </Dropdown.Toggle>
                               <Dropdown.Menu as={CustomMenu}>

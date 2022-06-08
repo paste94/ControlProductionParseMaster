@@ -1,8 +1,7 @@
 import React from 'react';
-import { Container, ListGroup, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
+import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import '../css/simple-sidebar.css';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import ModalCredits from './ModalCredits';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types'
 
 /**

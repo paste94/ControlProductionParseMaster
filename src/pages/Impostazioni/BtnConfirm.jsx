@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { FaTrash } from 'react-icons/fa'
 import ModalConfirm from '../../components/ModalConfirm'
 
 /**
@@ -18,6 +17,8 @@ function BtnConfirm({
     title,
     children,
     handleConfirm,
+    variant,
+    text,
 }) {
     const [show, setShow] = useState(false)
 
@@ -26,7 +27,8 @@ function BtnConfirm({
 
             <Button
                 onClick={ () => setShow(true)}
-                title={title}>
+                title={title}
+                variant={variant}>
                     {children}
             </Button>
 
@@ -36,7 +38,7 @@ function BtnConfirm({
                 handleConfirm={ () => handleConfirm(setShow(false)) }
                 handleClose={ () => setShow(false) } >
                     <p style={{color: 'red'}}>
-                        <b>Attenzione!</b> Questa operazione non può essere annullata, se non si è certi delle conseguenze NON confermare!
+                        <b>Attenzione!</b> {text}
                     </p>
                 </ModalConfirm>
         </div>
@@ -48,6 +50,8 @@ BtnConfirm.propTypes = {
     handleConfirm: PropTypes.func.isRequired,
     title: PropTypes.string,
     children: PropTypes.object,
+    variant: PropTypes.string,
+    text: PropTypes.string,
 }
 
 export default BtnConfirm

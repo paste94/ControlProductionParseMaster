@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next'
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
+import cellEditFactory from 'react-bootstrap-table2-editor'
 import DeleteButton from '../../components/DeleteButton'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import { Row, Col, Button } from 'react-bootstrap'

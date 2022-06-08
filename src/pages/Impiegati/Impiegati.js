@@ -7,7 +7,6 @@ import ModalChip from './ModalChip';
 import ModalNewImpiegato from './ModalNewImpiegato';
 import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
-import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
 

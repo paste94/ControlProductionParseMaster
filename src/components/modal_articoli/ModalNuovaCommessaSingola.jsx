@@ -19,11 +19,13 @@ import AlertError from '../../components/AlertError'
 function ModalNuovaCommessaSingola({
     commessaId,
 }) {
+    const DEFAULT_COSTO_ORARIO = localStorage.getItem('DefaultCostMat') ?? 0
+
     const [show, setShow] = useState(false);
     const [numDisegno, setNumDisegno] = useState('');
     const [numPezzi, setNumPezzi] = useState(1);
     const [costMat, setCostMat] = useState(0);
-    const [costoOrario, setCostoOrario] = useState(42)
+    const [costoOrario, setCostoOrario] = useState(DEFAULT_COSTO_ORARIO)
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
@@ -90,7 +92,7 @@ function ModalNuovaCommessaSingola({
         setNumDisegno('')
         setNumPezzi(0)
         setCostMat(0)
-        setCostoOrario(0)
+        setCostoOrario(DEFAULT_COSTO_ORARIO)
         setTotOre(0)
         setTotPreventivo(0)
         const newArr = [...oreMacchina]

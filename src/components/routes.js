@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {HashRouter as Router, Redirect, Route } from 'react-router-dom'
 import Page from '../pages/Page'
 import Sidebar from './Sidebar'
@@ -21,12 +21,9 @@ import { Col, Row } from 'react-bootstrap'
  * @return {Component} il componente creato
  */
 function AppRoutes() {
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
-
     useEffect(() => {
         Parse.LiveQuery.on('error', (error) => {
-            setError(`Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`)
+            console.log(`Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`)
         });
     }, [])
 

@@ -144,7 +144,7 @@ function getLavori(
 }
 
 
-export { 
+export {
     getLavori,
     getMacchineLavori,
     subscribeLavori,

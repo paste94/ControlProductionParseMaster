@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
 import BtnConfirm from './BtnConfirm';
 import packageJson from '../../../package.json';
-
+import { FaCheck, FaTimes } from 'react-icons/fa';
 
 /**
  * Pagina per la visualizzazione degli articoli salvati.
@@ -10,22 +10,29 @@ import packageJson from '../../../package.json';
  */
 function Impostazioni() {
     const [serverUrl, setServerUrl] = useState('')
+    const [defaultCostOrario, setDefaultCostOrario] = useState(0)
 
-    const handleResetDefaultSettings = (callback) => {
+    const handleResetServerURL = (callback) => {
         localStorage.setItem('ServerUrl', 'http://localhost:1337')
         setServerUrl(localStorage.getItem('ServerUrl'))
         callback
     }
 
-    const handleSaveSettings = (callback) => {
-        console.log('SAVE', serverUrl)
+    const handleSaveServerURL = (callback) => {
         localStorage.setItem('ServerUrl', serverUrl)
+        callback
+    }
+
+    const handleSaveDefaultCostOrario = (callback) => {
+        localStorage.setItem('DefaultCostOrario', defaultCostOrario)
         callback
     }
 
     useEffect(() => {
         const _url = localStorage.getItem('ServerUrl')
+        const _defaultCostOrario = localStorage.getItem('DefaultCostOrario') ?? 0
         setServerUrl(_url)
+        setDefaultCostOrario(_defaultCostOrario)
     }, [])
 
     // TODO: Aggiungi pagina di changelog
@@ -36,26 +43,6 @@ function Impostazioni() {
                 <Col>
                     <h1>Impostazioni</h1>
                 </Col>
-                <Row
-                    style={{
-                        marginRight: '0px',
-                    }}
-                    className='float-right vertical-center' >
-                    <Col>
-                        <BtnConfirm
-                            handleConfirm={handleSaveSettings}
-                            title={'Salvare le nuove impostzioni?'} >
-                            Salva
-                        </BtnConfirm>
-                    </Col>
-                    <Col>
-                        <BtnConfirm
-                            handleConfirm={handleResetDefaultSettings}
-                            title={'Resettare le impostazioni di default?'}>
-                                Reset
-                        </BtnConfirm>
-                    </Col>
-                </Row>
             </Row>
             <br/>
             <Row>
@@ -64,9 +51,44 @@ function Impostazioni() {
                 </Col>
                 <Col>
                     <InputGroup>
-                    <FormControl
-                        onChange={ (e) => setServerUrl(e.target.value)}
-                        value={serverUrl} />
+                        <FormControl
+                            onChange={ (e) => setServerUrl(e.target.value)}
+                            value={serverUrl} />
+                        <BtnConfirm
+                            handleConfirm={handleSaveServerURL}
+                            title='Salva modifiche'
+                            variant="outline-success"
+                            text="Questa operazione non può essere annullata, se non si è certi delle conseguenze NON confermare!">
+                                <FaCheck/>
+                        </BtnConfirm>
+                        <BtnConfirm
+                            handleConfirm={handleResetServerURL}
+                            variant="outline-danger"
+                            title="Reset"
+                            text="Questa operazione non può essere annullata, se non si è certi delle conseguenze NON confermare!">
+                                <FaTimes/>
+                        </BtnConfirm>
+                    </InputGroup>
+                </Col>
+            </Row>
+            <br/>
+            <Row>
+                <Col lg='4' md='4' sm='4'>
+                    <Form.Label>Default costo orario (€)</Form.Label>
+                </Col>
+                <Col>
+                    <InputGroup>
+                        <FormControl
+                            onChange={ (e) => setDefaultCostOrario(e.target.value)}
+                            value={defaultCostOrario}
+                            type='number'/>
+                        <BtnConfirm
+                            handleConfirm={handleSaveDefaultCostOrario}
+                            title='Salva modifiche'
+                            variant="outline-success"
+                            text={`Modificare il costo di default dei materiali a ${defaultCostOrario} €?`}>
+                                <FaCheck/>
+                        </BtnConfirm>
                     </InputGroup>
                 </Col>
             </Row>

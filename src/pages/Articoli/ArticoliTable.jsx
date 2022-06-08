@@ -62,10 +62,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
     // Definisce cosa mostrare quando la riga nella tabella viene espansa
     const expandRow = {
         renderer: row => {
-            console.log('ROW', row)
             let macchineValue = ''
-
-            console.log(row['oreMacchina'])
 
             if (row.oreMacchina != undefined && row.oreMacchina) {
                 Object.entries(row.oreMacchina.map(e => {
@@ -94,7 +91,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
         },
         showExpandColumn: true,
         expandByColumnOnly: true,
-        expandHeaderColumnRenderer: ({ isAnyExpands }) => { // TODO Snellisci
+        expandHeaderColumnRenderer: ({ isAnyExpands }) => {
             if (isAnyExpands) return <FaCaretDown/>;
             else return <FaCaretRight/>;
         },
