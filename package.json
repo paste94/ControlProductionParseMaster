@@ -54,6 +54,10 @@
     "react:test": "react-scripts test",
     "react:eject": "react-scripts eject",
     "electron:build": "electron-builder",
+    "electron:buildw32": "electron-builder --ia32 -w",
+    "electron:buildw64": "electron-builder --x64 -w",
+    "buildwin32": "npm run react:build && npm run electron:buildw32",
+    "buildwin64": "npm run react:build && npm run electron:buildw64",
     "release": "npm run react:build && npm run electron-builder --publish=always",
     "build": "npm run react:build && npm run electron:build",
     "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\""
@@ -78,10 +82,10 @@
   "devDependencies": {
     "concurrently": "^5.3.0",
     "electron": "^11.5.0",
-    "electron-builder": "^22.9.1",
     "electron-packager": "^15.2.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.22.0",
-    "wait-on": "^5.2.0"
+    "wait-on": "^5.2.0",
+    "electron-builder": "^23.0.3"
   }
 }
