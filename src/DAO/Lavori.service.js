@@ -12,37 +12,41 @@ let subscription;
     subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('lavori opened');
+        // console.log('lavori opened');
         getAllLavori(callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('lavoro created: ', object);
+        // console.log('lavoro created: ', object);
         getAllLavori(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('lavoro updated', object);
+        // console.log('lavoro updated', object);
         getAllLavori(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('lavoro entered', object);
+        // console.log('lavoro entered', object);
         getAllLavori(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('lavoro left', object);
+        // console.log('lavoro left', object);
         getAllLavori(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('lavoro deleted', object);
+        // console.log('lavoro deleted', object);
         getAllLavori(callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription lavoro closed');
+        // console.log('subscription lavoro closed');
+    });
+
+    Parse.LiveQuery.on('error', (error) => {
+        console.error(error);
     });
 }
 
@@ -75,7 +79,7 @@ let subscription;
             })
             callback(data)
         }, (error) => {
-            console.log('ERRORE:', error)
+            console.error('ERRORE:', error)
             callbackError(error.message)
         })
 }
