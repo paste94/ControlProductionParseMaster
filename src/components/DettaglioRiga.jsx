@@ -15,8 +15,8 @@ function DettaglioRiga({k, v}) {
                 style={{
                     paddingTop: '5px',
                     paddingBottom: '5px',
-                }}
-                md='4' >
+                    flex: '0 0 230px',
+                }}>
                     {k}
             </Col>
             <Col

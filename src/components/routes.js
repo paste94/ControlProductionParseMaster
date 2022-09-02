@@ -150,11 +150,15 @@ function AppRoutes() {
                                 key='100'
                                 path='/commessasingola'
                                 component={(props)=>{
-                                    return (
-                                        <Page>
-                                            <CommessaSingola commessa={props.location.state.commessa}/>
-                                        </Page>
-                                    )
+                                    try { // If there is no commessa, it returns the commesse mainpage
+                                        return (
+                                            <Page>
+                                                <CommessaSingola commessa={props.location.state.commessa}/>
+                                            </Page>
+                                        )
+                                    } catch (err) {
+                                        return <Redirect to='/commesse' />
+                                    }
                                 }}
                             />
                         </div>

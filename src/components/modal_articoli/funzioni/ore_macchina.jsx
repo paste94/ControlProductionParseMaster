@@ -28,7 +28,7 @@ function renderMacchine(oreMacchina, setOreMacchina, callback) {
     const renderer = oreMacchina.map( (m, i) =>
         <div key={i}>
             <OreMacchina
-                value={m.ore}
+                value={m.ore.toString()}
                 onChange={ (e) => {
                     const newArr = [...oreMacchina]
                     newArr[i].ore = parseFloat(e.target.value)

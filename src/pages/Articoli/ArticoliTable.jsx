@@ -83,7 +83,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
                         v={'€ ' + row['costoOrario']}
                     />
                     <DettaglioRiga
-                        k='Macchine: '
+                        k='Tempo Macchine: '
                         v={macchineValue}
                     />
                 </div>

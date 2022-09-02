@@ -155,11 +155,11 @@ function ModalNuovaCommessaSingola({
                                 />
                                 <br/>
                                 <NumPezzi
-                                    value={numPezzi}
+                                    value={numPezzi.toString()}
                                     onChange={(e) => setNumPezzi(e.target.value)} />
                                 <br/>
                                  <CostMat
-                                    value={costMat}
+                                    value={costMat.toString()}
                                     onChange={(e) => setCostMat(e.target.value)} />
                                 <br/>
                                 <CostoOrario
