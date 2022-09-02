@@ -130,7 +130,7 @@ function CommesseTable({data, setSuccess, setError}) {
         text: 'Azioni',
         formatter: defineButtons,
         headerStyle: (colum, colIndex) => {
-            return { width: '200px', textAlign: 'center' };
+            return { width: '250px', textAlign: 'center' };
         },
         editable: false,
     }];

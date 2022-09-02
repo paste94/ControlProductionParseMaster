@@ -116,7 +116,7 @@ function Impiegati() {
     // Il secondo parametro [] serve per farlo eseguire una
     // volta sola quando avvii la pagina
     useEffect(() => {
-        subscribeImpiegati(setData, (err) => console.log('ERROR Impiegati.jsx', err))
+        subscribeImpiegati(setData, (err) => console.error('ERROR Impiegati.jsx', err))
         return unsubscribeImpiegati
     }, []);
 

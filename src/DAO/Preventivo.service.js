@@ -13,41 +13,41 @@ let subscription;
     subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('Preventivo opened');
+        // console.log('Preventivo opened');
         getAllPreventivi(commessaId, callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('Preventivo created: ', object);
+        // console.log('Preventivo created: ', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('Preventivo updated', object);
+        // console.log('Preventivo updated', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('Preventivo entered', object);
+        // console.log('Preventivo entered', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('Preventivo left', object);
+        // console.log('Preventivo left', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('Preventivo deleted', object);
+        // console.log('Preventivo deleted', object);
         getAllPreventivi(commessaId, callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription Preventivo closed');
+        // console.log('subscription Preventivo closed');
     });
 
     subscription.on('error', () => {
-        console.log('ERROR');
+        console.error('ERROR');
     });
 }
 
@@ -73,7 +73,7 @@ function addPreventivo(newPreventivo, commessaId, callback) {
         .keys(newPreventivo)
         .forEach(
             key => {
-                console.log(key, '->', newPreventivo[key])
+                // console.log(key, '->', newPreventivo[key])
                 prev.set(key, newPreventivo[key])
             },
         )
@@ -107,7 +107,6 @@ async function getAllPreventivi(commessaId, callback, callbackError) {
             console.error('ERRORE:', error)
             callbackError(error.message)
         })
-        .catch(() => console.log('CATCH'))
 }
 
 /**

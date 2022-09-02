@@ -27,7 +27,7 @@ function CommessaSingola({commessa}) {
         if (commessa.archiviata) {
             setBackDestination('/commesse_archiviate')
         }
-        subscribePreventivo(commessa.id, setData, () => console.log('error'));
+        subscribePreventivo(commessa.id, setData, (err) => console.error('error', err));
         return unsubscribePreventivo;
     }, [commessa.id])
 

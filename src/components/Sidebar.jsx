@@ -12,9 +12,13 @@ import PropTypes from 'prop-types'
  */
 const Sidebar = ({data}) => {
     const listItems = data.map((r) =>
-        <NavItem key={r.id} href={r.path} >
-            <Nav.Link as={Link} to={r.path}>
-                {useLocation().pathname === r.path ? (<u>{r.text}</u>) : r.text}
+        <NavItem style={{
+            background: useLocation().pathname === r.path ? '#0d6efd44' : '#00000000',
+            borderRadius: '8px',
+            marginLeft: '5px',
+        }} key={r.id} href={r.path}>
+            <Nav.Link as={Link} to={r.path} >
+                {r.text}
             </Nav.Link>
         </NavItem>,
     )

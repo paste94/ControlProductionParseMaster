@@ -12,37 +12,41 @@ let subscription;
     subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('Macchine opened');
+        // console.log('Macchine opened');
         getAllMacchine(callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('macchina created: ', object);
+        // console.log('macchina created: ', object);
         getAllMacchine(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('macchina updated', object);
+        // console.log('macchina updated', object);
         getAllMacchine(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('macchina entered', object);
+        // console.log('macchina entered', object);
         getAllMacchine(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('macchina left', object);
+        // console.log('macchina left', object);
         getAllMacchine(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('macchina deleted', object);
+        // console.log('macchina deleted', object);
         getAllMacchine(callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription macchina closed');
+        // console.log('subscription macchina closed');
+    });
+
+    Parse.LiveQuery.on('error', (error) => {
+        console.error(error);
     });
 }
 
@@ -75,7 +79,7 @@ function getAllMacchine(callback, callbackError) {
             })
             callback(data)
         }, (error) => {
-            console.log('ERRORE:', error)
+            console.error('ERRORE:', error)
             callbackError(error.message)
         })
 }

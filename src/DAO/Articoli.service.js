@@ -12,37 +12,41 @@ async function subscribeArticoli(callback, callbackError) {
     subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('articoli opened');
+        // console.log('articoli opened');
         getAllArticoli(callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('Articoli created: ', object);
+        // console.log('Articoli created: ', object);
         getAllArticoli(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('Articoli updated', object);
+        // console.log('Articoli updated', object);
         getAllArticoli(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('Articoli entered', object);
+        // console.log('Articoli entered', object);
         getAllArticoli(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('Articoli left', object);
+        // console.log('Articoli left', object);
         getAllArticoli(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('Articoli deleted', object);
+        // console.log('Articoli deleted', object);
         getAllArticoli(callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription Articoli closed');
+        // console.log('subscription Articoli closed');
+    });
+
+    Parse.LiveQuery.on('error', (error) => {
+        console.error(error);
     });
 }
 

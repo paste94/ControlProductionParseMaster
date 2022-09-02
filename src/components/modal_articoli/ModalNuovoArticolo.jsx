@@ -56,8 +56,7 @@ function ModalNuovoArticolo() {
             totPreventivo: totPreventivo.toString(),
             oreMacchina: oreMacchina.filter(m => m.ore > 0),
         }
-
-        addArticolo(_articolo, handleHideModal, console.log)
+        addArticolo(_articolo, handleHideModal, console.error)
     }
 
     useEffect(() => {

@@ -23,7 +23,7 @@ import { Col, Row } from 'react-bootstrap'
 function AppRoutes() {
     useEffect(() => {
         Parse.LiveQuery.on('error', (error) => {
-            console.log(`Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`)
+            console.error(`Errore di connessione al server ${error.currentTarget.url}. Verificare che l'indirizzo sia corretto nela pagina "impostazioni" e riavviare il programma per rendere effettive le modifiche.`)
         });
     }, [])
 

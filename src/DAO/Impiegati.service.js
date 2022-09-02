@@ -12,37 +12,41 @@ let subscription;
     subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('Impiegati opened');
+        // console.log('Impiegati opened');
         getAllImpiegati(callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('impiegato created: ', object);
+        // console.log('impiegato created: ', object);
         getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('impiegato updated', object);
+        // console.log('impiegato updated', object);
         getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('impiegato entered', object);
+        // console.log('impiegato entered', object);
         getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('impiegato left', object);
+        // console.log('impiegato left', object);
         getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('impiegato deleted', object);
+        // console.log('impiegato deleted', object);
         getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription impiegato closed');
+        // console.log('subscription impiegato closed');
+    });
+
+    Parse.LiveQuery.on('error', (error) => {
+        console.error(error);
     });
 }
 
@@ -101,7 +105,6 @@ function addImpiegato(newImpiegato) {
  * @param {function} errorCallback
  */
 function deleteImpiegato(id, successCallback, errorCallback) {
-    console.log(id)
     new Parse.Query(impiegati)
         .get(id)
         .then(

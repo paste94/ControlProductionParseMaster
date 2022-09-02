@@ -12,41 +12,41 @@ async function subscribeCommesse(callback, callbackError) {
     subscription = await query.subscribe();
 
     subscription.on('open', () => {
-        console.log('commesse opened');
+        // console.log('commesse opened');
         getAllCommesse(callback, callbackError)
     })
 
     subscription.on('create', (object) => {
-        console.log('commesse created: ', object);
+        // console.log('commesse created: ', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
-        console.log('commesse updated', object);
+        // console.log('commesse updated', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
-        console.log('commesse entered', object);
+        // console.log('commesse entered', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
-        console.log('commesse left', object);
+        // console.log('commesse left', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
-        console.log('commesse deleted', object);
+        // console.log('commesse deleted', object);
         getAllCommesse(callback, callbackError);
     });
 
     subscription.on('close', () => {
-        console.log('subscription commesse closed');
+        // console.log('subscription commesse closed');
     });
 
     Parse.LiveQuery.on('error', (error) => {
-        console.log(error);
+        console.error(error);
     });
 }
 
