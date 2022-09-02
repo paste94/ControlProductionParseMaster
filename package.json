@@ -60,7 +60,8 @@
     "buildwin64": "npm run react:build && npm run electron:buildw64",
     "release": "npm run react:build && npm run electron-builder --publish=always",
     "build": "npm run react:build && npm run electron:build",
-    "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\""
+    "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\"",
+    "test":"jest"
   },
   "build": {
     "appId": "com.controlproduction.master"
@@ -82,10 +83,11 @@
   "devDependencies": {
     "concurrently": "^5.3.0",
     "electron": "^11.5.0",
+    "electron-builder": "^23.0.3",
     "electron-packager": "^15.2.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.22.0",
-    "wait-on": "^5.2.0",
-    "electron-builder": "^23.0.3"
+    "jest": "^26.6.0",
+    "wait-on": "^5.2.0"
   }
 }
