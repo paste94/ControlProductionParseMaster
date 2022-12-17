@@ -94,6 +94,20 @@ async function getAllCommesse(callback, callbackError) {
 }
 
 /**
+ * Trova la commessa dato un certo ID
+ * @param {String} objectId l'Id della commessa
+ * @param {function} successCallback
+ * @param {function} errorCallback
+ */
+function getCommessa(objectId, successCallback, errorCallback) {
+    const commessa = new Parse.Query(commesse)
+    commessa.get(objectId).then(
+        elem => successCallback(elem),
+        err => errorCallback(err.message),
+    )
+}
+
+/**
  * Aggiunge una commesssa al database
  * @param {Commessa} newCommessa la commessa da aggiungere,
  *                      campi: {nome, numero, dataOfferta, dataConsegna}
@@ -106,7 +120,7 @@ function addCommessa(newCommessa, successCallback, errorCallback) {
         .keys(newCommessa)
         .forEach( key => commessa.set(key, newCommessa[key]) )
     commessa.save().then(
-        elem => successCallback(`Commessa ${elem.attributes.numero} aggiunta con successo`),
+        elem => successCallback(elem.id),
         err => errorCallback(err.message),
     )
 }
@@ -200,4 +214,5 @@ export {
     unsubscribeCommesse,
     archiveCommessa,
     cloneCommessa,
+    getCommessa,
 };

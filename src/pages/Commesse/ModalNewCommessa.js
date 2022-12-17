@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
-import { addCommessa } from '../../DAO/Commesse.service';
+import { addCommessa, getCommessa } from '../../DAO/Commesse.service';
+import { useHistory } from 'react-router';
 
 /**
  * Modal specifico per l'aggiunta della commessa
@@ -9,6 +10,7 @@ import { addCommessa } from '../../DAO/Commesse.service';
  * @return {Component} il componente
  */
 function ModalNewCommessa({ setSuccess, setError}) {
+    const history = useHistory();
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: '',
@@ -37,6 +39,21 @@ function ModalNewCommessa({ setSuccess, setError}) {
     const handleChangeDataConsegna = (event) =>
         setNewCommessa({...newCommessa, data_consegna: event.target.value})
 
+    /**
+     * Funzione che apre la funestra della commessa singola.
+     * @param {String} commessaId ID dell'oggetto commessa. Questo ID è quello dell'oggetto univoco!
+     */
+    const openCommessaSingolaView = (commessaId) => {
+        getCommessa(
+            commessaId,
+            c => history.push({
+                pathname: '/commessasingola',
+                state: {commessa: c.attributes},
+            }),
+            setError,
+        )
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         addCommessa(
@@ -48,7 +65,7 @@ function ModalNewCommessa({ setSuccess, setError}) {
                 preventivo: [],
                 chiusa: false,
             },
-            setSuccess,
+            openCommessaSingolaView,
             setError,
         )
         handleClose()
