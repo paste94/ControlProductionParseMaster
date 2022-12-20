@@ -50,10 +50,10 @@ function ModalNuovaCommessaSingola({
     }
 
     /**
-     * @param {Event} e L'evento di bubmit
+     * @param {Event} e L'evento di submit
      */
     const handleSubmit = (e) => {
-        // Evito che la pagina venga ricaricata topo il confirm del form
+        // Evito che la pagina venga ricaricata dopo il confirm del form
         e.preventDefault();
 
         const _articolo = {

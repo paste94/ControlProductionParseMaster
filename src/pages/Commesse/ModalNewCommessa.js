@@ -44,12 +44,17 @@ function ModalNewCommessa({ setSuccess, setError}) {
      * @param {String} commessaId ID dell'oggetto commessa. Questo ID è quello dell'oggetto univoco!
      */
     const openCommessaSingolaView = (commessaId) => {
+        console.log(commessaId)
         getCommessa(
             commessaId,
-            c => history.push({
+            c => {
+                console.log(c.attributes)
+                history.push({
                 pathname: '/commessasingola',
-                state: {commessa: c.attributes},
-            }),
+                // Aggiungo all'oggetto un attributo 'id' che serve al component
+                state: {commessa: {id: commessaId, ...c.attributes}},
+            })
+        },
             setError,
         )
     }

@@ -150,6 +150,8 @@ function AppRoutes() {
                                 key='100'
                                 path='/commessasingola'
                                 component={(props)=>{
+                                    // Questa porzione di codice serve per reindirizzare la route sulla commessa singola
+                                    // al click sull'icona dell'occhio
                                     try { // If there is no commessa, it returns the commesse mainpage
                                         return (
                                             <Page>
