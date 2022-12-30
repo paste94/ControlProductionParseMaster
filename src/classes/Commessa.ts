@@ -1,129 +1,175 @@
+import { Parse } from "../DAO/http-common";
+
 class Commessa {
-    private _id: string;
-    private _nome: string;
-    private _numero: string;
-    private _data_offerta: Date;
-    private _data_consegna: Date;
-    private _chiusa: boolean;
-    private _totPreventivo: number;
-    private _totOre: number;
-    private _preventivo: number;
-    private _archiviata: boolean;
-    private _minutiReali: number;
-   
+    nome: string;
+    numero: string;
+    data_offerta: Date;
+    data_consegna: Date;
+    id?: string; 
+    chiusa: boolean = false;
+    totPreventivo: number = 0;
+    totOre: number = 0;
+    // _preventivo: any[]
+    archiviata: boolean = false;
+    minutiReali: number = 0;
+
+    constructor(commessa: Parse.Object<Parse.Attributes>);
     constructor(
-        id: string,
         nome: string,
         numero: string,
         data_offerta: Date,
         data_consegna: Date,
-        chiusa: boolean,
-        totPreventivo: number,
-        totOre: number,
-        preventivo: number,
-        archiviata: boolean,
-        minutiReali: number,
-        ) {
-            this._id = id;
-            this._nome = nome;
-            this._numero = numero;
-            this._data_offerta = data_offerta;
-            this._data_consegna = data_consegna;
-            this._chiusa = chiusa;
-            this._totPreventivo = totPreventivo;
-            this._totOre = totOre;
-            this._preventivo = preventivo;
-            this._archiviata = archiviata;
-            this._minutiReali = minutiReali;
+        id?: string,
+        chiusa?: boolean,
+        totPreventivo?: number,
+        totOre?: number,
+        //preventivo: any[],
+        archiviata?: boolean,
+        minutiReali?: number,
+        )
+    constructor(...args: any[]) {
+        if(args.length == 1){
+            this.nome = args[0].get('nome')
+            this.numero = args[0].get('numero')
+            this.data_offerta = args[0].get('data_offerta')
+            this.data_consegna = args[0].get('data_consegna')
+            this.id = args[0].id,
+            this.chiusa = args[0].get('chiusa') ?? false
+            this.totPreventivo = args[0].get('totPreventivo') ?? 0
+            this.totOre = args[0].get('totOre') ?? 0
+            // this._preventivo = args[0].get('preventivo')
+            this.archiviata = args[0].get('archiviata') ?? false
+            this.minutiReali = args[0].get('minutiReali') ?? 0
+        }else {
+            //console.log(args)
+            this.nome = args[0];
+            this.numero = args[1];
+            this.data_offerta = args[2];
+            this.data_consegna = args[3];
+            this.id = args[4];
+            this.chiusa = args[5] ?? false;
+            this.totPreventivo = args[6] ?? 0;
+            this.totOre = args[7] ?? 0;
+            //this._preventivo = args[7]
+            this.archiviata = args[8] ?? false;
+            this.minutiReali = args[9] ?? 0;
+        }
     }
 
-    
-    public get id() : string {
-        return this._id;
+    get data_consegna_string(): string {
+        return this.data_consegna.toISOString()
     }
 
-    public get nome() : string {
+    get data_offerta_string(): string {
+        return this.data_offerta.toISOString()
+    }
+
+    set data_offerta_string(newVal:string) {
+        this.data_offerta = new Date(newVal)
+    }
+
+    set data_consegna_string(newVal:string) {
+        this.data_offerta = new Date(newVal)
+    }
+
+    /*
+
+    set id(id: string) {
+        this.id = id;
+    }
+    get id() : string {
+        return this.id ?? "";
+    }
+
+    get nome() : string {
         return this._nome;
     }
 
-    public get numero() : string {
+    get numero() : string {
         return this._numero;
     }
 
-    public get data_offerta() : Date {
+    get data_offerta() : string {
         return this._data_offerta;
     }
 
-    public get data_consegna() : Date {
+    get data_consegna() : string {
         return this._data_consegna;
     }
 
-    public get chiusa() : boolean {
-        return this._chiusa;
+    get chiusa() : boolean {
+        return this.chiusa;
     }
 
-    public get totPreventivo() : number {
-        return this._totPreventivo;
+    get totPreventivo() : number {
+        return this.totPreventivo;
     }
 
-    public get totOre() : number {
-        return this._totOre;
+    get totOre() : number {
+        return this.totOre;
     }
 
-    public get preventivo() : number {
+    /*
+    get preventivo() : any {
         return this._preventivo;
     }
+    
 
-    public get archiviata() : boolean {
-        return this._archiviata;
+    get archiviata() : boolean {
+        return this.archiviata;
     }
     
-    public get minutiReali() : number {
-        return this._minutiReali;
+    get minutiReali() : number {
+        return this.minutiReali;
     }
 
-    public set id(id: string) {
-        this._id = id;
+    set id(id: string) {
+        this.id = id;
     }
 
-    public set nome(nome: string) {
+    set nome(nome: string) {
         this._nome = nome;
     }
 
-    public set numero(numero: string) {
+    set numero(numero: string) {
         this._numero = numero;
     }
 
-    public set data_offerta(data_offerta: Date) {
+    set data_offerta(data_offerta: string) {
         this._data_offerta = data_offerta;
     }
 
-    public set data_consegna(data_consegna: Date) {
+    set data_consegna(data_consegna: string) {
         this._data_consegna = data_consegna;
     }
 
-    public set chiusa(chiusa: boolean) {
-        this._chiusa = chiusa;
+    set chiusa(chiusa: boolean) {
+        this.chiusa = chiusa;
     }
 
-    public set totPreventivo(totPreventivo: number) {
-        this._totPreventivo = totPreventivo;
+    set totPreventivo(totPreventivo: number) {
+        this.totPreventivo = totPreventivo;
     }
 
-    public set totOre(totOre: number) {
-        this._totOre = totOre;
+    set totOre(totOre: number) {
+        this.totOre = totOre;
     }
 
-    public set preventivo(preventivo: number) {
+    /*
+    set preventivo(preventivo: any) {
         this._preventivo = preventivo;
     }
+    
 
-    public set archiviata(archiviata: boolean) {
-        this._archiviata = archiviata;
+    set archiviata(archiviata: boolean) {
+        this.archiviata = archiviata;
     }
     
-    public set minutiReali(minutiReali: number) {
-        this._minutiReali = minutiReali;
+    set minutiReali(minutiReali: number) {
+        this.minutiReali = minutiReali;
     }
+    */
 
   }
+
+  export default Commessa;

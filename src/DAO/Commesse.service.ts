@@ -1,13 +1,14 @@
+import Commessa from '../classes/Commessa';
 import {commesse, Parse} from './http-common';
 
-let subscription;
+let subscription: any;
 
 /**
  * Ottiene la subscription alle commesse
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-async function subscribeCommesse(callback, callbackError) {
+async function subscribeCommesse(callback: Function, callbackError: Function) {
     const query = new Parse.Query(commesse);
     subscription = await query.subscribe();
 
@@ -16,27 +17,27 @@ async function subscribeCommesse(callback, callbackError) {
         getAllCommesse(callback, callbackError)
     })
 
-    subscription.on('create', (object) => {
+    subscription.on('create', () => {
         // console.log('commesse created: ', object);
         getAllCommesse(callback, callbackError);
     });
 
-    subscription.on('update', (object) => {
+    subscription.on('update', () => {
         // console.log('commesse updated', object);
         getAllCommesse(callback, callbackError);
     });
 
-    subscription.on('enter', (object) => {
+    subscription.on('enter', () => {
         // console.log('commesse entered', object);
         getAllCommesse(callback, callbackError);
     });
 
-    subscription.on('leave', (object) => {
+    subscription.on('leave', () => {
         // console.log('commesse left', object);
         getAllCommesse(callback, callbackError);
     });
 
-    subscription.on('delete', (object) => {
+    subscription.on('delete', () => {
         // console.log('commesse deleted', object);
         getAllCommesse(callback, callbackError);
     });
@@ -45,7 +46,7 @@ async function subscribeCommesse(callback, callbackError) {
         // console.log('subscription commesse closed');
     });
 
-    Parse.LiveQuery.on('error', (error) => {
+    Parse.LiveQuery.on('error', (error :any) => {
         console.error(error);
     });
 }
@@ -64,30 +65,31 @@ async function unsubscribeCommesse() {
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-async function getAllCommesse(callback, callbackError) {
+async function getAllCommesse(callback :Function, callbackError :Function) {
     new Parse.Query(commesse)
         .notEqualTo('eliminato', true)
         .notEqualTo('archiviata', true)
         .find()
-        .then((result) => {
-            const data = []
-            result.forEach(elem => {
-                data.push({
-                    id: elem.id,
-                    nome: elem.get('nome') != undefined ? elem.get('nome') : '',
-                    numero: elem.get('numero') != undefined ? elem.get('numero') : '',
-                    data_offerta: elem.get('data_offerta') != undefined ? elem.get('data_offerta').toISOString() : '',
-                    data_consegna: elem.get('data_consegna') != undefined ? elem.get('data_consegna').toISOString() : '',
-                    chiusa: elem.get('chiusa') != undefined ? elem.get('chiusa') : '',
-                    totPreventivo: elem.get('totPreventivo') != undefined ? elem.get('totPreventivo') : 0,
-                    totOre: elem.get('totOre') != undefined ? elem.get('totOre') : 0,
-                    preventivo: elem.get('preventivo') != undefined ? elem.get('preventivo') : '',
-                    archiviata: elem.get('archiviata') != undefined ? elem.get('archiviata') : '',
-                    minutiReali: elem.get('minutiReali') != undefined ? elem.get('minutiReali') : 0,
-                })
+        .then((result :any) => {
+            const data: Commessa[] = []
+            console.log(result)
+            result.forEach((elem: Parse.Object<Parse.Attributes>) => {
+                data.push(new Commessa(
+                    elem.get('nome'),
+                    elem.get('numero'),
+                    elem.get('data_offerta'),
+                    elem.get('data_consegna'),
+                    elem.id,
+                    elem.get('chiusa'),
+                    elem.get('totPreventivo'),
+                    elem.get('totOre'),
+                    //elem.get('preventivo'),
+                    elem.get('archiviata'),
+                    elem.get('minutiReali'),
+                ))
             })
            callback(data)
-        }, (error) => {
+        }, (error:any) => {
             console.error('ERRORE:', error)
             callbackError(error.message)
         })
@@ -99,10 +101,22 @@ async function getAllCommesse(callback, callbackError) {
  * @param {function} successCallback
  * @param {function} errorCallback
  */
-function getCommessa(objectId, successCallback, errorCallback) {
+function getCommessa(objectId:string, successCallback:Function, errorCallback:Function) {
     const commessa = new Parse.Query(commesse)
     commessa.get(objectId).then(
-        elem => successCallback(elem),
+        elem => successCallback(new Commessa(
+            elem.get('nome'),
+            elem.get('numero'),
+            elem.get('data_offerta'),
+            elem.get('data_consegna'),
+            elem.id,
+            elem.get('chiusa'),
+            elem.get('totPreventivo'),
+            elem.get('totOre'),
+            //elem.get('preventivo'),
+            elem.get('archiviata'),
+            elem.get('minutiReali'),
+        )),
         err => errorCallback(err.message),
     )
 }
@@ -114,15 +128,17 @@ function getCommessa(objectId, successCallback, errorCallback) {
  * @param {function} successCallback
  * @param {function} errorCallback
  */
-function addCommessa(newCommessa, successCallback, errorCallback) {
+function addCommessa(newCommessa:Commessa, successCallback:Function, errorCallback:Function) {
     const commessa = new Parse.Object(commesse)
-    Object
-        .keys(newCommessa)
-        .forEach( key => commessa.set(key, newCommessa[key]) )
+    let property: keyof typeof newCommessa; // Specifica quali sono le property della commessa
+    for (property in newCommessa){
+        commessa.set(property, newCommessa[property])
+    }
     commessa.save().then(
         elem => successCallback(elem.id),
         err => errorCallback(err.message),
     )
+    
 }
 
 /**
@@ -132,17 +148,17 @@ function addCommessa(newCommessa, successCallback, errorCallback) {
  * @param {function} successCallback
  * @param {function} errorCallback
  */
-function deleteCommessa(id, successCallback, errorCallback) {
+function deleteCommessa(id: string, successCallback: Function, errorCallback: Function) {
     new Parse.Query(commesse)
         .get(id)
         .then(
-            elem => elem.
-                set('eliminato', true).
-                save().
-                then(
+            elem => {
+                const e: any = elem.set('eliminato', true)
+                e.save().then(
                     () => successCallback(`Commessa ${elem.attributes.numero} eliminata con successo`),
-                    error => callbackError(error.message),
-                ),
+                    (error:any) => errorCallback(error.message),
+                )
+            },
             error => errorCallback(error.message),
         )
 }
@@ -154,7 +170,7 @@ function deleteCommessa(id, successCallback, errorCallback) {
  * @param {function} successCallback
  * @param {function} errorCallback
  */
- function archiveCommessa(id, successCallback, errorCallback) {
+ function archiveCommessa(id:string, successCallback:Function, errorCallback:Function) {
     Parse.Cloud.run('archiviaCommessa', {'id': id})
     .then(
         () => successCallback( `Commessa archiviata con successo` ),
@@ -169,16 +185,20 @@ function deleteCommessa(id, successCallback, errorCallback) {
  *                 key_ è il campo da modificare e _value_ è il nuovo valore
  * @param {function} callback callback per successo
  */
-function updateCommessa(id, newVal) {
+function updateCommessa(id:string, newVal:any) {
     const [key] = Object.keys(newVal)
     const query = new Parse.Query(commesse)
+    console.log(key)
     newVal[key] = (key === 'data_offerta' || key === 'data_consegna') ?
         new Date(newVal[key]) :
         newVal[key]
     if (newVal[key] != 'Invalid Date') {
         query.get(id)
         .then(
-            elem => elem.set( key, newVal[key] ).save().catch((err) => console.error('ERRORE: ', err.message)),
+            elem => {
+                const e: any = elem.set( key, newVal[key] )
+                e.save().catch((err:any) => console.error('ERRORE: ', err.message))
+            },
             error => console.error('ERRORE:', error.message),
         )
     }
@@ -191,7 +211,7 @@ function updateCommessa(id, newVal) {
  * @param {function} successCallback
  * @param {function} errorCallback
  */
-function cloneCommessa(id, newCommessa, successCallback, errorCallback) {
+function cloneCommessa(id:string, newCommessa:Commessa, successCallback:Function, errorCallback:Function) {
     const c = {
         'commessaId': id,
         'nome': newCommessa.nome,

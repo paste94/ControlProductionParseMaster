@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import { addCommessa, getCommessa } from '../../DAO/Commesse.service';
 import { useHistory } from 'react-router';
+import Commessa from '../../classes/Commessa';
+
+type Props = {
+    setError: Function;
+}
 
 /**
  * Modal specifico per l'aggiunta della commessa
  * @param {Object}  props properties
  * @return {Component} il componente
  */
-function ModalNewCommessa({ setSuccess, setError}) {
+function ModalNewCommessa({setError}: PropsWithChildren<Props>): React.ReactNode {
     const history = useHistory();
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
@@ -30,46 +35,38 @@ function ModalNewCommessa({ setSuccess, setError}) {
         setShow(false)
     }
 
-    const handleChangeNome = (event) =>
+    const handleChangeNome = (event:any) =>
         setNewCommessa({...newCommessa, nome: event.target.value})
-    const handleChangeNumero = (event) =>
+    const handleChangeNumero = (event:any) =>
         setNewCommessa({...newCommessa, numero: event.target.value})
-    const handleChangeDataOfferta = (event) =>
+    const handleChangeDataOfferta = (event:any) =>
         setNewCommessa({...newCommessa, data_offerta: event.target.value})
-    const handleChangeDataConsegna = (event) =>
+    const handleChangeDataConsegna = (event:any) =>
         setNewCommessa({...newCommessa, data_consegna: event.target.value})
 
     /**
-     * Funzione che apre la funestra della commessa singola.
+     * Funzione che apre la funestra della commessa singola una volta che la commessa è stata creata
      * @param {String} commessaId ID dell'oggetto commessa. Questo ID è quello dell'oggetto univoco!
      */
-    const openCommessaSingolaView = (commessaId) => {
+    const openCommessaSingolaView = (commessaId :string) => {
         console.log(commessaId)
         getCommessa(
             commessaId,
-            c => {
-                console.log(c.attributes)
+            (c: Commessa) => {
                 history.push({
                 pathname: '/commessasingola',
                 // Aggiungo all'oggetto un attributo 'id' che serve al component
-                state: {commessa: {id: commessaId, ...c.attributes}},
+                state: {commessa: {id: commessaId, c}},
             })
         },
             setError,
         )
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         addCommessa(
-            {
-                nome: newCommessa.nome,
-                numero: newCommessa.numero,
-                data_offerta: new Date(newCommessa.data_offerta),
-                data_consegna: new Date(newCommessa.data_consegna),
-                preventivo: [],
-                chiusa: false,
-            },
+            new Commessa(newCommessa.nome, newCommessa.numero, new Date(newCommessa.data_offerta), new Date(newCommessa.data_consegna)),
             openCommessaSingolaView,
             setError,
         )
@@ -155,7 +152,6 @@ function ModalNewCommessa({ setSuccess, setError}) {
 }
 
 ModalNewCommessa.propTypes = {
-    setSuccess: PropTypes.func,
     setError: PropTypes.func,
 }
 

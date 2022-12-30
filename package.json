@@ -45,6 +45,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "styled-components": "^5.2.1",
+    "typescript": "^3.9.10",
     "watchpack": "^1.7.5",
     "web-vitals": "^0.2.4"
   },
@@ -61,7 +62,7 @@
     "release": "npm run react:build && npm run electron-builder --publish=always",
     "build": "npm run react:build && npm run electron:build",
     "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\"",
-    "test":"jest"
+    "test": "jest"
   },
   "build": {
     "appId": "com.controlproduction.master"
@@ -81,6 +82,8 @@
     ]
   },
   "devDependencies": {
+    "@types/parse": "^3.0.1",
+    "@types/react-router-dom": "^5.3.3",
     "concurrently": "^5.3.0",
     "electron": "^11.5.0",
     "electron-builder": "^23.0.3",

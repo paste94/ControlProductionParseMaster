@@ -79,12 +79,14 @@ function CommesseTable({data, setSuccess, setError}) {
     };
 
     const handleEdit = (id, newValue) => {
-        if ('data_offerta' in newValue) {
-            newValue.data_offerta = new Date(newValue.data_offerta)
-        } else if ('data_consegna' in newValue) {
-            newValue.data_consegna = new Date(newValue.data_consegna)
+        console.log(newValue)
+        if ('data_offerta_string' in newValue) {
+            updateCommessa(id, {'data_offerta': newValue.data_offerta_string})
+        } else if ('data_consegna_string' in newValue) {
+            updateCommessa(id, {'data_consegna': newValue.data_consegna_string})
+        } else {
+            updateCommessa(id, newValue)
         }
-        updateCommessa(id, newValue)
     }
 
     // Definizione delle colonne
@@ -99,12 +101,12 @@ function CommesseTable({data, setSuccess, setError}) {
         dataField: 'numero',
         text: 'Numero',
     }, {
-        dataField: 'data_offerta',
+        dataField: 'data_offerta_string',
         text: 'Data Offerta',
         formatter: dateFormatter,
         editor: {type: Type.DATE},
     }, {
-        dataField: 'data_consegna',
+        dataField: 'data_consegna_string',
         text: 'Data Consegna',
         formatter: dateFormatter,
         editor: {type: Type.DATE},

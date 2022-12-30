@@ -18,6 +18,7 @@ function dateFormatter(cell) {
  * @return {Object} la cella formattata
  */
 function timeFormatter(cell) {
+    console.log(cell)
     const h = Math.floor(cell/60)
     const min = Math.floor(cell-(h*60))
     return h + 'h ' + min + 'm'
