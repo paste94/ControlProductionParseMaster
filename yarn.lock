@@ -2671,6 +2671,13 @@
   "resolved" "https://registry.npmjs.org/@types/q/-/q-1.5.4.tgz"
   "version" "1.5.4"
 
+"@types/react-bootstrap-table-next@^4.0.18":
+  "integrity" "sha512-dJOj06ReCclTr/gR+gEXqTWyi3U2XTML/dFDZjuMbiC8Ud3Im1kQZT2w910uXAF67OJ63uL4l8Gk2pUd7wJexQ=="
+  "resolved" "https://registry.npmjs.org/@types/react-bootstrap-table-next/-/react-bootstrap-table-next-4.0.18.tgz"
+  "version" "4.0.18"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-dom@^5.3.3":
   "integrity" "sha512-kpqnYK4wcdm5UaWI3fLcELopqLrHgLqNsdpHauzlQktfkHL3npOSwtj1Uz9oKBAzs7lFtVkV8j83voAz2D8fhw=="
   "resolved" "https://registry.npmjs.org/@types/react-router-dom/-/react-router-dom-5.3.3.tgz"

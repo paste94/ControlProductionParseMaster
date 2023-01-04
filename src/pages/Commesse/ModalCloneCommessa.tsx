@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, PropsWithChildren } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import { FaCopy } from 'react-icons/fa'
 import { cloneCommessa } from '../../DAO/Commesse.service';
+import Commessa from '../../classes/Commessa';
+
+type Props = {
+    originalCommessa: Commessa;
+    setSuccess: Function;
+    setError: Function;
+}
 
 /**
  * Modal specifico per l'aggiunta della commessa
@@ -11,7 +18,7 @@ import { cloneCommessa } from '../../DAO/Commesse.service';
  *                      della commessa
  * @return {Component} il componente
  */
-function ModalCloneCommessa({originalCommessa, setSuccess, setError}) {
+function ModalCloneCommessa({originalCommessa, setSuccess, setError}: PropsWithChildren<Props>): React.ReactNode {
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: originalCommessa.nome,
@@ -22,18 +29,23 @@ function ModalCloneCommessa({originalCommessa, setSuccess, setError}) {
 
     const toggle = () => setShow(!show)
 
-    const handleChangeNome = (event) =>
+    const handleChangeNome = (event: any) =>
         setNewCommessa({...newCommessa, nome: event.target.value})
-    const handleChangeNumero = (event) =>
+    const handleChangeNumero = (event: any) =>
         setNewCommessa({...newCommessa, numero: event.target.value})
-    const handleChangeDataOfferta = (event) =>
+    const handleChangeDataOfferta = (event: any) =>
         setNewCommessa({...newCommessa, data_offerta: event.target.value})
-    const handleChangeDataConsegna = (event) =>
+    const handleChangeDataConsegna = (event: any) =>
         setNewCommessa({...newCommessa, data_consegna: event.target.value})
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e:any) => {
         e.preventDefault();
-        cloneCommessa(originalCommessa.id, newCommessa, setSuccess, setError)
+        cloneCommessa(
+            originalCommessa.id, 
+            new Commessa(newCommessa.nome, newCommessa.numero, new Date(newCommessa.data_offerta), new Date(newCommessa.data_consegna)),
+            setSuccess, 
+            setError
+        )
         toggle()
     }
 

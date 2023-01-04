@@ -5,7 +5,7 @@ class Commessa {
     numero: string;
     data_offerta: Date;
     data_consegna: Date;
-    id?: string; 
+    id: string; 
     chiusa: boolean = false;
     totPreventivo: number = 0;
     totOre: number = 0;

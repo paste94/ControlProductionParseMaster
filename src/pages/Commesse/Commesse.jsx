@@ -28,9 +28,16 @@ function Commesse() {
             handleClose={() => setSuccess('')} />
     </>
 
+    useEffect(() => {
+        console.log('Component mounted');
+        return () => {
+            console.log('Component will be unmount')
+        }
+    }, []);
+
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
-    useEffect((s) => {
+    useEffect(() => {
         subscribeCommesse(setData, setError);
         return unsubscribeCommesse;
     }, []);

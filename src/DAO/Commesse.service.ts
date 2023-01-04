@@ -216,8 +216,8 @@ function cloneCommessa(id:string, newCommessa:Commessa, successCallback:Function
         'commessaId': id,
         'nome': newCommessa.nome,
         'numero': newCommessa.numero,
-        'data_offerta': new Date(newCommessa.data_offerta),
-        'data_consegna': new Date(newCommessa.data_consegna),
+        'data_offerta': newCommessa.data_offerta,
+        'data_consegna': newCommessa.data_consegna,
     }
     Parse.Cloud.run('cloneCommessa', c)
         .then(

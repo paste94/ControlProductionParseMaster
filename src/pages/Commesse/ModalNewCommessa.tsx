@@ -151,9 +151,4 @@ function ModalNewCommessa({setError}: PropsWithChildren<Props>): React.ReactNode
     )
 }
 
-ModalNewCommessa.propTypes = {
-    setError: PropTypes.func,
-}
-
-
 export default ModalNewCommessa;
