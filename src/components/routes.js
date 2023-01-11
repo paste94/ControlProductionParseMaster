@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import {HashRouter as Router, Redirect, Route } from 'react-router-dom'
 import Page from '../pages/Page'
 import Sidebar from './Sidebar'

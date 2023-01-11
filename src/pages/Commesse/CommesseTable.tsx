@@ -1,8 +1,24 @@
+import React, { CSSProperties, PropsWithChildren, ReactElement, useState } from 'react';
+import BootstrapTable, { ColumnDescription } from 'react-bootstrap-table-next'
+// @ts-ignore
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
+import DeleteButton from '../../components/DeleteButton'
+// @ts-ignore
 import paginationFactory from 'react-bootstrap-table2-paginator'
+import { Row, Col, Button } from 'react-bootstrap'
+import { FaCheck, FaEye, FaArrowDown } from 'react-icons/fa'
+import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { archiveCommessa, deleteCommessa, updateCommessa } from '../../DAO/Commesse.service';
+import ModalCloneCommessa from './ModalCloneCommessa';
 import {dateFormatter, timeFormatter} from '../../utils/dateTimeFormatter';
+import Commessa from '../../classes/Commessa';
+
+type Props = {
+    data:Array<Commessa>, 
+    setSuccess: Function,
+    setError: Function,
+}
 
 /**
  * Definisce la tabella degli impiegati
@@ -12,9 +28,9 @@ import {dateFormatter, timeFormatter} from '../../utils/dateTimeFormatter';
  *                  - handleEdit (function) Gestisce la modifica dell'elemento
  * @return {Component} il component creato
  */
-function CommesseTable({data, setSuccess, setError}) {
+function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
     // Definizione dei bottoni nell'ultima colonna
-    const defineButtons = (cell, row, rowIndex, formatExtraData) => {
+    const defineButtons = (cell: any, row: Commessa, rowIndex: number, formatExtraData: any) => {
         const commessa = data[rowIndex]
         return (
             <Row>
@@ -38,9 +54,12 @@ function CommesseTable({data, setSuccess, setError}) {
                         title='Apri/chiudi commessa'
                         size='sm'
                         onClick={ () => {
+                            /* Vecchio controllo prima della creazione della classe Commessa
                             'chiusa' in row ?
                                 handleEdit(row.id, {chiusa: !row.chiusa}) :
                                 handleEdit(row.id, {chiusa: true})
+                                */
+                            handleEdit(row.id, {chiusa: !row.chiusa})
                         }} >
                             <FaCheck style={{color: 'black'}}/>
                     </Button>
@@ -71,8 +90,7 @@ function CommesseTable({data, setSuccess, setError}) {
         );
     };
 
-    const handleEdit = (id, newValue) => {
-        console.log(newValue)
+    const handleEdit = (id:string, newValue:any) => {
         if ('data_offerta_string' in newValue) {
             updateCommessa(id, {'data_offerta': newValue.data_offerta_string})
         } else if ('data_consegna_string' in newValue) {
@@ -83,7 +101,7 @@ function CommesseTable({data, setSuccess, setError}) {
     }
 
     // Definizione delle colonne
-    const columns = [{
+    const columns:Array<ColumnDescription> = [{
         dataField: 'id',
         text: 'ID',
         hidden: true,
@@ -124,18 +142,11 @@ function CommesseTable({data, setSuccess, setError}) {
         dataField: 'actions',
         text: 'Azioni',
         formatter: defineButtons,
-        headerStyle: (colum, colIndex) => {
-            return { width: '250px', textAlign: 'center' };
-        },
+        headerStyle: { width: '250px', textAlign: 'center' } ,
         editable: false,
     }];
 
-    // TODO Snellisci questa funzione
-    const rowStyle = (row, index) => {
-        const style = {}
-        if (row.chiusa) style.backgroundColor='#00e676'
-        return style
-    }
+    let s:CSSProperties
 
     return (
         <div>
@@ -144,13 +155,14 @@ function CommesseTable({data, setSuccess, setError}) {
                 data={ data }
                 columns={ columns }
                 pagination={ paginationFactory() }
-                rowStyle={ rowStyle }
+                // Rende il colore della riga verde nel caso questa sia chiusa
+                rowStyle={ (row:Commessa, index:number) => row.chiusa ? {backgroundColor:'#00e676'} : {} }
                 noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({
                     mode: 'click',
                     blurToSave: true,
-                    afterSaveCell: (oldValue, newValue, row, column) => {
-                        const newVal = {}
+                    afterSaveCell: (oldValue:any, newValue:any, row:Commessa, column: ColumnDescription) => {
+                        let newVal:any = {}
                         newVal[column.dataField] = newValue
                         handleEdit(row.id, newVal)
                     },

@@ -54,9 +54,10 @@ async function subscribeCommesse(callback: Function, callbackError: Function) {
 /**
  * Rimuove la sottoscrizione al DB
  */
-async function unsubscribeCommesse() {
+async function unsubscribeCommesse():Promise<void> {
     if (subscription != undefined) {
         subscription.unsubscribe();
+        console.log('COMMESSE UNSUBSCRIBED')
     }
 }
 

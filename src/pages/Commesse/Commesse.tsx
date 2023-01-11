@@ -37,9 +37,12 @@ function Commesse() {
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
+    // eslint-disable-next-line
     useEffect(() => {
         subscribeCommesse(setData, setError);
-        return unsubscribeCommesse;
+        return () => {
+            unsubscribeCommesse()
+        };
     }, []);
 
     return (
@@ -52,7 +55,7 @@ function Commesse() {
                     </Row>
                 </Col>
                 <Col>
-                    <ModalNewCommessa setSuccess={setSuccess} setError={setError} />
+                    <ModalNewCommessa setError={setError} />
                 </Col>
             </Row>
 

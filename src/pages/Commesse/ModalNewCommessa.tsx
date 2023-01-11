@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, ReactElement, useState } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import { addCommessa, getCommessa } from '../../DAO/Commesse.service';
@@ -14,7 +14,7 @@ type Props = {
  * @param {Object}  props properties
  * @return {Component} il componente
  */
-function ModalNewCommessa({setError}: PropsWithChildren<Props>): React.ReactNode {
+function ModalNewCommessa({setError}: PropsWithChildren<Props>): ReactElement {
     const history = useHistory();
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({

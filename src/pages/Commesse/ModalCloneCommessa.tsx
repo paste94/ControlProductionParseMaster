@@ -1,4 +1,4 @@
-import React, { useState, useEffect, PropsWithChildren } from 'react';
+import React, { useState, useEffect, PropsWithChildren, ReactElement } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import { FaCopy } from 'react-icons/fa'
@@ -18,7 +18,7 @@ type Props = {
  *                      della commessa
  * @return {Component} il componente
  */
-function ModalCloneCommessa({originalCommessa, setSuccess, setError}: PropsWithChildren<Props>): React.ReactNode {
+function ModalCloneCommessa({originalCommessa, setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: originalCommessa.nome,
