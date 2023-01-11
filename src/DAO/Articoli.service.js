@@ -1,3 +1,4 @@
+import { LiveQuerySubscription } from 'parse';
 import {articoli, Parse} from './http-common';
 
 let subscription;

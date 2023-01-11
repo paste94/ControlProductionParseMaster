@@ -1,13 +1,15 @@
+import { LiveQuerySubscription } from 'parse';
 import { macchine, Parse} from './http-common';
+import Macchina from '../classes/Macchina';
 
-let subscription;
+let subscription: LiveQuerySubscription;
 
 /**
  * Ottiene la subscription alle macchine
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
- async function subscribeMacchine(callback, callbackError) {
+ async function subscribeMacchine(callback: Function, callbackError: Function) {
     const query = new Parse.Query(macchine);
     subscription = await query.subscribe();
 
@@ -65,17 +67,17 @@ let subscription;
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-function getAllMacchine(callback, callbackError) {
+function getAllMacchine(callback: Function, callbackError: Function) {
     new Parse.Query(macchine)
         .notEqualTo('eliminato', true)
         .find()
         .then( result => {
-            const data = []
-            result.forEach(elem => {
-                data.push({
-                    id: elem.id,
-                    ...elem.attributes,
-                })
+            const data: Macchina[] = []
+            result.forEach((elem: Parse.Object<Parse.Attributes>) => {
+                data.push(new Macchina(
+                    elem.get('nome'),
+                    elem.id
+                ))
             })
             callback(data)
         }, (error) => {
@@ -89,17 +91,16 @@ function getAllMacchine(callback, callbackError) {
  * @param {Macchina} newMacchina la macchina da aggiungere
  * @param {function} callback callback per successo.
  */
- function addMacchina(newMacchina, callback) {
+ function addMacchina(newMacchina: Macchina, successCallback: Function, errorCallback: Function) {
     const macchina = new Parse.Object(macchine);
-
-    Object
-        .keys(newMacchina)
-        .forEach( key => macchina.set(key, newMacchina[key]))
-
-    macchina
-        .save()
-        .then(callback)
-        .catch(err => console.error('ERROR: ', err))
+    let property: keyof typeof newMacchina; // Specifica quali sono le property dell'oggetto
+    for (property in newMacchina){
+        macchina.set(property, newMacchina[property])
+    }
+    macchina.save().then(
+        elem => successCallback(elem.id),
+        err => errorCallback(err.message),
+    )
 }
 
 /**
@@ -107,11 +108,17 @@ function getAllMacchine(callback, callbackError) {
  * L'elemento viene eliminato impostando un flag 'eliminato' a true
  * @param {int} id identificativo della macchina
  */
-function deleteMacchina(id) {
+function deleteMacchina(id: string, successCallback: Function, errorCallback: Function) {
     new Parse.Query(macchine)
         .get(id)
         .then(
-            elem => elem.set('eliminato', true).save(),
+            elem => {
+                const e: any = elem.set('eliminato', true)
+                e.save().then(
+                    () => successCallback(`Macchina ${elem.attributes.nome} eliminata con successo`),
+                    (error:any) => errorCallback(error.message)
+                )
+            },
             error => console.error('ERRORE:', error.message),
         )
 }

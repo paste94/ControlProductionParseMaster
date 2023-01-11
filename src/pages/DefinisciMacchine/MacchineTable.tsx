@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import PropTypes from 'prop-types'
 import DeleteButton from '../../components/DeleteButton';
+import { deleteMacchina } from '../../DAO/Macchine.service';
+import Macchina from '../../classes/Macchina';
+
+type Props = {
+    data:Array<Macchina>, 
+    setSuccess: Function,
+    setError: Function,
+}
 
 /**
  *
@@ -10,15 +18,15 @@ import DeleteButton from '../../components/DeleteButton';
  *                  - handleDelete (function) cosa eseguire quando voglio eliminare un dato
  * @return {Component} il component creato
  */
-function MacchineTable({data, handleDelete}) {
+function MacchineTable({data, setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
     // Definizione dei bottoni nell'ultima colonna
-    const defineButtons = (cell, row, rowIndex, formatExtraData) => {
+    const defineButtons = (cell:any, row:Macchina, rowIndex: number, formatExtraData: any) => {
         return (
             <div className='row align-items-center'>
                 <div className='col'>
                     <DeleteButton
                         title={'Elimina macchina'}
-                        handleConfirm={() => handleDelete(row.id)} >
+                        handleConfirm={() => deleteMacchina(row.id, setSuccess, setError)} >
                             <p>Eliminare definitivamente la macchina?</p>
                     </DeleteButton>
                 </div>
@@ -51,11 +59,6 @@ function MacchineTable({data, handleDelete}) {
                 columns={ columns } />
         </div>
     )
-}
-
-MacchineTable.propTypes = {
-    data: PropTypes.array,
-    handleDelete: PropTypes.func,
 }
 
 export default MacchineTable;

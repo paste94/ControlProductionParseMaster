@@ -1,7 +1,8 @@
+import { LiveQuerySubscription } from 'parse';
 import Commessa from '../classes/Commessa';
 import {commesse, Parse} from './http-common';
 
-let subscription: any;
+let subscription: LiveQuerySubscription;
 
 /**
  * Ottiene la subscription alle commesse

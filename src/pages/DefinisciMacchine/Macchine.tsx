@@ -4,6 +4,7 @@ import MacchineTable from './MacchineTable';
 import ModalNewMacchina from './ModalNewMacchina';
 import AlertError from '../../components/AlertError'
 import { Col, Row } from 'react-bootstrap';
+import AlertSuccess from '../../components/AlertSuccess';
 
 /**
  * @return {Component} il componentes
@@ -11,19 +12,29 @@ import { Col, Row } from 'react-bootstrap';
 function Macchine() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+
+    const alerts = <>
+        <AlertError
+            show={error !== ''}
+            message={error}
+            handleClose={() => setError('')} />
+        <AlertSuccess
+            show={success !== ''}
+            message={success}
+            handleClose={() => setSuccess('')} />
+    </>
 
     useEffect(() => {
-        subscribeMacchine(setData, () => {});
-        return unsubscribeMacchine;
+        subscribeMacchine(setData, setError);
+        return () => {
+            unsubscribeMacchine()
+        };
     }, []);
 
     return (
         <div className='page'>
-            <AlertError
-                show={error !== ''}
-                message={error}
-                handleClose={ () => setError('') } />
-
+            {alerts}
             <Row className='align-items-center'>
                 <Col>
                     <Row className='ml-1'>
@@ -31,14 +42,15 @@ function Macchine() {
                     </Row>
                 </Col>
                 <Col>
-                    <ModalNewMacchina
-                        handleAdd={addMacchina}/>
+                    <ModalNewMacchina setError={setError}/>
                 </Col>
             </Row>
 
             <MacchineTable
                 data={data}
-                handleDelete={deleteMacchina} />
+                setSuccess={setSuccess}
+                setError={setError}/>
+        
         </div>
     )
 }

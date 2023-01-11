@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { PropsWithChildren, ReactElement, useState } from 'react';
 import { Modal, FormControl, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+import { addMacchina } from '../../DAO/Macchine.service';
+import Macchina from '../../classes/Macchina';
 
-// TODO: Chiudi il modal quando aggiungi la nuova macchina
-
+type Props = {
+    setError: Function,
+}
 /**
  * Modal specifico per l'aggiunta della macchina
  *
  * @param {Object}  props properties
- * @return {Component} ModalNewMacchina
  */
-function ModalNewMacchina({handleAdd}) {
+function ModalNewMacchina({setError}: PropsWithChildren<Props>): ReactElement {
     const [show, setShow] = useState(false)
     const [newMacchina, setNewMacchina] = useState({
         nome: '',
@@ -24,13 +26,13 @@ function ModalNewMacchina({handleAdd}) {
         setShow(false)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault()
-        handleAdd(newMacchina, handleClose)
+        addMacchina(new Macchina(newMacchina.nome), handleClose, setError)
     }
 
-    const handleChangeNome = (event) =>
-        setNewMacchina({...newMacchina, nome: event.target.value});
+    const handleChangeNome = (e: any) =>
+        setNewMacchina({...newMacchina, nome: e.target.value});
 
     return (
         <div>
@@ -77,10 +79,6 @@ function ModalNewMacchina({handleAdd}) {
             </Modal>
         </div>
     )
-}
-
-ModalNewMacchina.propTypes = {
-    handleAdd: PropTypes.func.isRequired,
 }
 
 export default ModalNewMacchina;
