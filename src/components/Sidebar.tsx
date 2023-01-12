@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import '../css/simple-sidebar.css';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types'
+import RouteType from '../classes/RouteType';
+
+type Props = {
+    data: Array<RouteType>
+}
 
 /**
  * Definisce la sidebar
@@ -10,16 +15,25 @@ import PropTypes from 'prop-types'
  *                  - data (array) elenco di elementi che formano la sidebar
  * @return {Component} il componente creato
  */
-const Sidebar = ({data}) => {
-    const listItems = data.map((r) =>
-        <NavItem style={{
-            background: useLocation().pathname === r.path ? '#0d6efd44' : '#00000000',
-            borderRadius: '8px',
-            marginLeft: '5px',
-        }} key={r.id} href={r.path}>
-            <Nav.Link as={Link} to={r.path} >
-                {r.text}
-            </Nav.Link>
+function Sidebar({data}: PropsWithChildren<Props>): ReactElement {
+    const listItems = data.map((r: {
+        id: number;
+        path: string;
+        text: string;
+        main: () => JSX.Element;
+    }) =>
+        <NavItem 
+            style={{
+                background: useLocation().pathname === r.path ? '#0d6efd44' : '#00000000',
+                borderRadius: '8px',
+                marginLeft: '5px',
+            }} 
+            key={r.id} 
+            // @ts-ignore
+            href={r.path} >
+                <Nav.Link as={Link} to={r.path} >
+                    {r.text}
+                </Nav.Link>
         </NavItem>,
     )
 

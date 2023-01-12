@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {HashRouter as Router, Redirect, Route } from 'react-router-dom'
 import Page from '../pages/Page'
 import Sidebar from './Sidebar'
@@ -13,6 +13,7 @@ import Impostazioni from '../pages/Impostazioni/impostazioni'
 import { Parse } from '../DAO/http-common'
 import CommesseArchiviate from '../pages/CommesseArchiviate/CommesseArchiviate'
 import { Col, Row } from 'react-bootstrap'
+import RouteType from '../classes/RouteType'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
@@ -27,7 +28,7 @@ function AppRoutes() {
         });
     }, [])
 
-    const routes = [
+    const routes: Array<RouteType> = [
         {
             id: 0,
             path: '/commesse',
@@ -139,7 +140,6 @@ function AppRoutes() {
                                         <Route
                                             key={route.path}
                                             path={route.path}
-                                            exact={route.exact}
                                             component={route.main}
                                         />
                                     ),
@@ -149,7 +149,7 @@ function AppRoutes() {
                                 exact
                                 key='100'
                                 path='/commessasingola'
-                                component={(props)=>{
+                                component={(props:any)=>{
                                     // Questa porzione di codice serve per reindirizzare la route sulla commessa singola
                                     // al click sull'icona dell'occhio
                                     try { // If there is no commessa, it returns the commesse mainpage

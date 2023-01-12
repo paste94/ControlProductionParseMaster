@@ -6,7 +6,6 @@ import { addImpiegato, deleteImpiegato, subscribeImpiegati, unsubscribeImpiegati
 import ModalChip from './ModalChip';
 import ModalNewImpiegato from './ModalNewImpiegato';
 import ImpiegatiTable from './ImpiegatiTable';
-import ModalConfirm from '../../components/ModalConfirm';
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
 import Impiegato from '../../classes/Impiegato';
@@ -87,25 +86,7 @@ function Impiegati(): ReactElement {
         addImpiegato(new Impiegato(newImp.nome, newImp.chip), setSuccess, setError)
         handleCloseNewImpiegato()
     };
-
-    // // Quando faccio click sul bottone di eliminazione
-    // const handleDelete = (id) => {
-    //     setDeleteId(id)
-    //     handleShowConfirm();
-    // };
-
-    // // Quando confermo l'eliminazione
-    // const handleDeleteConfirm = () => {
-    //     const id = deleteId;
-    //     setDeleteId('');
-    //     deleteImpiegato(id, setSuccess, setError)
-    //     handleCloseConfirm()
-    // }
-
-    /* EFFECT */
-
-    // Il secondo parametro [] serve per farlo eseguire una
-    // volta sola quando avvii la pagina
+    
     useEffect(() => {
         subscribeImpiegati(setData, setError)
         return () => {
@@ -113,8 +94,6 @@ function Impiegati(): ReactElement {
         }
     }, []);
 
-
-    /* RENDER */
     return (
         <div className='page'>
             {alerts}
