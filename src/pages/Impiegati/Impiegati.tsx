@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import '../../css/Pages.css';
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import { Button, Col, Row } from 'react-bootstrap'
-import { addImpiegato, deleteImpiegato, updateImpiegato, subscribeImpiegati, unsubscribeImpiegati} from '../../DAO/Impiegati.service';
+import { addImpiegato, deleteImpiegato, subscribeImpiegati, unsubscribeImpiegati} from '../../DAO/Impiegati.service';
 import ModalChip from './ModalChip';
 import ModalNewImpiegato from './ModalNewImpiegato';
 import ImpiegatiTable from './ImpiegatiTable';
 import ModalConfirm from '../../components/ModalConfirm';
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
+import Impiegato from '../../classes/Impiegato';
 
 /** Pagina degli impiegati
  *
@@ -16,7 +17,7 @@ import AlertSuccess from '../../components/AlertSuccess';
  *                  - handleShowAlert (function) handler che mostra l'alert
  * @return {Component} il component creato
  */
-function Impiegati() {
+function Impiegati(): ReactElement {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
@@ -46,7 +47,7 @@ function Impiegati() {
     });
 
     // L'id dell'elemento da eliminare
-    const [deleteId, setDeleteId] = useState('');
+    //const [deleteId, setDeleteId] = useState('');
 
     /* HANDLERS */
 
@@ -66,58 +67,50 @@ function Impiegati() {
     const handleShowChip = () => setModalState({...modalState, chip: true});
 
     // Quando chiudi il modal confirm
-    const handleCloseConfirm = () => setModalState({...modalState, confirm: false});
-
-    // Quando mostri il modal confirm
-    const handleShowConfirm = () => setModalState({...modalState, confirm: true});
-
     // Quando modifico il nome del nuovo utente
-    const handleChangeNome = (event) => setNewImp({...newImp, nome: event.target.value});
+    const handleChangeNome = (event:any) => setNewImp({...newImp, nome: event.target.value});
 
     // Quando modifico il chip del nuovo utente
-    const handleChangeChip = (event) => setNewImp({...newImp, chip: event.target.value});
+    const handleChangeChip = (event:any) => setNewImp({...newImp, chip: event.target.value});
 
     // Quando inserisco un nuovo carattere nel form del chip
-    const handleSetChip = (event) => {
+    const handleSetChip = (event:any) => {
         if (event.charCode === 13) {
             setNewImp({...newImp, chip: event.target.value});
             handleCloseChip();
         }
     };
 
-    // newVal può essere un oggetto {nome: newName} oppure {chip: newChip}
-    const handleEdit = (id, newVal) => {
-        updateImpiegato(id, newVal)
-    }
-
     // Quando creo il nuovo impiegato
-    const handleAddImpiegato = (e) => {
+    const handleAddImpiegato = (e:any) => {
         e.preventDefault()
-        addImpiegato(newImp)
+        addImpiegato(new Impiegato(newImp.nome, newImp.chip), setSuccess, setError)
         handleCloseNewImpiegato()
     };
 
-    // Quando faccio click sul bottone di eliminazione
-    const handleDelete = (id) => {
-        setDeleteId(id)
-        handleShowConfirm();
-    };
+    // // Quando faccio click sul bottone di eliminazione
+    // const handleDelete = (id) => {
+    //     setDeleteId(id)
+    //     handleShowConfirm();
+    // };
 
-    // Quando confermo l'eliminazione
-    const handleDeleteConfirm = () => {
-        const id = deleteId;
-        setDeleteId('');
-        deleteImpiegato(id, setSuccess, setError)
-        handleCloseConfirm()
-    }
+    // // Quando confermo l'eliminazione
+    // const handleDeleteConfirm = () => {
+    //     const id = deleteId;
+    //     setDeleteId('');
+    //     deleteImpiegato(id, setSuccess, setError)
+    //     handleCloseConfirm()
+    // }
 
     /* EFFECT */
 
     // Il secondo parametro [] serve per farlo eseguire una
     // volta sola quando avvii la pagina
     useEffect(() => {
-        subscribeImpiegati(setData, (err) => console.error('ERROR Impiegati.jsx', err))
-        return unsubscribeImpiegati
+        subscribeImpiegati(setData, setError)
+        return () => {
+            unsubscribeImpiegati()
+        }
     }, []);
 
 
@@ -142,8 +135,8 @@ function Impiegati() {
 
             <ImpiegatiTable
                 data={data}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit} />
+                setSuccess={setSuccess}
+                setError={setError} />
 
             <ModalNewImpiegato
                 show={modalState.newImp}
@@ -159,16 +152,6 @@ function Impiegati() {
                 handleClose={handleCloseChip}
                 handleSetChip={handleSetChip} />
 
-            <ModalConfirm
-                show={modalState.confirm}
-                title='Conferma eliminazione'
-                handleConfirm={handleDeleteConfirm}
-                handleClose={handleCloseConfirm} >
-                    <p>
-                        Confermare l`&apos;`eliminazione?
-                        ATTENZIONE! Questa operazione non è reversibile
-                    </p>
-            </ModalConfirm>
         </div>
     );
 }

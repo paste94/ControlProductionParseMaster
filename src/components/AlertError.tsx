@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { PropsWithChildren, ReactElement } from 'react'
+// @ts-ignore
 import { Alert, AlertContainer } from 'react-bs-notifier'
 import PropTypes from 'prop-types'
+
+type Props = {
+    show:boolean, 
+    message: string,
+    handleClose: Function,
+}
 
 /**
  * Mostra un alert di errore
@@ -11,13 +18,13 @@ import PropTypes from 'prop-types'
  *                  - message (String): il messaggio di errore
  * @return {Component} ciao
   */
-function AlertSuccess({show, message, handleClose}) {
+function AlertError({show, message, handleClose}: PropsWithChildren<Props>): ReactElement {
     return (
         <AlertContainer position="bottom-right">
             { show ? (
                 <Alert
-                    type="success"
-                    headline='OK'
+                    type="danger"
+                    headline='Errore'
                     onDismiss={ handleClose }
                     showIcon={true}
                     timeout={5000} >
@@ -28,10 +35,10 @@ function AlertSuccess({show, message, handleClose}) {
     )
 }
 
-AlertSuccess.propTypes = {
+AlertError.propTypes = {
     show: PropTypes.bool.isRequired,
     message: PropTypes.string,
     handleClose: PropTypes.func,
 }
 
-export default AlertSuccess
+export default AlertError

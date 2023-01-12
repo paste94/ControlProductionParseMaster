@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { FaTrash } from 'react-icons/fa'
 import ModalConfirm from './ModalConfirm'
+
+type Props = {
+    title:string, 
+    handleConfirm: Function,
+    children: JSX.Element,
+}
 
 /**
  * Definisce il bottone dell'eliminazione di un elemento
@@ -14,15 +20,11 @@ import ModalConfirm from './ModalConfirm'
  *                      clickata la conferma
  * @return {Component} il component
  */
-function DeleteButton(props) {
+function DeleteButton({title, handleConfirm, children}: PropsWithChildren<Props>): JSX.Element {
     const [show, setShow] = useState(false)
 
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
-    const handleConfirm = () => {
-        props.handleConfirm()
-        handleClose()
-    }
 
     return (
         <div>
@@ -30,16 +32,19 @@ function DeleteButton(props) {
             <Button
                 variant='link'
                 onClick={handleShow}
-                title={props.title}
+                title={title}
                 size='sm' >
                 <FaTrash style={{color: '#b71c1c'}}/>
             </Button>
 
             <ModalConfirm
                 show={show}
-                title={props.title}
-                handleConfirm={ handleConfirm }
-                handleClose={ handleClose } > {props.children} </ModalConfirm>
+                title={title}
+                handleConfirm={ () => {
+                    handleConfirm(), 
+                    handleClose()
+                } }
+                handleClose={ handleClose } > {children} </ModalConfirm>
         </div>
 
     )

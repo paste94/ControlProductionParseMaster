@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import { Modal, FormControl, InputGroup, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+
+type Props = {
+    show:boolean, 
+    handleClose: React.MouseEventHandler<HTMLElement>,
+    handleSetChip: React.KeyboardEventHandler<HTMLInputElement>,
+}
 
 /**
  * Definisce il modal che permette di impostare il chip
@@ -13,7 +19,7 @@ import PropTypes from 'prop-types'
  *                      quando viene impostato il chip
  * @return {Component} il component creato
  */
-function ModalChip({show, handleClose, handleSetChip}) {
+function ModalChip({show, handleClose, handleSetChip}: PropsWithChildren<Props>): ReactElement {
     return (
         <Modal
             show={ show }

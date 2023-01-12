@@ -1,13 +1,15 @@
+import { LiveQuerySubscription } from 'parse';
 import { impiegati, Parse} from './http-common';
+import Impiegato from '../classes/Impiegato';
 
-let subscription;
+let subscription: LiveQuerySubscription;
 
 /**
  * Ottiene la subscription agli impiegati
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
- async function subscribeImpiegati(callback, callbackError) {
+ async function subscribeImpiegati(callback: Function, callbackError: Function) {
     const query = new Parse.Query(impiegati);
     subscription = await query.subscribe();
 
@@ -63,19 +65,15 @@ let subscription;
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-function getAllImpiegati(callback, callbackError) {
+function getAllImpiegati(callback: Function, callbackError: Function) {
     new Parse.Query(impiegati)
         .notEqualTo('eliminato', true)
         .find()
         .then(
             result => {
-                const data = []
-                result.forEach(elem => {
-                    data.push({
-                        id: elem.id,
-                        ...elem.attributes,
-                    })
-                })
+                const data: Impiegato[] = []
+                result.forEach(elem => data.push(new Impiegato(elem))
+                )
                 callback(data)
             },
             error => {
@@ -90,12 +88,18 @@ function getAllImpiegati(callback, callbackError) {
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-function addImpiegato(newImpiegato) {
+function addImpiegato(newImpiegato:Impiegato, successCallback: Function, errorCallback: Function) {
     const impiegato = new Parse.Object(impiegati)
-    Object.keys(newImpiegato).forEach(
-        key => impiegato.set(key, newImpiegato[key]))
-    impiegato.set('lavoriInCorso', [])
-        .save()
+
+    let property: keyof typeof newImpiegato; // Specifica quali sono le property dell'oggetto
+    for (property in newImpiegato){
+        impiegato.set(property, newImpiegato[property])
+    }
+
+    impiegato.save().then(
+        elem => successCallback(`Impiegato ${elem.attributes.nome} creato con successo`),
+        err => errorCallback('ERROR: ', err),
+    )
 }
 
 /** Elimina l'impiegato selezionato
@@ -104,15 +108,16 @@ function addImpiegato(newImpiegato) {
  * @param {function} successCallback
  * @param {function} errorCallback
  */
-function deleteImpiegato(id, successCallback, errorCallback) {
+function deleteImpiegato(id:string, successCallback:Function, errorCallback:Function) {
     new Parse.Query(impiegati)
         .get(id)
         .then(
             elem => {
-                elem.set('eliminato', true)
+                const e: any = elem.set('eliminato', true)
+                e.set('eliminato', true)
                     .save().then(
-                        (elem) => successCallback(`Impiegato ${elem.attributes.nome} rimosso con successo`),
-                        (err) => errorCallback(err.message))
+                        () => successCallback(`Impiegato ${elem.attributes.nome} rimosso con successo`),
+                        (err:any) => errorCallback(err.message))
             })
 }
 
@@ -123,11 +128,18 @@ function deleteImpiegato(id, successCallback, errorCallback) {
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-function updateImpiegato(id, newVal) {
+function updateImpiegato(id:string, newVal:any, successCallback:Function, errorCallback:Function) {
     const [key] = Object.keys(newVal)
     new Parse.Query(impiegati)
         .get(id)
-        .then( elem => elem.set( key, newVal[key] ).save() )
+        .then( elem => {
+            const e: any = elem.set( key, newVal[key] )
+            e.save().then(
+                () => successCallback(`Impiegato modificato con successo`),
+                (err:any) => errorCallback('ERRORE:', err.message)
+            )
+        },
+        (err:any) => errorCallback('ERRORE:', err.message))
 }
 
 export {

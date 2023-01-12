@@ -1,5 +1,7 @@
 /src/classes/Commessa.ts
 /src/classes/Articolo.ts
 /src/classes/Macchina.ts
+/src/classes/Impiegato.ts
 /src/DAO/Commesse.service.ts
 /src/DAO/Macchine.service.ts
+/src/DAO/Impiegati.service.ts

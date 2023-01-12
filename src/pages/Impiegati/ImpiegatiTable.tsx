@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { PropsWithChildren, ReactElement, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import cellEditFactory from 'react-bootstrap-table2-editor';
+// @ts-ignore
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
 import ModalChip from './ModalChip';
+// @ts-ignore
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
 import DeleteButton from '../../components/DeleteButton';
+import { deleteImpiegato, updateImpiegato } from '../../DAO/Impiegati.service';
+import Impiegato from '../../classes/Impiegato';
+
+type Props = {
+    data:Array<Impiegato>, 
+    setSuccess: Function,
+    setError: Function,
+}
 
 /** Definisce la tabella degli impiegati
  *
@@ -15,32 +25,34 @@ import DeleteButton from '../../components/DeleteButton';
  *                                          impostato il chip
  * @return {Component} Il componente creato
  */
-function ImpiegatiTable({data, handleEdit, handleDelete}) {
-    const [editRow, setEditRow] = useState(null)
+function ImpiegatiTable({data, setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
+    const [editRowId, setEditRowId] = useState('')
     const [show, setShow] = useState(false)
     const handleShow = () => setShow(true)
     const handleClose = () => {
         setShow(false)
-        setEditRow(null)
+        setEditRowId('')
     }
-    const handleSetChip = (event) => {
+    const handleSetChip = (event:any) => {
         if (event.charCode === 13) {
-            const id = editRow.id
-            const newVal = event.target.value
-            handleEdit(id, {chip: newVal})
+            const id = editRowId
+            if(id == ''){
+                setError('Errore, ID del record non trovato!')
+            } else {
+                const newVal = event.target.value
+                updateImpiegato(id, {chip: newVal}, setSuccess, setError)
+            }
             handleClose();
         }
     }
 
-    const handleSetNome = (id, newNome) => handleEdit(id, {nome: newNome})
-
     // Definizione dei bottoni nell'ultima colonna
-    const defineButtons = (cell, row, rowIndex, formatExtraData) => {
+    const defineButtons = (cell:any, row:Impiegato, rowIndex:number, formatExtraData:any) => {
         return (
             <div className='row align-items-center'>
                 <div className='col'>
                     <DeleteButton
-                        handleConfirm={() => handleDelete(row.id)}
+                        handleConfirm={() => deleteImpiegato(row.id, setSuccess, setError)}
                         title={'Elimina impiegato'} >
                             <p>Eliminare definitivamente impiegato?</p>
                     </DeleteButton>
@@ -57,14 +69,14 @@ function ImpiegatiTable({data, handleEdit, handleDelete}) {
     }, {
         dataField: 'nome',
         text: 'Nome',
-        editable: false,
+        editable: true,
     }, {
         dataField: 'chip',
         text: 'Chip',
         editable: false,
         events: {
-            onClick: (e, column, columnIndex, row, rowIndex) => {
-                setEditRow(row)
+            onClick: (e: any, column: any, columnIndex: number, row: Impiegato, rowIndex: number) => {
+                setEditRowId(row.id)
                 handleShow()
             },
         },
@@ -88,8 +100,8 @@ function ImpiegatiTable({data, handleEdit, handleDelete}) {
                 cellEdit={ cellEditFactory({
                     mode: 'click',
                     blurToSave: true,
-                    afterSaveCell: (oldValue, newValue, row, column) => {
-                        handleSetNome(row.id, newValue)
+                    afterSaveCell: (oldValue:string, newValue:string, row: Impiegato, column:any) => {
+                        updateImpiegato(row.id, {nome: newValue}, setSuccess, setError)
                     },
                 })} />
 
@@ -100,12 +112,6 @@ function ImpiegatiTable({data, handleEdit, handleDelete}) {
 
         </div>
     )
-}
-
-ImpiegatiTable.propTypes = {
-    data: PropTypes.array.isRequired,
-    handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
 }
 
 export default ImpiegatiTable

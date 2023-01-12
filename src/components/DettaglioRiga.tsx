@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+
+type Props = {
+    k:string, 
+    v: string,
+}
 
 /**
  * @param {Object}  props Definisce le propertyes della tabella
@@ -8,7 +13,7 @@ import PropTypes from 'prop-types'
  *                  - v valore del campo
  * @return {Component} Il component
  */
-function DettaglioRiga({k, v}) {
+function DettaglioRiga({k, v}: PropsWithChildren<Props>): ReactElement {
     return (
         <Row >
             <Col

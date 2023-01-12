@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import CommesseTable from './CommesseTable';
 import ModalNewCommessa from './ModalNewCommessa';
 import { subscribeCommesse, unsubscribeCommesse } from '../../DAO/Commesse.service'
@@ -12,7 +12,7 @@ import AlertSuccess from '../../components/AlertSuccess';
  * @param {object}  props properties
  * @return {Component} Il componente creato
  */
-function Commesse() {
+function Commesse(): ReactElement {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')

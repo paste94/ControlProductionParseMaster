@@ -74,10 +74,7 @@ function getAllMacchine(callback: Function, callbackError: Function) {
         .then( result => {
             const data: Macchina[] = []
             result.forEach((elem: Parse.Object<Parse.Attributes>) => {
-                data.push(new Macchina(
-                    elem.get('nome'),
-                    elem.id
-                ))
+                data.push(new Macchina(elem))
             })
             callback(data)
         }, (error) => {

@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react'
 import { Modal, FormControl, InputGroup, Button, Form } from 'react-bootstrap';
 import PropTypes from 'prop-types'
+
+type Props = {
+    newImp: any,
+    show: boolean,
+    handleClose: React.MouseEventHandler<HTMLElement>,
+    handleAddImpiegato: React.FormEventHandler<HTMLFormElement>,
+    handleChangeNome: React.ChangeEventHandler<any>,
+    handleChangeChip: React.ChangeEventHandler<any>,
+    handleShowChip: React.MouseEventHandler<HTMLElement>,
+}
 
 /**
  * Modal specifico per l'aggiunta dell'impiegato
@@ -27,7 +37,7 @@ function ModalNewImpiegato({
     handleChangeNome,
     handleChangeChip,
     handleShowChip,
-}) {
+}: PropsWithChildren<Props>): ReactElement {
     return (
         <Modal
             show={show}

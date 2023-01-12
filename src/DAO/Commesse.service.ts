@@ -76,19 +76,7 @@ async function getAllCommesse(callback :Function, callbackError :Function) {
             const data: Commessa[] = []
             console.log(result)
             result.forEach((elem: Parse.Object<Parse.Attributes>) => {
-                data.push(new Commessa(
-                    elem.get('nome'),
-                    elem.get('numero'),
-                    elem.get('data_offerta'),
-                    elem.get('data_consegna'),
-                    elem.id,
-                    elem.get('chiusa'),
-                    elem.get('totPreventivo'),
-                    elem.get('totOre'),
-                    //elem.get('preventivo'),
-                    elem.get('archiviata'),
-                    elem.get('minutiReali'),
-                ))
+                data.push(new Commessa(elem))
             })
            callback(data)
         }, (error:any) => {
@@ -190,7 +178,7 @@ function deleteCommessa(id: string, successCallback: Function, errorCallback: Fu
 function updateCommessa(id:string, newVal:any) {
     const [key] = Object.keys(newVal)
     const query = new Parse.Query(commesse)
-    console.log(key)
+
     newVal[key] = (key === 'data_offerta' || key === 'data_consegna') ?
         new Date(newVal[key]) :
         newVal[key]

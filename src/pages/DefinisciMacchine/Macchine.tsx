@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { addMacchina, deleteMacchina, subscribeMacchine, unsubscribeMacchine } from '../../DAO/Macchine.service';
+import { subscribeMacchine, unsubscribeMacchine } from '../../DAO/Macchine.service';
 import MacchineTable from './MacchineTable';
 import ModalNewMacchina from './ModalNewMacchina';
 import AlertError from '../../components/AlertError'
