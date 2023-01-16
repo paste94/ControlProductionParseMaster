@@ -1,4 +1,4 @@
-import React, { CSSProperties, PropsWithChildren, ReactElement, useState } from 'react';
+import React, { CSSProperties, PropsWithChildren, ReactElement, useEffect, useState } from 'react';
 import BootstrapTable, { ColumnDescription } from 'react-bootstrap-table-next'
 // @ts-ignore
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor'
@@ -8,27 +8,25 @@ import paginationFactory from 'react-bootstrap-table2-paginator'
 import { Row, Col, Button } from 'react-bootstrap'
 import { FaCheck, FaEye, FaArrowDown } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import { archiveCommessa, deleteCommessa, updateCommessa } from '../../DAO/Commesse.service';
+import { archiveCommessa, deleteCommessa, subscribeCommesse, unsubscribeCommesse, updateCommessa } from '../../DAO/Commesse.service';
 import ModalCloneCommessa from './ModalCloneCommessa';
 import {dateFormatter, timeFormatter} from '../../utils/dateTimeFormatter';
 import Commessa from '../../classes/Commessa';
 
-type Props = {
-    data:Array<Commessa>, 
-    setSuccess: Function,
-    setError: Function,
-}
-
 /**
- * Definisce la tabella degli impiegati
- * @param {Object}  props Definisce le propertyes della tabella
- *                  - data (array) elenco degli elementi
- *                      dell'elemento
- *                  - handleEdit (function) Gestisce la modifica dell'elemento
- * @return {Component} il component creato
+ * Tabella che contiene le commesse e i bottoni azioni per esse.
+ *
+ * @prop data - I dati da visualizzare nella tabella
+ * @prop setSuccess - Callback per il successo del component
+ * @prop setError - Callback per il fallimento del component
  */
-function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
+function CommesseTable({setSuccess, setError}: PropsWithChildren<{
+        setSuccess?: (msg: string) => void,
+        setError?: (msg: string) => void,
+    }>): ReactElement {
+    
+    const [data, setData] = useState<Commessa[]>([])
+
     // Definizione dei bottoni nell'ultima colonna
     const defineButtons = (cell: any, row: Commessa, rowIndex: number, formatExtraData: any) => {
         const commessa = data[rowIndex]
@@ -54,11 +52,6 @@ function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): 
                         title='Apri/chiudi commessa'
                         size='sm'
                         onClick={ () => {
-                            /* Vecchio controllo prima della creazione della classe Commessa
-                            'chiusa' in row ?
-                                handleEdit(row.id, {chiusa: !row.chiusa}) :
-                                handleEdit(row.id, {chiusa: true})
-                                */
                             handleEdit(row.id, {chiusa: !row.chiusa})
                         }} >
                             <FaCheck style={{color: 'black'}}/>
@@ -90,6 +83,12 @@ function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): 
         );
     };
 
+    /**
+     * Eseguito quando viene fatta richiesta di modifica di un elemento. 
+     * @param id ID della commessa da modificare
+     * @param newValue Nuovo valore da assegnare alla commessa. Questo deve essere un oggeto 
+     * _{k,v}_ dove _k_ è il nome della chiave da modificare e _v_ è il nuovo valore
+     */
     const handleEdit = (id:string, newValue:any) => {
         if ('data_offerta_string' in newValue) {
             updateCommessa(id, {'data_offerta': newValue.data_offerta_string})
@@ -100,7 +99,9 @@ function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): 
         }
     }
 
-    // Definizione delle colonne
+    /**
+     * Definisce le colonne che vengono poi mostrate nella tabella 
+     */
     const columns:Array<ColumnDescription> = [{
         dataField: 'id',
         text: 'ID',
@@ -146,7 +147,13 @@ function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): 
         editable: false,
     }];
 
-    let s:CSSProperties
+    
+    useEffect(() => {
+        subscribeCommesse(setData, setError);
+        return () => {
+            unsubscribeCommesse()
+        };
+    }, []);
 
     return (
         <div>
@@ -155,7 +162,6 @@ function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): 
                 data={ data }
                 columns={ columns }
                 pagination={ paginationFactory() }
-                // Rende il colore della riga verde nel caso questa sia chiusa
                 rowStyle={ (row:Commessa, index:number) => row.chiusa ? {backgroundColor:'#00e676'} : {} }
                 noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({
@@ -170,12 +176,6 @@ function CommesseTable({data, setSuccess, setError}: PropsWithChildren<Props>): 
                 />
         </div>
     )
-}
-
-CommesseTable.propTypes = {
-    data: PropTypes.array,
-    setSuccess: PropTypes.func,
-    setError: PropTypes.func,
 }
 
 export default CommesseTable

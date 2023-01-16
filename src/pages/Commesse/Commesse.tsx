@@ -5,18 +5,22 @@ import { subscribeCommesse, unsubscribeCommesse } from '../../DAO/Commesse.servi
 import { Col, Row } from 'react-bootstrap';
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
-
+import Commessa from '../../classes/Commessa';
 
 /**
- * Pagina delle commesse
- * @param {object}  props properties
- * @return {Component} Il componente creato
+ * Schermata che mostra le Commesse aperte e non. Qui vengono mostrate solo le commesse non 
+ * archiviate. Da qui è possibile accedere alle commesse singole (dettaglio), modificare o 
+ * eliminare commesse intere. 
+ *
+ * @returns Il component della pagina
  */
 function Commesse(): ReactElement {
-    const [data, setData] = useState([])
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
+    const [error, setError] = useState<string>('')
+    const [success, setSuccess] = useState<string>('')
 
+    /**
+     * Mostra gli alert di errore o successo nella pagina
+     */
     const alerts = <>
         <AlertError
             show={error !== ''}
@@ -27,16 +31,6 @@ function Commesse(): ReactElement {
             message={success}
             handleClose={() => setSuccess('')} />
     </>
-
-    // Il secondo parametro [] serve per farlo eseguire una volta
-    // sola quando avvii la pagina
-    // eslint-disable-next-line
-    useEffect(() => {
-        subscribeCommesse(setData, setError);
-        return () => {
-            unsubscribeCommesse()
-        };
-    }, []);
 
     return (
         <div className='page'>
@@ -53,7 +47,6 @@ function Commesse(): ReactElement {
             </Row>
 
             <CommesseTable
-                data={data}
                 setSuccess={setSuccess}
                 setError={setError}
                  />

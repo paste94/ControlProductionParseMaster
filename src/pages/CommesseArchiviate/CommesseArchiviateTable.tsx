@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next'
+import React, { useState, useEffect, PropsWithChildren, ReactElement } from 'react';
+import BootstrapTable, { ColumnDescription } from 'react-bootstrap-table-next'
+// @ts-ignore
 import cellEditFactory from 'react-bootstrap-table2-editor'
 import DeleteButton from '../../components/DeleteButton'
+// @ts-ignore
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import { Row, Col, Button } from 'react-bootstrap'
 import { FaArrowUp, FaEye } from 'react-icons/fa'
@@ -11,26 +13,34 @@ import { deleteCommessaArchiviata, unarchiveCommessa } from '../../DAO/CommesseA
 import ModalCloneCommessa from '../Commesse/ModalCloneCommessa';
 import { dateFormatter, timeFormatter } from '../../utils/dateTimeFormatter';
 import { subscribeCommesseArchiviate, unsubscribeCommesseArchiviate } from '../../DAO/CommesseArchiviate.service';
+import Commessa from '../../classes/Commessa';
+
+type Props = {
+    setSuccess: (msg: string) => void,
+    setError: (msg: string) => void,
+}
 
 /**
- * Definisce la tabella degli impiegati
- * @param {Object}  props Definisce le propertyes della tabella
- *                  - data (array) elenco degli elementi
- * @return {Component} il component creato
+ * Tabella che contiene le commesse e i bottoni azioni per esse.
+ *
+ * @prop setSuccess - Callback per il successo del component
+ * @prop setError - Callback per il fallimento del component
  */
-function CommesseArchiviateTable({setSuccess, setError}) {
-    const [data, setData] = useState([])
+function CommesseArchiviateTable({setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
+    const [data, setData] = useState<Commessa[]>([])
 
     // Il secondo parametro [] serve per farlo eseguire una volta
     // sola quando avvii la pagina
     useEffect(() => {
         subscribeCommesseArchiviate(setData, setError);
-        return unsubscribeCommesseArchiviate;
+        return () => {
+            unsubscribeCommesseArchiviate()
+        };
     }, []);
 
 
     // Definizione dei bottoni nell'ultima colonna
-    const defineButtons = (cell, row, rowIndex, formatExtraData) => {
+    const defineButtons = (cell: any, row: Commessa, rowIndex: number, formatExtraData: any) => {
         const commessa = data[rowIndex]
         return (
             <Row>
@@ -73,7 +83,7 @@ function CommesseArchiviateTable({setSuccess, setError}) {
     };
 
     // Definizione delle colonne
-    const columns = [{
+    const columns:Array<ColumnDescription> = [{
         dataField: 'id',
         text: 'ID',
         hidden: true,
@@ -86,12 +96,12 @@ function CommesseArchiviateTable({setSuccess, setError}) {
         text: 'Numero',
         editable: false,
     }, {
-        dataField: 'data_offerta',
+        dataField: 'data_offerta_string',
         text: 'Data Offerta',
         formatter: dateFormatter,
         editable: false,
     }, {
-        dataField: 'data_consegna',
+        dataField: 'data_consegna_string',
         text: 'Data Consegna',
         formatter: dateFormatter,
         editable: false,
@@ -106,7 +116,6 @@ function CommesseArchiviateTable({setSuccess, setError}) {
     }, {
         dataField: 'minutiReali',
         text: 'Ore reali',
-        formatter: timeFormatter,
         editable: false,
     }, {
         dataField: 'totPreventivo',
@@ -116,18 +125,9 @@ function CommesseArchiviateTable({setSuccess, setError}) {
         dataField: 'actions',
         text: 'Azioni',
         formatter: defineButtons,
-        headerStyle: (colum, colIndex) => {
-            return { width: '250px', textAlign: 'center' };
-        },
+        headerStyle: { width: '250px', textAlign: 'center' } ,
         editable: false,
     }];
-
-    // TODO Snellisci questa funzione
-    const rowStyle = (row, index) => {
-        const style = {}
-        if (row.chiusa) style.backgroundColor='#00e676'
-        return style
-    }
 
     return (
         <div>
@@ -136,16 +136,11 @@ function CommesseArchiviateTable({setSuccess, setError}) {
                 data={ data }
                 columns={ columns }
                 pagination={ paginationFactory() }
-                rowStyle={ rowStyle }
+                rowStyle={ (row:Commessa, index:number) => row.chiusa ? {backgroundColor:'#00e676'} : {} }
                 noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({
                     mode: 'click',
                     blurToSave: true,
-                    afterSaveCell: (oldValue, newValue, row, column) => {
-                        const newVal = {}
-                        newVal[column.dataField] = newValue
-                        handleEdit(row.id, newVal)
-                    },
                 })}
                 />
         </div>

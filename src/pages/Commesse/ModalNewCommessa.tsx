@@ -1,20 +1,17 @@
 import React, { PropsWithChildren, ReactElement, useState } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
-import PropTypes from 'prop-types'
 import { addCommessa, getCommessa } from '../../DAO/Commesse.service';
 import { useHistory } from 'react-router';
 import Commessa from '../../classes/Commessa';
 
-type Props = {
-    setError: Function;
-}
 
 /**
- * Modal specifico per l'aggiunta della commessa
- * @param {Object}  props properties
- * @return {Component} il componente
+ * Modal specifico la creazione di una commessa. 
+ * @prop setError - Callback per il fallimento del component
  */
-function ModalNewCommessa({setError}: PropsWithChildren<Props>): ReactElement {
+function ModalNewCommessa({setError}: PropsWithChildren<{
+    setError?: (msg: string) => void;
+}>): ReactElement {
     const history = useHistory();
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
@@ -46,7 +43,7 @@ function ModalNewCommessa({setError}: PropsWithChildren<Props>): ReactElement {
 
     /**
      * Funzione che apre la funestra della commessa singola una volta che la commessa è stata creata
-     * @param {String} commessaId ID dell'oggetto commessa. Questo ID è quello dell'oggetto univoco!
+     * @param commessaId ID dell'oggetto commessa. Questo ID è quello dell'oggetto univoco!
      */
     const openCommessaSingolaView = (commessaId :string) => {
         console.log(commessaId)

@@ -15,7 +15,7 @@ const macchine = 'macchine'
  * @param {String} date la stringa da convertire in data
  * @return {Date} la data
  */
-function strToDate(date) {
+function strToDate(date:string) {
   if (date === '') {
       return ''
   }
@@ -26,10 +26,10 @@ function strToDate(date) {
 
 /**
  * Converte una data in stringa
- * @param {Date} date la data da convertire in stringa
+ * @param {string} date la data da convertire in stringa
  * @return {String} la data
  */
-function dateToStr(date) {
+function dateToStr(date:string) {
   if (date === '') {
       return ''
   }

@@ -1,24 +1,21 @@
 import React, { useState, useEffect, PropsWithChildren, ReactElement } from 'react';
 import { Modal, FormControl, Button, Form, Col } from 'react-bootstrap';
-import PropTypes from 'prop-types'
 import { FaCopy } from 'react-icons/fa'
 import { cloneCommessa } from '../../DAO/Commesse.service';
 import Commessa from '../../classes/Commessa';
 
-type Props = {
-    originalCommessa: Commessa;
-    setSuccess: Function;
-    setError: Function;
-}
-
 /**
- * Modal specifico per l'aggiunta della commessa
- * @param {Object}  props properties
- *                  - handleConfirm (function) handler che gestisce la creazione
- *                      della commessa
- * @return {Component} il componente
+ * Modal specifico la clonazione di una commessa. Prende come proprietà una commessa e crea una 
+ * copia esata ad eccezione dell'ID, nascosto all'utente. 
+ * @prop originalCommessa - commessa da copiare
+ * @prop setSuccess - Callback per il successo del component
+ * @prop setError - Callback per il fallimento del component
  */
-function ModalCloneCommessa({originalCommessa, setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
+function ModalCloneCommessa({originalCommessa, setSuccess, setError}: PropsWithChildren<{
+        originalCommessa: Commessa;
+        setSuccess?: (msg: string) => void;
+        setError?: (msg: string) => void;
+    }>): ReactElement {
     const [show, setShow] = useState(false)
     const [newCommessa, setNewCommessa] = useState({
         nome: originalCommessa.nome,
@@ -146,12 +143,5 @@ function ModalCloneCommessa({originalCommessa, setSuccess, setError}: PropsWithC
 
     )
 }
-
-ModalCloneCommessa.propTypes = {
-    originalCommessa: PropTypes.object.isRequired,
-    setSuccess: PropTypes.func,
-    setError: PropTypes.func,
-}
-
 
 export default ModalCloneCommessa;

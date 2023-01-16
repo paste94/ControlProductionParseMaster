@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import { Col, Row } from 'react-bootstrap';
 import CommesseArchiviateTable from './CommesseArchiviateTable';
-import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';
 
 /**
- * Pagina delle commesse
- * @param {object}  props properties
- * @return {Component} Il componente creato
- */
-function CommesseArchiviate() {
+* Schermata che mostra le Commesse archiviate, aperte e non. 
+* Da qui non è possibile modificare, aprire o chiudere commesse.  
+*
+* @returns Il component della pagina
+*/
+function CommesseArchiviate(): ReactElement {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
 
@@ -41,11 +41,6 @@ function CommesseArchiviate() {
                 />
         </div>
     )
-}
-
-CommesseArchiviate.propTypes = {
-    setSuccess: PropTypes.func,
-    setError: PropTypes.func,
 }
 
 export default CommesseArchiviate;
