@@ -1,7 +1,6 @@
 import React, {ReactElement, useEffect, useState} from 'react';
 import CommesseTable from './CommesseTable';
 import ModalNewCommessa from './ModalNewCommessa';
-import { subscribeCommesse, unsubscribeCommesse } from '../../DAO/Commesse.service'
 import { Col, Row } from 'react-bootstrap';
 import AlertError from '../../components/AlertError';
 import AlertSuccess from '../../components/AlertSuccess';

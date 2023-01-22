@@ -57,14 +57,13 @@ async function unsubscribeCommesse():Promise<void> {
  * @param callback callback per successo che prende come parametro i dati ottenuti
  * @param errorCallback Callback di notifica dell'errore.
  */
-async function getAllCommesse(callback :(data: Array<Commessa>) => void, errorCallback?: (msg: string) => void): Promise<void> {
+async function getAllCommesse(callback: (data: Array<Commessa>) => void, errorCallback?: (msg: string) => void): Promise<void> {
     new Parse.Query(commesse)
         .notEqualTo('eliminato', true)
         .notEqualTo('archiviata', true)
         .find()
         .then((result :any) => {
             const data: Commessa[] = []
-            console.log(result)
             result.forEach((elem: Parse.Object<Parse.Attributes>) => {
                 data.push(new Commessa(elem))
             })
