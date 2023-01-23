@@ -1,5 +1,5 @@
 import { Button, Form, Modal} from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import NumDisegno from './component/NumDisegno';
 import NumPezzi from './component/NumPezzi';
 import CostMat from './component/CostMat';
@@ -7,7 +7,9 @@ import CostoOrario from './component/CostoOrario';
 import PropTypes from 'prop-types'
 import { getOreMacchina, renderMacchine } from './funzioni/ore_macchina';
 import { FaEdit } from 'react-icons/fa';
-import { editArticolo } from '../../DAO/Articoli.service';
+import { updateArticolo } from '../../DAO/Articoli.service';
+import Articolo from '../../classes/Articolo';
+import MacchinaOre from '../../classes/MacchinaOre';
 
 
 /**
@@ -16,17 +18,17 @@ import { editArticolo } from '../../DAO/Articoli.service';
  *                  - articolo (object) contiene l'articolo da modificare
  * @return {Component} il componente
  */
-function ModalModificaArticolo({
-    articolo,
-}) {
-    const [show, setShow] = useState(false);
-    const [numDisegno, setNumDisegno] = useState(articolo.numDisegno);
-    const [numPezzi, setNumPezzi] = useState(1);
-    const [costMat, setCostMat] = useState(0);
-    const [costoOrario, setCostoOrario] = useState(42)
-    const [totOre, setTotOre] = useState(0)
-    const [totPreventivo, setTotPreventivo] = useState(0)
-    const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
+function ModalModificaArticolo({articolo}: PropsWithChildren<{
+    articolo:Articolo,
+}>) {
+    const [show, setShow] = useState<boolean>(false);
+    const [numDisegno, setNumDisegno] = useState<string>(articolo.numDisegno);
+    const [numPezzi, setNumPezzi] = useState<number>(1);
+    const [costMat, setCostMat] = useState<number>(0);
+    const [costoOrario, setCostoOrario] = useState<number>(Number(localStorage.getItem('DefaultCostMat')) ?? 0)
+    const [totOre, setTotOre] = useState<number>(0)
+    const [totPreventivo, setTotPreventivo] = useState<number>(0)
+    const [oreMacchina, setOreMacchina] = useState<MacchinaOre[]>([]) // Mappa [nome macchina -> ore assegnate]
 
     const [renderedMacchine, setRenderedMacchine] = useState([])
 
@@ -36,22 +38,31 @@ function ModalModificaArticolo({
     /**
      * @param {Event} e L'evento di bubmit
      */
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         // Evito che la pagina venga ricaricata topo il confirm del form
         e.preventDefault();
 
-        const _articolo = {
-            costMat: costMat.toString(),
-            costoOrario: costoOrario.toString(),
-            numDisegno: numDisegno.toString(),
-            numPezzi: numPezzi.toString(),
-            totOre: totOre.toString(),
-            totPreventivo: totPreventivo.toString(),
-            oreMacchina: oreMacchina.filter(m => m.ore > 0),
-            parent: articolo.parent,
-        }
+        const _articolo = new Articolo(
+            String(totPreventivo), 
+            String(totOre), 
+            oreMacchina, 
+            numDisegno, 
+            String(numPezzi), 
+            String(costMat),
+            String(costoOrario)
+        )
 
-        editArticolo(articolo.id, _articolo, handleHideModal)
+        // const _articolo = {
+        //     costMat: costMat.toString(),
+        //     costoOrario: costoOrario.toString(),
+        //     numDisegno: numDisegno.toString(),
+        //     numPezzi: numPezzi.toString(),
+        //     totOre: totOre.toString(),
+        //     totPreventivo: totPreventivo.toString(),
+        //     oreMacchina: oreMacchina.filter((m: MacchinaOre) => m.ore > 0),
+        // }
+
+        updateArticolo(articolo.id, _articolo, handleHideModal)
     }
 
     useEffect(() => {
@@ -65,18 +76,18 @@ function ModalModificaArticolo({
             setOreMacchina([])
         } else {
             setNumDisegno(articolo.numDisegno)
-            setNumPezzi(articolo.numPezzi)
-            setCostMat(articolo.costMat)
-            setCostoOrario(articolo.costoOrario)
-            setTotOre(articolo.totOre)
-            setTotPreventivo(articolo.totPreventivo)
+            setNumPezzi(Number(articolo.numPezzi))
+            setCostMat(Number(articolo.costMat))
+            setCostoOrario(Number(articolo.costoOrario))
+            setTotOre(Number(articolo.totOre))
+            setTotPreventivo(Number(articolo.totPreventivo))
             // Prendo le ore macchina della articolo ed aggiungo le ore macchina
             // a 0 delle macchine nuove non utilizzate.
-            getOreMacchina((macchine) => {
+            getOreMacchina((macchine: MacchinaOre[]) => {
                 // Deep copy dell'oggetto oreMacchina di articolo
                 const _oreMacchina = JSON.parse(JSON.stringify(articolo.oreMacchina))
                 // Estraggo gli ID delle macchine già presenti in articolo
-                const _oreMacchinaIds = _oreMacchina.map(m => m.id)
+                const _oreMacchinaIds = _oreMacchina.map((m: MacchinaOre) => m.id)
                 // Tolgo le macchine presenti in articolo dall'elenco delle macchine totali
                 const _macchineFiltered = macchine.filter(e => !_oreMacchinaIds.includes(e.id))
                 // Imposto come oreMacchina l'elenco dato dalla concatenazione delle macchine
@@ -99,12 +110,12 @@ function ModalModificaArticolo({
     // Modifica i contatori totali
     useEffect(() => {
         const _totOre = oreMacchina.reduce(
-            (accumulator, current) => accumulator + parseFloat(current.ore),
+            (accumulator, current) => accumulator + Number(current.ore),
             0,
         )
-        const _totPreventivo = (_totOre * parseFloat(costoOrario) + parseFloat(costMat)) * parseInt(numPezzi)
-        setTotOre(_totOre.toFixed(2))
-        setTotPreventivo(_totPreventivo.toFixed(2))
+        const _totPreventivo = (_totOre * Number(costoOrario) + Number(costMat)) * Number(numPezzi)
+        setTotOre(Number(_totOre.toFixed(2)))
+        setTotPreventivo(Number(_totPreventivo.toFixed(2)))
     }, [oreMacchina, numPezzi, costMat, costoOrario] )
 
     return (

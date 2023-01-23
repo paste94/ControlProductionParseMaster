@@ -1,19 +1,27 @@
-import React from 'react'
-import BootstrapTable from 'react-bootstrap-table-next'
+import React, { PropsWithChildren, ReactElement, useEffect, useState } from 'react'
+import BootstrapTable, { ColumnDescription } from 'react-bootstrap-table-next'
 import { Row, Col } from 'react-bootstrap'
+// @ts-ignore
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import DeleteButton from '../../components/DeleteButton'
 import { FaCaretDown, FaCaretRight } from 'react-icons/fa'
-import PropTypes from 'prop-types'
 import ModalModificaArticolo from '../../components/modal_articoli/ModalModificaArticolo'
 import DettaglioRiga from '../../components/DettaglioRiga'
+import { deleteArticolo, subscribeArticoli, unsubscribeArticoli } from '../../DAO/Articoli.service'
+import Articolo from '../../classes/Articolo'
 
 /**
  * Definisce la tabella per visualizzare e gestire gli articoli
  * @param {*} props le properties del component
  * @return {Component} il component creato
  */
-function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
+function ArticoliTable({setSuccess, setError}: PropsWithChildren<{
+        setSuccess?: (msg: string) => void,
+        setError?: (msg: string) => void,
+    }>): ReactElement {
+
+    const [data, setData] = useState<Articolo[]>([])
+
     /**
      * Definisce i bottoni da inserire nell'ultima colonna della tabella
      * @param {object} cell la cella in cui sono definiti i bottoni
@@ -22,7 +30,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
      * @param {object} formatExtraData dati extra (vedi documentazione)
      * @return {Component} il component creato
      */
-    const defineButtons = (cell, row, rowIndex, formatExtraData) => (
+    const defineButtons = (cell: any, row: Articolo, rowIndex: number, formatExtraData: any) => (
         <Row>
             <Col lg='6' md='6' sm='6'>
                 <ModalModificaArticolo
@@ -31,7 +39,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
             <Col lg='6' md='6' sm='6'>
                 <DeleteButton
                     title='Elimina'
-                    handleConfirm={() => handleDeleteArticolo(row.id)} >
+                    handleConfirm={() => deleteArticolo(row.id)} >
                         <p>Eliminare definitivamente l`&apos;`articolo?</p>
                 </DeleteButton>
             </Col>
@@ -39,7 +47,7 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
     )
 
     // Definizione delle colonne
-    const columns = [
+    const columns:Array<ColumnDescription> = [
         {
             dataField: 'numDisegno',
             text: 'Numero Disegno',
@@ -53,17 +61,14 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
             dataField: 'azioni',
             text: 'Azioni',
             formatter: defineButtons,
-            headerStyle: (colum, colIndex) => {
-                return { width: '120px'};
-            },
+            headerStyle: { width: '250px', textAlign: 'center' },
         },
     ];
 
     // Definisce cosa mostrare quando la riga nella tabella viene espansa
     const expandRow = {
-        renderer: row => {
+        renderer: (row: Articolo) => {
             let macchineValue = ''
-
             if (row.oreMacchina != undefined && row.oreMacchina) {
                 Object.entries(row.oreMacchina.map(e => {
                     macchineValue = macchineValue + e.nome + ': ' + e.ore + 'h\n'
@@ -91,15 +96,24 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
         },
         showExpandColumn: true,
         expandByColumnOnly: true,
+        // @ts-ignore
         expandHeaderColumnRenderer: ({ isAnyExpands }) => {
             if (isAnyExpands) return <FaCaretDown/>;
             else return <FaCaretRight/>;
         },
-            expandColumnRenderer: ({ expanded }) => {
+        // @ts-ignore
+        expandColumnRenderer: ({ expanded }) => {
             if (expanded) return <FaCaretDown color='grey'/>;
             else return <FaCaretRight color='grey'/>;
         },
     }
+
+    useEffect(() => {
+        subscribeArticoli(setData, setError);
+        return () => {
+            unsubscribeArticoli()
+        };
+    }, []);
 
     return (
         <div>
@@ -113,12 +127,6 @@ function ArticoliTable({data, handleEditArticolo, handleDeleteArticolo}) {
                 />
         </div>
     )
-}
-
-ArticoliTable.propTypes = {
-    data: PropTypes.array.isRequired,
-    handleEditArticolo: PropTypes.func.isRequired,
-    handleDeleteArticolo: PropTypes.func.isRequired,
 }
 
 export default ArticoliTable

@@ -2,6 +2,8 @@
 /src/classes/Articolo.ts
 /src/classes/Macchina.ts
 /src/classes/Impiegato.ts
+/src/classes/Articolo.ts
 /src/DAO/Commesse.service.ts
 /src/DAO/Macchine.service.ts
 /src/DAO/Impiegati.service.ts
+/src/DAO/Articoli.service.ts
