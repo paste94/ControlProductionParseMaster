@@ -23,7 +23,7 @@
         "space-before-blocks":"warn",
         "indent":"off",
         "semi":"off",
-        "no-trailing-spaces":"warn",
+        "no-trailing-spaces":"off",
         "object-curly-spacing":"off",
         "keyword-spacing":"warn",
         "no-unused-vars":"off",

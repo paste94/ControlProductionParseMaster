@@ -46,7 +46,7 @@ function Impiegati(): ReactElement {
     });
 
     // L'id dell'elemento da eliminare
-    //const [deleteId, setDeleteId] = useState('');
+    // const [deleteId, setDeleteId] = useState('');
 
     /* HANDLERS */
 

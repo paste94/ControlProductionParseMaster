@@ -36,7 +36,7 @@ function ImpiegatiTable({data, setSuccess, setError}: PropsWithChildren<Props>):
     const handleSetChip = (event:any) => {
         if (event.charCode === 13) {
             const id = editRowId
-            if(id == ''){
+            if (id == '') {
                 setError('Errore, ID del record non trovato!')
             } else {
                 const newVal = event.target.value

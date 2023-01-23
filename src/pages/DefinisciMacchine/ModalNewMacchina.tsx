@@ -11,6 +11,8 @@ type Props = {
  * Modal specifico per l'aggiunta della macchina
  *
  * @param {Object}  props properties
+ * 
+ * @return {ReactEelemnt} L'elemento modal creato 
  */
 function ModalNewMacchina({setError}: PropsWithChildren<Props>): ReactElement {
     const [show, setShow] = useState(false)

@@ -15,18 +15,18 @@ import { dateFormatter, timeFormatter } from '../../utils/dateTimeFormatter';
 import { subscribeCommesseArchiviate, unsubscribeCommesseArchiviate } from '../../DAO/CommesseArchiviate.service';
 import Commessa from '../../classes/Commessa';
 
-type Props = {
-    setSuccess: (msg: string) => void,
-    setError: (msg: string) => void,
-}
-
 /**
  * Tabella che contiene le commesse e i bottoni azioni per esse.
  *
- * @prop setSuccess - Callback per il successo del component
- * @prop setError - Callback per il fallimento del component
+ * @param {Function} setSuccess - Callback per il successo del component
+ * @param {Function} setError - Callback per il fallimento del component
+ * 
+ * @return {ReactElement} Il component tabella 
  */
-function CommesseArchiviateTable({setSuccess, setError}: PropsWithChildren<Props>): ReactElement {
+function CommesseArchiviateTable({setSuccess, setError}: PropsWithChildren<{
+    setSuccess: (msg: string) => void,
+    setError: (msg: string) => void,
+}>): ReactElement {
     const [data, setData] = useState<Commessa[]>([])
 
     // Il secondo parametro [] serve per farlo eseguire una volta
@@ -125,7 +125,7 @@ function CommesseArchiviateTable({setSuccess, setError}: PropsWithChildren<Props
         dataField: 'actions',
         text: 'Azioni',
         formatter: defineButtons,
-        headerStyle: { width: '250px', textAlign: 'center' } ,
+        headerStyle: { width: '250px', textAlign: 'center' },
         editable: false,
     }];
 
@@ -136,7 +136,7 @@ function CommesseArchiviateTable({setSuccess, setError}: PropsWithChildren<Props
                 data={ data }
                 columns={ columns }
                 pagination={ paginationFactory() }
-                rowStyle={ (row:Commessa, index:number) => row.chiusa ? {backgroundColor:'#00e676'} : {} }
+                rowStyle={ (row:Commessa, index:number) => row.chiusa ? { backgroundColor: '#00e676' } : {} }
                 noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({
                     mode: 'click',
