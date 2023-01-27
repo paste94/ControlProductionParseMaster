@@ -18,7 +18,7 @@ function ModalNuovoArticolo() {
     const [numDisegno, setNumDisegno] = useState('');
     const [numPezzi, setNumPezzi] = useState(1);
     const [costMat, setCostMat] = useState(0);
-    const [costoOrario, setCostoOrario] = useState<number>(Number(localStorage.getItem('DefaultCostMat')) ?? 0)
+    const [costoOrario, setCostoOrario] = useState(localStorage.getItem('DefaultCostMat') ?? 0)
     const [totOre, setTotOre] = useState(0)
     const [totPreventivo, setTotPreventivo] = useState(0)
     const [oreMacchina, setOreMacchina] = useState([]) // Mappa [nome macchina -> ore assegnate]
