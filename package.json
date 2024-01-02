@@ -1,6 +1,6 @@
 {
   "name": "control-production-master",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -65,6 +65,11 @@
     "releasewin64": "yarn run react:build && yarn run electron:buildw64 --publish=always",
     "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\"",
     "test": "jest"
+  },
+  "build": {
+    "appId": "com.electron.react.control-production-master",
+    "icon": "build/logo512.png",
+    "artifactName": "${productName}_${version}_${os}${arch}.${ext}"
   },
   "browserslist": {
     "production": [
