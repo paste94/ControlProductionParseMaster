@@ -1,6 +1,6 @@
 {
   "name": "control-production-master",
-  "version": "2.1.1",
+  "version": "2.1.3",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -60,8 +60,9 @@
     "electron:build": "electron-builder",
     "electron:buildw32": "electron-builder --ia32 -w",
     "electron:buildw64": "electron-builder --x64 -w",
-    "buildwin32": "npm run react:build && npm run electron:buildw32",
-    "buildwin64": "npm run react:build && npm run electron:buildw64",
+    "buildwin32": "yarn run react:build && yarn run electron:buildw32",
+    "buildwin64": "yarn run react:build && yarn run electron:buildw64",
+    "releasewin64": "yarn run react:build && yarn run electron:buildw64 --publish=always",
     "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\"",
     "test": "jest"
   },

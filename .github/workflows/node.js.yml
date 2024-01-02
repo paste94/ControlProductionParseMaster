@@ -30,6 +30,42 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
 
+  release_exe:
+    name: Release exe
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install # will run `yarn install` command
+
+      - name: Build production bundle
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: package
+
+      - name: Build production bundle
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: electron:win:zip
+
+      - name: Building the installer
+        run: |
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "scripts\innoscript.iss"
+        shell: cmd
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Test_Setup.exe
+          path: 'scripts\Output\Test_Setup.exe'
+
   release:
     runs-on: ${{ matrix.os }}
 
@@ -56,3 +92,4 @@ jobs:
             # If the commit is tagged with a version (e.g. "v1.0.0"),
             # release the app after building
             release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+            args: "--x64 -w"
