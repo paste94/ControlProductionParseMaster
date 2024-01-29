@@ -8,10 +8,13 @@ let subscription: LiveQuerySubscription;
 
 /**
  * Ottiene la subscription alle commesse
- * @param callback callback per successo che prende come parametro i dati ottenuti
- * @param callbackError callback per errore.
+ * @param {Function} callback callback per successo che prende come parametro i dati ottenuti
+ * @param {Function} callbackError callback per errore.
  */
-async function subscribeCommesseArchiviate(callback: (data: Array<Commessa>) => void, callbackError?: (msg: string) => void) {
+async function subscribeCommesseArchiviate(
+        callback: (data: Array<Commessa>) => void, 
+        callbackError?: (msg: string) => void,
+    ) {
     const query = new Parse.Query(commesse);
     subscription = await query.subscribe();
 
@@ -55,10 +58,13 @@ async function unsubscribeCommesseArchiviate(): Promise<void> {
 
 /**
  * Ottiene tutte le commesse dal database
- * @param callback callback per successo che prende come parametro i dati ottenuti
- * @param callbackError callback per errore.
+ * @param {Function} callback callback per successo che prende come parametro i dati ottenuti
+ * @param {Function} callbackError callback per errore.
  */
-async function getAllCommesseArchiviate(callback: (data: Array<Commessa>) => void, callbackError?: (msg: string) => void): Promise<void> {
+async function getAllCommesseArchiviate(
+        callback: (data: Array<Commessa>) => void, 
+        callbackError?: (msg: string) => void,
+    ): Promise<void> {
     new Parse.Query(commesse)
         .notEqualTo('eliminato', true)
         .equalTo('archiviata', true)
@@ -69,24 +75,27 @@ async function getAllCommesseArchiviate(callback: (data: Array<Commessa>) => voi
                 data.push(new Commessa(elem))            
             })
             callback(data)
-        }, 
-        (err: any) => callbackExec(err.message, callbackError)
+        })
+        .catch(
+            (err: any) => callbackExec(err.message, callbackError),
         )
 }
 
 /**
  * Disarchivia la commessa con ID selezionato.
  * L'elemento viene archiviato impostando un flag 'archiviato' a true
- * @param id identificativo della macchina
- * @param successCallback funzione da eseguire nel caso di successo
- * @param errorCallback funzione da eseguire nel caso di errore
+ * @param {string} id identificativo della macchina
+ * @param {Function} successCallback funzione da eseguire nel caso di successo
+ * @param {Function} errorCallback funzione da eseguire nel caso di errore
  */
-function unarchiveCommessa(id: string, successCallback?: (msg: string) => void, errorCallback?: (msg: string) => void): void {
+function unarchiveCommessa(
+    id: string, 
+    successCallback?: (msg: string) => void, 
+    errorCallback?: (msg: string) => void,
+): void {
     Parse.Cloud.run('disarchiviaCommessa', {'id': id})
-    .then(
-        () => callbackExec(`Commessa archiviata con successo`, successCallback), //successCallback( `Commessa archiviata con successo` ),
-        (err: any) => callbackExec('ERRORE:' + err.message, errorCallback)
-    )
+    .then(() => callbackExec(`Commessa archiviata con successo`, successCallback))
+    .catch((err: any) => callbackExec('ERRORE:' + err.message, errorCallback))
 }
 
 /**

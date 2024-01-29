@@ -76,9 +76,9 @@ function Impiegati(): ReactElement {
     const handleSetChip = (event:any) => {
         if (event.charCode === 13) {
             console.log(data.map(el => el['chip']))
-            let chipsList: Array<string> = data.map(el => el['chip'])
-            let newChip: string = event.target.value
-            if(chipsList.includes(newChip)){
+            const chipsList: Array<string> = data.map(el => el['chip'])
+            const newChip: string = event.target.value
+            if (chipsList.includes(newChip)) {
                 setError(`Chip "${newChip}" già associato ad unaltro impiegato, rimuoverlo o scegliere un altro chip.`)
             } else {
                 setNewImp({...newImp, chip: newChip});

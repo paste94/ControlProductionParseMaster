@@ -10,10 +10,18 @@ import LavoriTable from './LavoriTable';
 function Lavori() {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
+    const [minutes, setMinutes] = useState(0)
+    const [hoursString, setHoursString] = useState('')
 
-    useEffect(() => {
-        subscribeLavori(setData, (err) => console.error(err))
+    const minToString = (mins) => `${parseInt(mins/60)} h, ${mins%60} m`  
+
+    useEffect(async () => {
+        await subscribeLavori(setData, (err) => console.error(err))
     }, [])
+
+    useEffect(async () => {
+        await setHoursString(minToString(minutes))
+    }, [minutes])
 
     return (
         <div className='page'>
@@ -23,15 +31,23 @@ function Lavori() {
                 handleClose={ () => setError('') } />
 
             <Row className='align-items-center'>
-                <Col>
+                <Col sm={8}>
                     <Row className='ml-1'>
                         <h1>Lavori</h1>
+                    </Row>
+                </Col>
+                <Col sm={4}>
+                    <Row>
+                        <h2>
+                            Tot: {hoursString}
+                        </h2>
                     </Row>
                 </Col>
             </Row>
 
             <LavoriTable
-                data={data}/>
+                data={data}
+                setMinutes={setMinutes}/>
         </div>
     )
 }

@@ -1,4 +1,6 @@
+import { element } from 'prop-types';
 import { Parse, lavori } from './http-common';
+import { getAllImpiegati} from './Impiegati.service';
 
 let subscription;
 
@@ -64,7 +66,8 @@ let subscription;
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
- function getAllLavori(callback, callbackError) {
+ async function getAllLavori(callback, callbackError) {
+    let impiegati = await getAllImpiegati((res) => impiegati = res, () => {})
     new Parse.Query(lavori)
         .notEqualTo('eliminato', true)
         .notEqualTo('archiviato', true)
@@ -72,10 +75,17 @@ let subscription;
         .then( result => {
             const data = []
             result.forEach(elem => {
-                data.push({
+                const obj = {
                     id: elem.id,
                     ...elem.attributes,
-                })
+                }
+                if (obj.impiegatoNome == undefined) {
+                    try {
+                        const nome = impiegati.filter((elem) => elem.id == obj.impiegatoId)[0].nome
+                        obj.impiegatoNome = nome
+                    } catch (error) {}
+                }
+                data.push(obj)
             })
             callback(data)
         }, (error) => {

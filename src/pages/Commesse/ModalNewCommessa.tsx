@@ -60,6 +60,10 @@ function ModalNewCommessa({setError}: PropsWithChildren<{
         )
     }
 
+    /**
+     * Submit event handler
+     * @param {Event} e Event to handle
+     */
     const handleSubmit = (e: any) => {
         e.preventDefault();
         addCommessa(

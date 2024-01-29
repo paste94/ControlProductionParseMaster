@@ -3,6 +3,8 @@
   "version": "2.1.4",
   "private": true,
   "main": "public/electron.js",
+  "author": "Riccardo Pasteris",
+  "description": "Master application for control production system",
   "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -63,6 +65,7 @@
     "buildwin32": "yarn run react:build && yarn run electron:buildw32",
     "buildwin64": "yarn run react:build && yarn run electron:buildw64",
     "releasewin64": "yarn run react:build && yarn run electron:buildw64 --publish=always",
+    "releasewin32": "yarn run react:build && yarn run electron:buildw32 --publish=always",
     "start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3010 && electron .\"",
     "test": "jest"
   },

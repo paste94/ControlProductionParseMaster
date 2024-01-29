@@ -8,7 +8,7 @@ import AlertSuccess from '../../components/AlertSuccess';
 * Schermata che mostra le Commesse archiviate, aperte e non. 
 * Da qui non è possibile modificare, aprire o chiudere commesse.  
 *
-* @returns Il component della pagina
+* @return {ReactElement} Il component della pagina
 */
 function CommesseArchiviate(): ReactElement {
     const [error, setError] = useState('')

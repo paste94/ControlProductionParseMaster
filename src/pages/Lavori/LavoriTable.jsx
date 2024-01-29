@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
-import filterFactory, { multiSelectFilter, dateFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { multiSelectFilter, dateFilter, selectFilter } from 'react-bootstrap-table2-filter';
 
 
 /**
@@ -10,7 +10,7 @@ import filterFactory, { multiSelectFilter, dateFilter } from 'react-bootstrap-ta
  * @param {Object} props Properties
  * @return {COmponent} il component
  */
-function LavoriTable({data}) {
+function LavoriTable({data, setMinutes}) {
     const [selectMacchine, setSelectMacchine] = useState({})
     const [selectNumCommessa, setSelectNumCommessa] = useState({})
     const [selectNumDisegno, setSelectNumDisegno] = useState({})
@@ -23,11 +23,19 @@ function LavoriTable({data}) {
         return obj
     }
 
-    useEffect(() => {
-        setSelectMacchine(createFilter(data, 'macchina'))
-        setSelectNumCommessa(createFilter(data, 'commessaNome'))
-        setSelectNumDisegno(createFilter(data, 'preventivoNome'))
-        setSelectImpiegatoNome(createFilter(data, 'impiegatoNome'))
+    const afterFilter = (newResult, newFilters) => {
+        let tot = 0
+        newResult.forEach(elem => {
+            tot += elem.diffInMinutes != undefined ? elem.diffInMinutes : 0
+        })
+        setMinutes(tot)
+    }
+
+    useEffect(async () => {
+        await setSelectMacchine(createFilter(data, 'macchina'))
+        await setSelectNumCommessa(createFilter(data, 'commessaNome'))
+        await setSelectNumDisegno(createFilter(data, 'preventivoNome'))
+        await setSelectImpiegatoNome(createFilter(data, 'impiegatoNome'))
     }, [data])
 
     const columns = [{
@@ -37,28 +45,28 @@ function LavoriTable({data}) {
     }, {
         dataField: 'commessaNome',
         text: 'Numero commessa',
-        filter: multiSelectFilter({
+        filter: selectFilter({
             placeholder: 'Tutte',
             options: selectNumCommessa,
         }),
     }, {
         dataField: 'preventivoNome',
         text: 'Numero Disegno',
-        filter: multiSelectFilter({
+        filter: selectFilter({
             placeholder: 'Tutti',
             options: selectNumDisegno,
         }),
     }, {
         dataField: 'macchina',
         text: 'Macchina',
-        filter: multiSelectFilter({
+        filter: selectFilter({
             placeholder: 'Tutte',
             options: selectMacchine,
         }),
     }, {
         dataField: 'impiegatoNome',
         text: 'Impiegato',
-        filter: multiSelectFilter({
+        filter: selectFilter({
             placeholder: 'Tutti',
             options: selectImpiegatoNome,
         }),
@@ -108,7 +116,7 @@ function LavoriTable({data}) {
                 data={data}
                 columns={ columns }
                 pagination={ paginationFactory() }
-                filter={ filterFactory() }
+                filter={ filterFactory(({afterFilter})) }
                 noDataIndication="Tabella vuota" />
         </div>
     )
@@ -116,6 +124,7 @@ function LavoriTable({data}) {
 
 LavoriTable.propTypes = {
     data: PropTypes.array.isRequired,
+    setMinutes: PropTypes.func,
 }
 
 export default LavoriTable

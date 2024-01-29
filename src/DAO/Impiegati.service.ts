@@ -15,32 +15,32 @@ let subscription: LiveQuerySubscription;
 
     subscription.on('open', () => {
         // console.log('Impiegati opened');
-        getAllImpiegati(callback, callbackError)
+        _getAllImpiegati(callback, callbackError)
     })
 
     subscription.on('create', (object) => {
         // console.log('impiegato created: ', object);
-        getAllImpiegati(callback, callbackError);
+        _getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('update', (object) => {
         // console.log('impiegato updated', object);
-        getAllImpiegati(callback, callbackError);
+        _getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('enter', (object) => {
         // console.log('impiegato entered', object);
-        getAllImpiegati(callback, callbackError);
+        _getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('leave', (object) => {
         // console.log('impiegato left', object);
-        getAllImpiegati(callback, callbackError);
+        _getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('delete', (object) => {
         // console.log('impiegato deleted', object);
-        getAllImpiegati(callback, callbackError);
+        _getAllImpiegati(callback, callbackError);
     });
 
     subscription.on('close', () => {
@@ -65,7 +65,7 @@ let subscription: LiveQuerySubscription;
  * @param {function} callback callback per successo.
  * @param {function} callbackError callback per errore.
  */
-function getAllImpiegati(callback: Function, callbackError: Function) {
+function _getAllImpiegati(callback: Function, callbackError: Function) {
     new Parse.Query(impiegati)
         .notEqualTo('eliminato', true)
         .find()
@@ -80,6 +80,19 @@ function getAllImpiegati(callback: Function, callbackError: Function) {
                 console.error(error)
                 callbackError(error.message)
             })
+}
+
+/** Ottiene tutti gli impiegati dal database
+ * @param {function} callback callback per successo.
+ * @param {function} callbackError callback per errore.
+ */
+async function getAllImpiegati(callback: Function, callbackError: Function) {
+    const data: Impiegato[] = []
+    let result = await new Parse.Query(impiegati)
+        .notEqualTo('eliminato', true)
+        .find()
+    result.forEach(elem => data.push(new Impiegato(elem)))
+    return data
 }
 
 /** Aggiunge un nuovo impiegato al database
