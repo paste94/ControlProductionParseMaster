@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { Col, Form, FormControl, InputGroup, Row, Button } from 'react-bootstrap';
 import BtnConfirm from './BtnConfirm';
 import packageJson from '../../../package.json';
 import { FaCheck, FaTimes } from 'react-icons/fa';
@@ -90,6 +90,16 @@ function Impostazioni() {
                                 <FaCheck/>
                         </BtnConfirm>
                     </InputGroup>
+                </Col>
+            </Row>
+            <br/>
+            <Row>
+                <Col>
+                    <a href='https://github.com/paste94/ControlProductionParseMaster/releases' target="_blank">
+                        <Button>
+                            Check updates
+                        </Button>
+                    </a>
                 </Col>
             </Row>
             <hr/>

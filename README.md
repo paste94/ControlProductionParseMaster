@@ -1,4 +1,4 @@
-# Installazione v2.1.4
+# Installazione v2.1.5
 
 1) Scarca la repo
 2) Esegui `npm install` per installare le dipendenze
