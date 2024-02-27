@@ -1,6 +1,6 @@
 {
   "name": "control-production-master",
-  "version": "2.2",
+  "version": "2.2.0",
   "private": true,
   "main": "public/electron.js",
   "author": "Riccardo Pasteris",
