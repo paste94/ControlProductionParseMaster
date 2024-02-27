@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import AlertError from '../../components/AlertError';
 import { subscribeLavori } from '../../DAO/Lavori.service';
@@ -7,20 +7,24 @@ import LavoriTable from './LavoriTable';
 /**
  * @return {Component} il component creato
  */
-function Lavori() {
+function Lavori(): ReactElement {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
     const [minutes, setMinutes] = useState(0)
     const [hoursString, setHoursString] = useState('')
 
-    const minToString = (mins) => `${parseInt(mins/60)} h, ${mins%60} m`  
+    const minToString = (mins: number) => `${Math.floor(mins/60)} h, ${mins%60} m`  
 
-    useEffect(async () => {
-        await subscribeLavori(setData, (err) => console.error(err))
+    useEffect(() => {
+        const subscribe = async () => 
+            await subscribeLavori(setData, (err: string) => console.error(err))
+        subscribe()
     }, [])
 
-    useEffect(async () => {
-        await setHoursString(minToString(minutes))
+    useEffect(() => {
+        const set = async () => 
+            await setHoursString(minToString(minutes))
+        set()
     }, [minutes])
 
     return (

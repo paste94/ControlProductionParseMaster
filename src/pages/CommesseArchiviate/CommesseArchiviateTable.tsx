@@ -129,13 +129,19 @@ function CommesseArchiviateTable({setSuccess, setError}: PropsWithChildren<{
         editable: false,
     }];
 
+    const onPageChange = (page: Number, sizePerPage: Number) => 
+        sessionStorage.setItem('CommesseArchiviateTablePage', String(page));
+
     return (
         <div>
             <BootstrapTable
                 keyField='id'
                 data={ data }
                 columns={ columns }
-                pagination={ paginationFactory() }
+                pagination={ paginationFactory({
+                    page: sessionStorage.getItem('CommesseArchiviateTablePage') != undefined ? Number(sessionStorage.getItem('CommesseArchiviateTablePage')) : 1,
+                    onPageChange: onPageChange,
+                }) }
                 rowStyle={ (row:Commessa, index:number) => row.chiusa ? { backgroundColor: '#00e676' } : {} }
                 noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({

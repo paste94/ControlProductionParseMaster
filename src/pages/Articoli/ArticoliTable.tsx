@@ -108,6 +108,9 @@ function ArticoliTable({setSuccess, setError}: PropsWithChildren<{
         },
     }
 
+    const onPageChange = (page: Number, sizePerPage: Number) => 
+        sessionStorage.setItem('ArticoliTablePage', String(page));
+
     useEffect(() => {
         subscribeArticoli(setData, setError);
         return () => {
@@ -121,7 +124,10 @@ function ArticoliTable({setSuccess, setError}: PropsWithChildren<{
                 keyField='id'
                 data={ data }
                 columns={ columns }
-                pagination={ paginationFactory() }
+                pagination={ paginationFactory({
+                    page: sessionStorage.getItem('ArticoliTablePage') != undefined ? Number(sessionStorage.getItem('ArticoliTablePage')) : 1,
+                    onPageChange: onPageChange,
+                }) }
                 noDataIndication="Tabella vuota"
                 expandRow={ expandRow }
                 />

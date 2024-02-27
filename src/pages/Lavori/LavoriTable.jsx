@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import PropTypes from 'prop-types'
-import filterFactory, { multiSelectFilter, dateFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { dateFilter, selectFilter } from 'react-bootstrap-table2-filter';
 
 
 /**
@@ -109,13 +109,20 @@ function LavoriTable({data, setMinutes}) {
         text: 'Tempo(ore)',
     }]
 
+
+    const onPageChange = (page, sizePerPage) => 
+        sessionStorage.setItem('LavoriTablePage', String(page));
+
     return (
         <div>
             <BootstrapTable
                 keyField='id'
                 data={data}
                 columns={ columns }
-                pagination={ paginationFactory() }
+                pagination={ paginationFactory({
+                    page: sessionStorage.getItem('LavoriTablePage') != undefined ? Number(sessionStorage.getItem('LavoriTablePage')) : 1,
+                    onPageChange: onPageChange,
+                }) }
                 filter={ filterFactory(({afterFilter})) }
                 noDataIndication="Tabella vuota" />
         </div>

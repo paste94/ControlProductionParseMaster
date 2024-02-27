@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { Col, Row, Button } from 'react-bootstrap'
 import CommessaSingolaTable from './CommessaSingolaTable'
 import { FaArrowLeft } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom';
-import {
-    subscribePreventivo,
-    unsubscribePreventivo,
-} from '../../DAO/Preventivo.service'
+import { subscribePreventivo, unsubscribePreventivo } from '../../DAO/Preventivo.service'
 import PropTypes from 'prop-types'
 import AlertError from '../../components/AlertError'
 import ModalNuovaCommessaSingola from '../../components/modal_articoli/ModalNuovaCommessaSingola';
+import Commessa from '../../classes/Commessa';
 
 
 /**
@@ -18,7 +16,9 @@ import ModalNuovaCommessaSingola from '../../components/modal_articoli/ModalNuov
  *                      la commessa da visualizzare, direttamente dal DB
  * @return {Component} il component
  */
-function CommessaSingola({commessa}) {
+function CommessaSingola({commessa}: PropsWithChildren<{
+        commessa: Commessa
+    }>) {
     const [data, setData] = useState([])
     const [error, setError] = useState('')
     const [backDestination, setBackDestination] = useState('/commesse')
@@ -27,8 +27,10 @@ function CommessaSingola({commessa}) {
         if (commessa.archiviata) {
             setBackDestination('/commesse_archiviate')
         }
-        subscribePreventivo(commessa.id, setData, (err) => console.error('error', err));
-        return unsubscribePreventivo;
+        subscribePreventivo(commessa.id, setData, (err: string) => console.error('error', err));
+        return () => {
+            unsubscribePreventivo();
+        };
     }, [commessa.id])
 
     return (
@@ -40,7 +42,7 @@ function CommessaSingola({commessa}) {
 
             <Row className='align-items-center'>
                 <Col lg='1' md='1' sm='1'>
-                    <NavLink to={backDestination} key={0} activeClassName="active">
+                    <NavLink to={backDestination} >
                         <Button
                             variant='transparent'
                             title='Indietro' >
@@ -71,6 +73,7 @@ function CommessaSingola({commessa}) {
 
 CommessaSingola.propTypes = {
     commessa: PropTypes.object.isRequired,
+    page: PropTypes.number,
 }
 
 export default CommessaSingola

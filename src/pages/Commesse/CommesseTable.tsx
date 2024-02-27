@@ -23,20 +23,21 @@ import Commessa from '../../classes/Commessa';
 function CommesseTable({setSuccess, setError}: PropsWithChildren<{
         setSuccess?: (msg: string) => void,
         setError?: (msg: string) => void,
-    }>): ReactElement {
+}>): ReactElement {
     
     const [data, setData] = useState<Commessa[]>([])
 
     // Definizione dei bottoni nell'ultima colonna
-    const defineButtons = (cell: any, row: Commessa, rowIndex: number, formatExtraData: any) => {
-        const commessa = data[rowIndex]
+    const defineButtons = (cell: any, commessa: Commessa, rowIndex: number, formatExtraData: any) => {
         return (
             <Row>
                 <Col lg='2' md='2' sm='2'>
                     <NavLink
                         to={{
                             pathname: '/commessasingola',
-                            state: {commessa: commessa},
+                            state: {
+                                commessa: commessa,
+                            },
                         }}>
                         <Button
                             variant='link'
@@ -52,7 +53,7 @@ function CommesseTable({setSuccess, setError}: PropsWithChildren<{
                         title='Apri/chiudi commessa'
                         size='sm'
                         onClick={ () => {
-                            handleEdit(row.id, {chiusa: !row.chiusa})
+                            handleEdit(commessa.id, {chiusa: !commessa.chiusa})
                         }} >
                             <FaCheck style={{color: 'black'}}/>
                     </Button>
@@ -62,20 +63,20 @@ function CommesseTable({setSuccess, setError}: PropsWithChildren<{
                         variant='link'
                         title='Archivia commessa'
                         size='sm'
-                        onClick={ () => archiveCommessa(row.id, setSuccess, setError) } >
+                        onClick={ () => archiveCommessa(commessa.id, setSuccess, setError) } >
                             <FaArrowDown style={{color: 'black'}}/>
                     </Button>
                 </Col>
                 <Col lg='2' md='2' sm='2'>
                     <ModalCloneCommessa
-                        originalCommessa={row}
+                        originalCommessa={commessa}
                         setError={setError}
                         setSuccess={setSuccess} />
                 </Col>
                 <Col lg='2' md='2' sm='2'>
                     <DeleteButton
                         title={'Elimina commessa'}
-                        handleConfirm={() => deleteCommessa(row.id, setSuccess, setError)} >
+                        handleConfirm={() => deleteCommessa(commessa.id, setSuccess, setError)} >
                             <p>Eliminare definitivamente la commessa?</p>
                     </DeleteButton>
                 </Col>
@@ -147,6 +148,8 @@ function CommesseTable({setSuccess, setError}: PropsWithChildren<{
         editable: false,
     }];
 
+    const onPageChange = (page: Number, sizePerPage: Number) => 
+        sessionStorage.setItem('CommessaTablePage', String(page));
     
     useEffect(() => {
         subscribeCommesse(setData, setError);
@@ -161,7 +164,10 @@ function CommesseTable({setSuccess, setError}: PropsWithChildren<{
                 keyField='id'
                 data={ data }
                 columns={ columns }
-                pagination={ paginationFactory() }
+                pagination={ paginationFactory({
+                    page: sessionStorage.getItem('CommessaTablePage') != undefined ? Number(sessionStorage.getItem('CommessaTablePage')) : 1,
+                    onPageChange: onPageChange,
+                }) }
                 rowStyle={ (row:Commessa, index:number) => row.chiusa ? {backgroundColor:'#00e676'} : {} }
                 noDataIndication="Tabella vuota"
                 cellEdit={ cellEditFactory({

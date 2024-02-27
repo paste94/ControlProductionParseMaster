@@ -88,13 +88,20 @@ function ImpiegatiTable({data, setSuccess, setError}: PropsWithChildren<Props>):
         headerStyle: { width: 20 },
     }];
 
+
+    const onPageChange = (page: Number, sizePerPage: Number) => 
+        sessionStorage.setItem('ImpiegatiTablePage', String(page));
+
     return (
         <div>
             <BootstrapTable
                 keyField='id'
                 data={ data }
                 columns={ columns }
-                pagination={ paginationFactory() }
+                pagination={ paginationFactory({
+                    page: sessionStorage.getItem('ImpiegatiTablePage') != undefined ? Number(sessionStorage.getItem('ImpiegatiTablePage')) : 1,
+                    onPageChange: onPageChange,
+                }) }
                 noDataIndication='Tabella vuota. Fai click su "Aggiungi
                                     impiegato" per iniziare'
                 cellEdit={ cellEditFactory({

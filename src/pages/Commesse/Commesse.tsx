@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {PropsWithChildren, ReactElement, useEffect, useState} from 'react';
 import CommesseTable from './CommesseTable';
 import ModalNewCommessa from './ModalNewCommessa';
 import { Col, Row } from 'react-bootstrap';
@@ -52,9 +52,6 @@ function Commesse(): ReactElement {
 
         </div>
     )
-}
-
-Commesse.propTypes = {
 }
 
 export default Commesse;

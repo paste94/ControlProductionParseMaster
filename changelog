@@ -15,3 +15,8 @@
 v2.1.5 (29/01/2024)
 - Aggiunto calcolo delle ore totali filtrate nella pagina Lavori
 - Aggiunta visualizzazione dei nomi dei dipendentu sulla pagina Lavori
+
+v2.2 (27/02/2024)
+- Corretto bug di apertura della pagina commessa singola
+- Aggiunto metodo di memorizzazione dellle pagine delle commesse
+- Migrata commessa singola a typescript

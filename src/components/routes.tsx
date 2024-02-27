@@ -6,7 +6,6 @@ import Impiegati from '../pages/Impiegati/Impiegati'
 import Lavori from '../pages/Lavori/Lavori'
 import Commesse from '../pages/Commesse/Commesse'
 import Articoli from '../pages/Articoli/Articoli'
-import CommessaSingola from '../pages/CommessaSingola/CommessaSingola'
 import PropTypes from 'prop-types'
 import Macchine from '../pages/DefinisciMacchine/Macchine'
 import Impostazioni from '../pages/Impostazioni/impostazioni'
@@ -14,6 +13,7 @@ import { Parse } from '../DAO/http-common'
 import CommesseArchiviate from '../pages/CommesseArchiviate/CommesseArchiviate'
 import { Col, Row } from 'react-bootstrap'
 import RouteType from '../classes/RouteType'
+import CommessaSingola from '../pages/CommessaSingola/CommessaSingola'
 
 /**
  * Elemento che definisce le routes dell'applicazione. Permette di definire i path e le
