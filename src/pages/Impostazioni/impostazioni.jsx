@@ -95,7 +95,7 @@ function Impostazioni() {
             <br/>
             <Row>
                 <Col>
-                    <a href='https://github.com/paste94/ControlProductionParseMaster/releases' target="_blank">
+                    <a href='https://github.com/paste94/ControlProductionParseMaster/releases/latest/download/control-production-master_winx64.exe' target="_blank">
                         <Button>
                             Check updates
                         </Button>

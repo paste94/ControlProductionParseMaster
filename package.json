@@ -1,6 +1,6 @@
 {
   "name": "control-production-master",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "main": "public/electron.js",
   "author": "Riccardo Pasteris",
@@ -72,7 +72,7 @@
   "build": {
     "appId": "com.electron.react.control-production-master",
     "icon": "build/logo512.png",
-    "artifactName": "${productName}_${version}_${os}${arch}.${ext}"
+    "artifactName": "${productName}_${os}${arch}.${ext}"
   },
   "browserslist": {
     "production": [
