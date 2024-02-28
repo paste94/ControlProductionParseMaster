@@ -24,3 +24,6 @@ v2.2.0 (27/02/2024)
 v2.2.1 (28/02/2024)
 - Rimossa versione dal nome file così da creare link diretto al download
 - Aggiunto link diretto al download del file per update
+
+v2.2.2 (28/02/2024)
+- Restorato link di download per l'ultima release
